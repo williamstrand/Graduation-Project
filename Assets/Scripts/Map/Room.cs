@@ -17,11 +17,20 @@ namespace WSP.Map
             TopRight = topRight;
         }
 
+        /// <summary>
+        ///     Checks if the room is connected to another room.
+        /// </summary>
+        /// <param name="otherRoom">the other room.</param>
+        /// <returns>true if the rooms are connected.</returns>
         public bool IsConnected(Room otherRoom)
         {
             return ConnectedRooms.Contains(otherRoom);
         }
 
+        /// <summary>
+        ///     Connect the room to another room.
+        /// </summary>
+        /// <param name="otherRoom">the other room.</param>
         public void Connect(Room otherRoom)
         {
             if (!IsConnected(otherRoom))
@@ -30,6 +39,11 @@ namespace WSP.Map
             }
         }
 
+        /// <summary>
+        ///     Gets the closest room from a list of rooms.
+        /// </summary>
+        /// <param name="rooms">the list of rooms.</param>
+        /// <returns>the closest room.</returns>
         public Room GetClosestRoom(List<Room> rooms)
         {
             Room closestRoom = null;
@@ -37,8 +51,6 @@ namespace WSP.Map
 
             for (var i = 0; i < rooms.Count; i++)
             {
-                if (rooms[i] == null) break;
-
                 if (rooms[i] == this) continue;
                 if (IsConnected(rooms[i])) continue;
 
@@ -52,6 +64,12 @@ namespace WSP.Map
             return closestRoom;
         }
 
+        /// <summary>
+        ///     Checks if the room overlaps with any other room from a list.
+        /// </summary>
+        /// <param name="rooms">the list of rooms to check.</param>
+        /// <param name="wallSize">the required size of the walls between room.</param>
+        /// <returns>true if any room overlaps with this room.</returns>
         public bool CheckForOverlap(List<Room> rooms, int wallSize)
         {
             for (var i = 0; i < rooms.Count; i++)
@@ -64,6 +82,12 @@ namespace WSP.Map
             return false;
         }
 
+        /// <summary>
+        ///     Checks if the room overlaps with another room.
+        /// </summary>
+        /// <param name="room">the other room.</param>
+        /// <param name="wallSize">the required size of the walls between room.</param>
+        /// <returns>true if the rooms overlap.</returns>
         public bool CheckForOverlap(Room room, int wallSize)
         {
             return room.BottomLeft.x - wallSize <= TopRight.x &&
