@@ -1,19 +1,50 @@
 using UnityEngine;
 using WSP.Map;
 using WSP.Map.Pathfinding;
+using WSP.Units;
+using WSP.Units.Player;
 
 namespace WSP
 {
     public class GameManager : MonoBehaviour
     {
+        public static Map.Map CurrentMap { get; private set; }
+        public static bool IsPlayerTurn { get; private set; } = true;
         [SerializeField] GameObject square;
         [SerializeField] GameObject exit;
-        Transform parent;
+        Transform mapParent;
+        [SerializeField] PlayerController playerPrefab;
         MapGenerator mapGenerator;
+        IUnit player;
+        float timer;
+
+        void Awake()
+        {
+            Singleton<GameManager>.Initialize(this);
+        }
 
         void Start()
         {
-            parent = new GameObject("Map").transform;
+            mapParent = new GameObject("Map").transform;
+            GenerateMap();
+
+            player = Instantiate(playerPrefab, CurrentMap.GetWorldPosition(CurrentMap.StartRoom.Center), Quaternion.identity);
+            player.OnTurnEnd += EndPlayerTurn;
+        }
+
+        void Update()
+        {
+            if (IsPlayerTurn) return;
+
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                IsPlayerTurn = true;
+            }
+        }
+
+        void GenerateMap()
+        {
             mapGenerator = new MapGenerator
             {
                 StartRoomWidth = new Vector2Int(10, 10),
@@ -25,50 +56,46 @@ namespace WSP
                 Height = 40,
                 CellSize = 1f
             };
-            GenerateMap();
-        }
 
-        void Update()
-        {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Space))
+            foreach (Transform tile in mapParent) Destroy(tile.gameObject);
+
+            CurrentMap = mapGenerator.GenerateMap();
+            for (var x = 0; x < CurrentMap.Width; x++)
             {
-                GenerateMap();
-            }
-        }
-
-        void GenerateMap()
-        {
-            foreach (Transform tile in parent) Destroy(tile.gameObject);
-
-            var grid = mapGenerator.GenerateMap();
-            for (var x = 0; x < grid.Width; x++)
-            {
-                for (var y = 0; y < grid.Height; y++)
-                    switch (grid.GetValue(x, y))
+                for (var y = 0; y < CurrentMap.Height; y++)
+                    switch (CurrentMap.GetValue(x, y))
                     {
                         case Map.Map.Empty:
                             break;
 
                         case Map.Map.Wall:
-                            Instantiate(square, grid.GetWorldPosition(x, y), Quaternion.identity, parent);
+                            Instantiate(square, CurrentMap.GetWorldPosition(x, y), Quaternion.identity, mapParent);
                             break;
 
                         case Map.Map.Exit:
-                            Instantiate(exit, grid.GetWorldPosition(x, y), Quaternion.identity, parent);
+                            Instantiate(exit, CurrentMap.GetWorldPosition(x, y), Quaternion.identity, mapParent);
                             break;
                     }
             }
 
-            var startRoom = grid.StartRoom;
-            var exitRoom = grid.ExitRoom;
+            var startRoom = CurrentMap.StartRoom;
+            var exitRoom = CurrentMap.ExitRoom;
 
-            if (Pathfinder.FindPath(grid, startRoom.Center, exitRoom.Center, out var path))
+            #if UNITY_EDITOR
+            if (Pathfinder.FindPath(CurrentMap, startRoom.Center, exitRoom.Center, out var path))
             {
                 for (var i = 1; i < path.Count; i++)
                 {
-                    Debug.DrawLine(grid.GetWorldPosition(path[i - 1].Position), grid.GetWorldPosition(path[i].Position), Color.green, 5f);
+                    Debug.DrawLine(CurrentMap.GetWorldPosition(path[i - 1].Position), CurrentMap.GetWorldPosition(path[i].Position), Color.green, 5f);
                 }
             }
+            #endif
+        }
+
+        void EndPlayerTurn()
+        {
+            IsPlayerTurn = false;
+            timer = .1f;
         }
     }
 }

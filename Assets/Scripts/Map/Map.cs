@@ -11,8 +11,8 @@ namespace WSP.Map
         public const int Exit = 2;
 
         int[,] gridArray;
-        float cellSize;
 
+        public float CellSize;
         public int Height => gridArray.GetLength(1);
         public int Width => gridArray.GetLength(0);
         public List<Room> Rooms { get; set; } = new();
@@ -22,7 +22,7 @@ namespace WSP.Map
         public Map(int width, int height, float cellSize)
         {
             gridArray = new int[width, height];
-            this.cellSize = cellSize;
+            CellSize = cellSize;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace WSP.Map
         /// <returns>the world position.</returns>
         public Vector2 GetWorldPosition(int x, int y)
         {
-            return new Vector2(x, y) * cellSize;
+            return new Vector2(x, y) * CellSize + new Vector2(CellSize / 2, CellSize / 2);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace WSP.Map
         /// <returns>a grid position.</returns>
         public Vector2Int GetGridPosition(Vector2 worldPosition)
         {
-            return new Vector2Int(Mathf.FloorToInt(worldPosition.x / cellSize), Mathf.FloorToInt(worldPosition.y / cellSize));
+            return new Vector2Int(Mathf.FloorToInt(worldPosition.x / CellSize), Mathf.FloorToInt(worldPosition.y / CellSize));
         }
 
         /// <summary>
