@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using WSP.Units.Player;
 
 namespace WSP.Units.Enemies
 {
@@ -22,7 +23,14 @@ namespace WSP.Units.Enemies
         {
             if (!IsTurn) return;
 
-            var target = GameManager.CurrentMap.GetWorldPosition(GameManager.CurrentMap.StartRoom.Center);
+            var target = GameManager.CurrentMap.GetWorldPosition(PlayerController.GridPosition);
+
+            if (GameManager.CurrentMap.GetGridPosition(target) == Unit.GridPosition)
+            {
+                EndTurn();
+                return;
+            }
+
             Unit.MoveTo(target);
         }
 

@@ -1,28 +1,38 @@
 ﻿using System;
 using UnityEngine;
+using WSP.Camera;
 using WSP.Input;
 
 namespace WSP.Units.Player
 {
     public class PlayerController : MonoBehaviour, IUnitController
     {
+        public static Vector2Int GridPosition => instance.Unit.GridPosition;
+        static PlayerController instance;
+
         public Action OnTurnEnd { get; set; }
         public Unit Unit { get; private set; }
         public bool IsTurn { get; set; }
 
         Controls controls;
-        Camera mainCamera;
+        UnityEngine.Camera mainCamera;
 
         Vector2Int targetPosition;
 
+        void Awake()
+        {
+            instance = this;
+        }
+
         void Start()
         {
-            mainCamera = Camera.main;
+            mainCamera = UnityEngine.Camera.main;
 
             controls = new Controls();
             controls.Enable();
 
             targetPosition = Unit.GridPosition;
+            CameraController.SetTargetPosition(Unit.GridPosition);
         }
 
         void Update()
@@ -44,7 +54,6 @@ namespace WSP.Units.Player
             }
 
             if (!IsTurn) return;
-            if (targetPosition == Unit.GridPosition) return;
 
             Unit.MoveTo(GameManager.CurrentMap.GetWorldPosition(targetPosition));
         }
@@ -61,7 +70,10 @@ namespace WSP.Units.Player
             targetPosition = Unit.GridPosition;
         }
 
-        public void TurnStart() { }
+        public void TurnStart()
+        {
+            CameraController.SetTargetPosition(Unit.GridPosition);
+        }
 
         void EndTurn()
         {
