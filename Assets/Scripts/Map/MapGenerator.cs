@@ -20,22 +20,22 @@ namespace WSP.Map
         public int WallSize { get; set; } = 1;
 
         List<Room> rooms = new();
-        Map map;
+        Pathfinding.Map map;
 
         /// <summary>
         ///     Generates a map. Set properties before calling this method.
         /// </summary>
         /// <returns>a Map.</returns>
-        public Map GenerateMap()
+        public Pathfinding.Map GenerateMap()
         {
-            map = new Map(Width, Height, CellSize);
+            map = new Pathfinding.Map(Width, Height, CellSize);
             map.Rooms = rooms;
             rooms.Clear();
 
             // Fill grid with walls
             for (var x = 0; x < Width; x++)
             {
-                for (var y = 0; y < Width; y++) map.SetValue(x, y, Map.Wall);
+                for (var y = 0; y < Width; y++) map.SetValue(x, y, Pathfinding.Map.Wall);
             }
 
             // Generate start room
@@ -70,7 +70,7 @@ namespace WSP.Map
             // Generate exit
             var exitRoom = rooms[Random.Range(1, rooms.Count)];
             var exitPosition = new Vector2Int(Random.Range(exitRoom.BottomLeft.x, exitRoom.TopRight.x), Random.Range(exitRoom.BottomLeft.y, exitRoom.TopRight.y));
-            map.SetValue(exitPosition.x, exitPosition.y, Map.Exit);
+            map.SetValue(exitPosition.x, exitPosition.y, Pathfinding.Map.Exit);
             map.ExitRoom = exitRoom;
 
             // Fix if there are rooms you cant get to
@@ -125,7 +125,7 @@ namespace WSP.Map
 
             for (var x = bottomLeft.x; x < topRight.x; x++)
             {
-                for (var y = bottomLeft.y; y < topRight.y; y++) map.SetValue(x, y, Map.Empty);
+                for (var y = bottomLeft.y; y < topRight.y; y++) map.SetValue(x, y, Pathfinding.Map.Empty);
             }
 
             rooms.Add(room);
@@ -179,7 +179,7 @@ namespace WSP.Map
         {
             for (var x = Mathf.Min(room1X, room2X); x <= Mathf.Max(room1X, room2X); x++)
             {
-                map.SetValue(x, y, Map.Empty);
+                map.SetValue(x, y, Pathfinding.Map.Empty);
             }
         }
 
@@ -193,7 +193,7 @@ namespace WSP.Map
         {
             for (var y = Mathf.Min(room1Y, room2Y); y <= Mathf.Max(room1Y, room2Y); y++)
             {
-                map.SetValue(x, y, Map.Empty);
+                map.SetValue(x, y, Pathfinding.Map.Empty);
             }
         }
     }

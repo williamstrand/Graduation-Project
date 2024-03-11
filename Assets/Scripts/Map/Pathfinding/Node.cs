@@ -4,7 +4,7 @@ namespace WSP.Map.Pathfinding
 {
     public class Node
     {
-        public Vector2Int Position { get; private set; }
+        public Vector2Int Position { get; }
 
         public int GCost { get; set; }
         public int HCost { get; set; }
@@ -15,6 +15,11 @@ namespace WSP.Map.Pathfinding
         public Node(Vector2Int position)
         {
             Position = position;
+        }
+
+        public static implicit operator Vector2Int(Node node)
+        {
+            return node.Position;
         }
     }
 }

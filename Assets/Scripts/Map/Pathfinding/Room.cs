@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace WSP.Map
+namespace WSP.Map.Pathfinding
 {
     public class Room
     {

@@ -16,7 +16,7 @@ namespace WSP.Map.Pathfinding
         /// <param name="end">the end position.</param>
         /// <param name="path">the path.</param>
         /// <returns>true if a path could be found.</returns>
-        public static bool FindPath(Map map, Vector2Int start, Vector2Int end, out List<Node> path)
+        public static bool FindPath(Map map, Vector2Int start, Vector2Int end, out Path path)
         {
             open.Clear();
             closed.Clear();
@@ -99,9 +99,9 @@ namespace WSP.Map.Pathfinding
         /// </summary>
         /// <param name="finalNode">the final node.</param>
         /// <returns>a path.</returns>
-        static List<Node> CreatePath(Node finalNode)
+        static Path CreatePath(Node finalNode)
         {
-            var path = new List<Node>();
+            var path = new Path();
             var node = finalNode;
             while (node != null)
             {
