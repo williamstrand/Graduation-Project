@@ -4,13 +4,13 @@ using WSP.Units.Components;
 
 namespace WSP.Units
 {
-    [RequireComponent(typeof(MovementComponent))]
+    [RequireComponent(typeof(IMovementComponent))]
     public class Unit : MonoBehaviour
     {
         public Action OnActionFinished { get; set; }
         public Vector2Int GridPosition => Movement.GridPosition;
 
-        protected MovementComponent Movement;
+        protected IMovementComponent Movement;
 
         protected void Awake()
         {
