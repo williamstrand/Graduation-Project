@@ -23,6 +23,8 @@ namespace WSP.Units.Components
             if (IsMoving) return false;
 
             var targetGridPosition = GameManager.CurrentMap.GetGridPosition(target);
+            if (targetGridPosition == GridPosition) return false;
+
             if (!Pathfinder.FindPath(GameManager.CurrentMap, GridPosition, targetGridPosition, out var path)) return false;
 
             targetPosition = GameManager.CurrentMap.GetWorldPosition(path[1].Position);

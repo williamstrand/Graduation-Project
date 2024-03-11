@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using WSP.Map;
 using WSP.Map.Pathfinding;
@@ -9,39 +10,31 @@ namespace WSP
     public class GameManager : MonoBehaviour
     {
         public static Map.Map CurrentMap { get; private set; }
-        public static bool IsPlayerTurn { get; private set; } = true;
         [SerializeField] GameObject square;
         [SerializeField] GameObject exit;
         Transform mapParent;
         [SerializeField] PlayerController playerPrefab;
         MapGenerator mapGenerator;
-        IUnit player;
-        float timer;
+        IUnitController player;
+
+        [SerializeField] Unit playerUnit;
+
+        public Queue<IUnitController> UnitControllers = new();
 
         void Awake()
         {
             Singleton<GameManager>.Initialize(this);
-        }
-
-        void Start()
-        {
             mapParent = new GameObject("Map").transform;
             GenerateMap();
 
-            player = Instantiate(playerPrefab, CurrentMap.GetWorldPosition(CurrentMap.StartRoom.Center), Quaternion.identity);
-            player.OnTurnEnd += EndPlayerTurn;
+            player = Instantiate(playerPrefab);
+            var unit = Instantiate(playerUnit, CurrentMap.GetWorldPosition(CurrentMap.StartRoom.Center), Quaternion.identity);
+            player.SetUnit(unit);
+            UnitControllers.Enqueue(player);
+            StartTurn(player);
         }
 
-        void Update()
-        {
-            if (IsPlayerTurn) return;
-
-            timer -= Time.deltaTime;
-            if (timer <= 0)
-            {
-                IsPlayerTurn = true;
-            }
-        }
+        void Start() { }
 
         void GenerateMap()
         {
@@ -92,10 +85,21 @@ namespace WSP
             #endif
         }
 
-        void EndPlayerTurn()
+        void StartTurn(IUnitController unitController)
         {
-            IsPlayerTurn = false;
-            timer = .1f;
+            unitController.IsTurn = true;
+            unitController.TurnStart();
+            unitController.OnTurnEnd += EndCurrentTurn;
+        }
+
+        void EndCurrentTurn()
+        {
+            UnitControllers.Peek().IsTurn = false;
+            UnitControllers.Peek().OnTurnEnd -= EndCurrentTurn;
+
+            UnitControllers.Enqueue(UnitControllers.Dequeue());
+
+            StartTurn(UnitControllers.Peek());
         }
     }
 }

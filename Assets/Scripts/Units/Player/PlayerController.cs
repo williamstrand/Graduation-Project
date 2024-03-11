@@ -1,16 +1,15 @@
 ﻿using System;
 using UnityEngine;
 using WSP.Input;
-using WSP.Units.Components;
 
 namespace WSP.Units.Player
 {
-    [RequireComponent(typeof(MovementComponent))]
-    public class PlayerController : MonoBehaviour, IUnit
+    public class PlayerController : MonoBehaviour, IUnitController
     {
         public Action OnTurnEnd { get; set; }
+        public Unit Unit { get; private set; }
+        public bool IsTurn { get; set; }
 
-        IMovementComponent movement;
         Controls controls;
         Camera mainCamera;
 
@@ -18,15 +17,12 @@ namespace WSP.Units.Player
 
         void Start()
         {
-            movement = GetComponent<MovementComponent>();
-            movement.OnMoveEnd += EndTurn;
-
             mainCamera = Camera.main;
 
             controls = new Controls();
             controls.Enable();
 
-            targetPosition = movement.GridPosition;
+            targetPosition = Unit.GridPosition;
         }
 
         void Update()
@@ -44,17 +40,33 @@ namespace WSP.Units.Player
 
             if (controls.Game.Stop.triggered)
             {
-                targetPosition = movement.GridPosition;
+                targetPosition = Unit.GridPosition;
             }
 
-            if (!GameManager.IsPlayerTurn) return;
-            if (targetPosition == movement.GridPosition) return;
+            if (!IsTurn) return;
+            if (targetPosition == Unit.GridPosition) return;
 
-            movement.MoveTo(GameManager.CurrentMap.GetWorldPosition(targetPosition));
+            Unit.MoveTo(GameManager.CurrentMap.GetWorldPosition(targetPosition));
         }
+
+        public void SetUnit(Unit unit)
+        {
+            if (Unit != null)
+            {
+                Unit.OnActionFinished -= EndTurn;
+            }
+
+            Unit = unit;
+            Unit.OnActionFinished += EndTurn;
+            targetPosition = Unit.GridPosition;
+        }
+
+        public void TurnStart() { }
 
         void EndTurn()
         {
+            if (!IsTurn) return;
+
             OnTurnEnd?.Invoke();
         }
     }
