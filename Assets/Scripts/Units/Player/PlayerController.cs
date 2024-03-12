@@ -2,6 +2,7 @@
 using UnityEngine;
 using WSP.Camera;
 using WSP.Input;
+using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Player
 {
@@ -11,13 +12,16 @@ namespace WSP.Units.Player
         static PlayerController instance;
 
         public Action OnTurnEnd { get; set; }
-        public Unit Unit { get; private set; }
+        public IUnit Unit { get; private set; }
         public bool IsTurn { get; set; }
+
+        bool actionStarted;
 
         Controls controls;
         UnityEngine.Camera mainCamera;
 
         Vector2Int targetPosition;
+        IUnit targetUnit;
 
         void Awake()
         {
@@ -37,42 +41,65 @@ namespace WSP.Units.Player
 
         void Update()
         {
-            if (controls.Game.LeftClick.triggered)
-            {
-                var mousePosition = controls.Game.MousePosition.ReadValue<Vector2>();
-                var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
-                var gridPos = GameManager.CurrentMap.GetGridPosition(worldPosition);
-                if (GameManager.CurrentMap.GetValue(gridPos) != Map.Map.Wall)
-                {
-                    targetPosition = gridPos;
-                }
-            }
-
             if (controls.Game.Stop.triggered)
             {
                 targetPosition = Unit.GridPosition;
+                return;
             }
 
             if (!IsTurn) return;
 
-            Unit.MoveTo(GameManager.CurrentMap.GetWorldPosition(targetPosition));
+            if (controls.Game.LeftClick.triggered)
+            {
+                var mousePosition = controls.Game.MousePosition.ReadValue<Vector2>();
+                var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
+                var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
+                targetPosition = gridPosition;
+
+                if (actionStarted) return;
+
+                targetUnit = GameManager.CurrentLevel.IsOccupied(gridPosition) ? GameManager.CurrentLevel.GetUnitAt(gridPosition) : null;
+            }
+
+            if (actionStarted) return;
+
+            if (targetUnit != null)
+            {
+                if (Pathfinder.Distance(Unit.GridPosition, targetUnit.GridPosition) <= Unit.Stats.AttackRange)
+                {
+                    Unit.Attack(targetUnit);
+                    targetUnit = null;
+                    actionStarted = true;
+                    return;
+                }
+
+                targetPosition = targetUnit.GridPosition;
+            }
+
+            if (Unit.MoveTo(GameManager.CurrentLevel.Map.GetWorldPosition(targetPosition)))
+            {
+                actionStarted = true;
+            }
         }
 
-        public void SetUnit(Unit unit)
+        public void SetUnit(IUnit unit)
         {
             if (Unit != null)
             {
                 Unit.OnActionFinished -= EndTurn;
+                Unit.OnDeath -= Kill;
             }
 
             Unit = unit;
             Unit.OnActionFinished += EndTurn;
+            Unit.OnDeath += Kill;
             targetPosition = Unit.GridPosition;
         }
 
         public void TurnStart()
         {
             CameraController.SetTargetPosition(Unit.GridPosition);
+            actionStarted = false;
         }
 
         void EndTurn()
@@ -80,6 +107,11 @@ namespace WSP.Units.Player
             if (!IsTurn) return;
 
             OnTurnEnd?.Invoke();
+        }
+
+        void Kill()
+        {
+            Debug.LogError("Player died");
         }
     }
 }

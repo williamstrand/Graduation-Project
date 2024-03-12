@@ -76,6 +76,11 @@ namespace WSP.Map.Pathfinding
             }
         }
 
+        public void SetValue(Vector2Int gridPosition, int value)
+        {
+            SetValue(gridPosition.x, gridPosition.y, value);
+        }
+
         /// <summary>
         ///     Gets the value of a grid position.
         /// </summary>
@@ -114,7 +119,8 @@ namespace WSP.Map.Pathfinding
             {
                 for (var y = -1; y <= 1; y++)
                 {
-                    if (Mathf.Abs(x) == Mathf.Abs(y)) continue;
+                    // if (Mathf.Abs(x) == Mathf.Abs(y)) continue;
+                    if (x == 0 && y == 0) continue;
 
                     var checkX = gridPosition.x + x;
                     var checkY = gridPosition.y + y;
@@ -126,6 +132,19 @@ namespace WSP.Map.Pathfinding
             }
 
             return neighbours;
+        }
+
+        public Map Copy()
+        {
+            var map = new Map(Width, Height, CellSize)
+            {
+                gridArray = (int[,])gridArray.Clone(),
+                Rooms = new List<Room>(Rooms),
+                StartRoom = StartRoom,
+                ExitRoom = ExitRoom
+            };
+
+            return map;
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using WSP.Map;
 using WSP.Map.Pathfinding;
@@ -9,7 +8,7 @@ namespace WSP
 {
     public class GameManager : MonoBehaviour
     {
-        public static Map.Map CurrentMap { get; private set; }
+        public static Level CurrentLevel { get; private set; }
         [SerializeField] GameObject square;
         [SerializeField] GameObject exit;
         Transform mapParent;
@@ -19,8 +18,6 @@ namespace WSP
 
         [SerializeField] Unit playerUnit;
 
-        public Queue<IUnitController> UnitControllers = new();
-
         void Awake()
         {
             Singleton<GameManager>.Initialize(this);
@@ -28,13 +25,15 @@ namespace WSP
             GenerateMap();
 
             player = Instantiate(playerPrefab);
-            var unit = Instantiate(playerUnit, CurrentMap.GetWorldPosition(CurrentMap.StartRoom.Center), Quaternion.identity);
+            var unit = Instantiate(playerUnit, CurrentLevel.Map.GetWorldPosition(CurrentLevel.Map.StartRoom.Center), Quaternion.identity);
             player.SetUnit(unit);
-            UnitControllers.Enqueue(player);
-            StartTurn(player);
+            CurrentLevel.Units.Enqueue(player);
         }
 
-        void Start() { }
+        void Start()
+        {
+            StartTurn(player);
+        }
 
         void GenerateMap()
         {
@@ -52,34 +51,39 @@ namespace WSP
 
             foreach (Transform tile in mapParent) Destroy(tile.gameObject);
 
-            CurrentMap = mapGenerator.GenerateMap();
-            for (var x = 0; x < CurrentMap.Width; x++)
+            var map = mapGenerator.GenerateMap();
+            for (var x = 0; x < map.Width; x++)
             {
-                for (var y = 0; y < CurrentMap.Height; y++)
-                    switch (CurrentMap.GetValue(x, y))
+                for (var y = 0; y < map.Height; y++)
+                    switch (map.GetValue(x, y))
                     {
-                        case Map.Map.Empty:
+                        case Map.Pathfinding.Map.Empty:
                             break;
 
-                        case Map.Map.Wall:
-                            Instantiate(square, CurrentMap.GetWorldPosition(x, y), Quaternion.identity, mapParent);
+                        case Map.Pathfinding.Map.Wall:
+                            Instantiate(square, map.GetWorldPosition(x, y), Quaternion.identity, mapParent);
                             break;
 
-                        case Map.Map.Exit:
-                            Instantiate(exit, CurrentMap.GetWorldPosition(x, y), Quaternion.identity, mapParent);
+                        case Map.Pathfinding.Map.Exit:
+                            Instantiate(exit, map.GetWorldPosition(x, y), Quaternion.identity, mapParent);
                             break;
                     }
             }
 
-            var startRoom = CurrentMap.StartRoom;
-            var exitRoom = CurrentMap.ExitRoom;
+            var startRoom = map.StartRoom;
+            var exitRoom = map.ExitRoom;
+
+            CurrentLevel = new Level(map);
 
             #if UNITY_EDITOR
-            if (Pathfinder.FindPath(CurrentMap, startRoom.Center, exitRoom.Center, out var path))
+            if (Pathfinder.FindPath(map, startRoom.Center, exitRoom.Center, out var path))
             {
                 for (var i = 1; i < path.Count; i++)
                 {
-                    Debug.DrawLine(CurrentMap.GetWorldPosition(path[i - 1].Position), CurrentMap.GetWorldPosition(path[i].Position), Color.green, 5f);
+                    Debug.DrawLine(map.GetWorldPosition(path[i - 1].Position),
+                        map.GetWorldPosition(path[i].Position),
+                        Color.green,
+                        5f);
                 }
             }
             #endif
@@ -94,12 +98,12 @@ namespace WSP
 
         void EndCurrentTurn()
         {
-            UnitControllers.Peek().IsTurn = false;
-            UnitControllers.Peek().OnTurnEnd -= EndCurrentTurn;
+            CurrentLevel.Units.Peek().IsTurn = false;
+            CurrentLevel.Units.Peek().OnTurnEnd -= EndCurrentTurn;
 
-            UnitControllers.Enqueue(UnitControllers.Dequeue());
+            CurrentLevel.Units.Enqueue(CurrentLevel.Units.Dequeue());
 
-            StartTurn(UnitControllers.Peek());
+            StartTurn(CurrentLevel.Units.Peek());
         }
     }
 }

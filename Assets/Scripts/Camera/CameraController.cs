@@ -4,7 +4,7 @@ namespace WSP.Camera
 {
     public class CameraController : MonoBehaviour
     {
-        static CameraController Instance;
+        static CameraController instance;
         UnityEngine.Camera mainCamera;
 
         [SerializeField] float cameraSpeed = 1;
@@ -14,7 +14,7 @@ namespace WSP.Camera
         void Awake()
         {
             mainCamera = UnityEngine.Camera.main;
-            Instance = this;
+            instance = this;
         }
 
         void Update()
@@ -26,8 +26,7 @@ namespace WSP.Camera
 
         public static void SetTargetPosition(Vector2 position)
         {
-            var transform = Instance.mainCamera.transform;
-            Instance.targetPosition = position;
+            instance.targetPosition = position;
         }
     }
 }

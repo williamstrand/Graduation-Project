@@ -14,7 +14,7 @@ namespace WSP.Units.Components
         void Start()
         {
             targetPosition = transform.position;
-            GridPosition = GameManager.CurrentMap.GetGridPosition(targetPosition);
+            GridPosition = GameManager.CurrentLevel.Map.GetGridPosition(targetPosition);
         }
 
 
@@ -22,13 +22,18 @@ namespace WSP.Units.Components
         {
             if (IsMoving) return false;
 
-            var targetGridPosition = GameManager.CurrentMap.GetGridPosition(target);
+            var targetGridPosition = GameManager.CurrentLevel.Map.GetGridPosition(target);
             if (targetGridPosition == GridPosition) return false;
 
-            if (!Pathfinder.FindPath(GameManager.CurrentMap, GridPosition, targetGridPosition, out var path)) return false;
+            if (!GameManager.CurrentLevel.FindPath(GridPosition, targetGridPosition, out var path))
+            {
+                if (!Pathfinder.FindPath(GameManager.CurrentLevel.Map, GridPosition, targetGridPosition, out path)) return false;
+            }
 
-            targetPosition = GameManager.CurrentMap.GetWorldPosition(path[1].Position);
-            GridPosition = GameManager.CurrentMap.GetGridPosition(targetPosition);
+            if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;
+
+            targetPosition = GameManager.CurrentLevel.Map.GetWorldPosition(path[1].Position);
+            GridPosition = GameManager.CurrentLevel.Map.GetGridPosition(targetPosition);
 
             return true;
         }

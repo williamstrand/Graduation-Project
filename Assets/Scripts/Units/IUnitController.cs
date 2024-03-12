@@ -5,10 +5,10 @@ namespace WSP.Units
     public interface IUnitController
     {
         Action OnTurnEnd { get; set; }
-        Unit Unit { get; }
+        IUnit Unit { get; }
         bool IsTurn { get; set; }
 
         void TurnStart();
-        void SetUnit(Unit unit);
+        void SetUnit(IUnit unit);
     }
 }
