@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using WSP.Camera;
 using WSP.Input;
-using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Player
 {
@@ -32,8 +31,6 @@ namespace WSP.Units.Player
                 return;
             }
 
-            if (!IsTurn) return;
-
             if (controls.Game.LeftClick.triggered)
             {
                 var mousePosition = controls.Game.MousePosition.ReadValue<Vector2>();
@@ -46,15 +43,14 @@ namespace WSP.Units.Player
                 targetUnit = GameManager.CurrentLevel.IsOccupied(gridPosition) ? GameManager.CurrentLevel.GetUnitAt(gridPosition) : null;
             }
 
+            if (!IsTurn) return;
             if (ActionStarted) return;
 
             if (targetUnit != null)
             {
-                if (Pathfinder.Distance(Unit.GridPosition, targetUnit.GridPosition) <= Unit.Stats.AttackRange)
+                if (Attack(targetUnit))
                 {
-                    Unit.Attack(targetUnit);
                     targetUnit = null;
-                    ActionStarted = true;
                     return;
                 }
 

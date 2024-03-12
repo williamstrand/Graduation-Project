@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using WSP.Map.Pathfinding;
 
 namespace WSP.Units
 {
@@ -32,8 +33,20 @@ namespace WSP.Units
         protected virtual void EndTurn()
         {
             if (!IsTurn) return;
-
+            
             OnTurnEnd?.Invoke();
+        }
+
+        protected bool Attack(IUnit target)
+        {
+            if (target == null) return false;
+
+            if (Pathfinder.Distance(Unit.GridPosition, target.GridPosition) > Unit.Stats.AttackRange) return false;
+
+            Unit.Attack(target);
+            ActionStarted = true;
+
+            return true;
         }
 
         protected abstract void Kill();

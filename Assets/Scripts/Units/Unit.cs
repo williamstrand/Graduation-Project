@@ -26,7 +26,6 @@ namespace WSP.Units
 
         protected void Start()
         {
-            movement.OnMoveEnd += ActionFinished;
             attack.OnAttackFinished += ActionFinished;
 
             CurrentHealth = Stats.Health;

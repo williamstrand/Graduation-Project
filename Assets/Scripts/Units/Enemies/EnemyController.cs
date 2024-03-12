@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Enemies
 {
@@ -20,12 +19,7 @@ namespace WSP.Units.Enemies
 
             var target = GameManager.CurrentLevel.Player.GridPosition;
 
-            if (Pathfinder.Distance(Unit.GridPosition, target) <= Unit.Stats.AttackRange)
-            {
-                Unit.Attack(GameManager.CurrentLevel.GetUnitAt(target));
-                ActionStarted = true;
-                return;
-            }
+            if (Attack(GameManager.CurrentLevel.GetUnitAt(target))) return;
 
             Unit.MoveTo(target);
             EndTurn();
