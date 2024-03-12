@@ -1,18 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using WSP.Map.Pathfinding;
-using WSP.Units.Player;
 
 namespace WSP.Units.Enemies
 {
-    public class EnemyController : MonoBehaviour, IUnitController
+    public class EnemyController : UnitController
     {
-        public Action OnTurnEnd { get; set; }
-        public IUnit Unit { get; private set; }
-        public bool IsTurn { get; set; }
-
-        bool actionStarted;
-
         [SerializeField] Unit unitPrefab;
 
         void Start()
@@ -24,59 +16,25 @@ namespace WSP.Units.Enemies
         void Update()
         {
             if (!IsTurn) return;
-            if (actionStarted) return;
+            if (ActionStarted) return;
 
-            var target = GameManager.CurrentLevel.Map.GetWorldPosition(PlayerController.GridPosition);
+            var target = GameManager.CurrentLevel.Player.GridPosition;
 
-            if (GameManager.CurrentLevel.Map.GetGridPosition(target) == Unit.GridPosition)
+            if (Pathfinder.Distance(Unit.GridPosition, target) <= Unit.Stats.AttackRange)
             {
-                EndTurn();
+                Unit.Attack(GameManager.CurrentLevel.GetUnitAt(target));
+                ActionStarted = true;
                 return;
             }
 
-            if (Pathfinder.Distance(Unit.GridPosition, GameManager.CurrentLevel.Map.GetGridPosition(target)) <= Unit.Stats.AttackRange)
-            {
-                Unit.Attack(GameManager.CurrentLevel.GetUnitAt(GameManager.CurrentLevel.Map.GetGridPosition(target)));
-                actionStarted = true;
-                return;
-            }
-
-            if (!Unit.MoveTo(target))
-            {
-                EndTurn();
-                return;
-            }
-
+            Unit.MoveTo(target);
             EndTurn();
         }
 
-        public void SetUnit(IUnit unit)
-        {
-            if (Unit != null)
-            {
-                Unit.OnActionFinished -= EndTurn;
-                Unit.OnDeath -= Kill;
-            }
-
-            Unit = unit;
-            Unit.OnActionFinished += EndTurn;
-            Unit.OnDeath += Kill;
-        }
-
-        public void TurnStart()
-        {
-            actionStarted = false;
-        }
-
-        void Kill()
+        protected override void Kill()
         {
             Destroy(Unit.GameObject);
             GameManager.CurrentLevel.Units.Remove(this);
-        }
-
-        void EndTurn()
-        {
-            OnTurnEnd?.Invoke();
         }
     }
 }

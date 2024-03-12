@@ -1,32 +1,17 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using WSP.Camera;
 using WSP.Input;
 using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Player
 {
-    public class PlayerController : MonoBehaviour, IUnitController
+    public class PlayerController : UnitController
     {
-        public static Vector2Int GridPosition => instance.Unit.GridPosition;
-        static PlayerController instance;
-
-        public Action OnTurnEnd { get; set; }
-        public IUnit Unit { get; private set; }
-        public bool IsTurn { get; set; }
-
-        bool actionStarted;
-
         Controls controls;
         UnityEngine.Camera mainCamera;
 
         Vector2Int targetPosition;
         IUnit targetUnit;
-
-        void Awake()
-        {
-            instance = this;
-        }
 
         void Start()
         {
@@ -56,12 +41,12 @@ namespace WSP.Units.Player
                 var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
                 targetPosition = gridPosition;
 
-                if (actionStarted) return;
+                if (ActionStarted) return;
 
                 targetUnit = GameManager.CurrentLevel.IsOccupied(gridPosition) ? GameManager.CurrentLevel.GetUnitAt(gridPosition) : null;
             }
 
-            if (actionStarted) return;
+            if (ActionStarted) return;
 
             if (targetUnit != null)
             {
@@ -69,7 +54,7 @@ namespace WSP.Units.Player
                 {
                     Unit.Attack(targetUnit);
                     targetUnit = null;
-                    actionStarted = true;
+                    ActionStarted = true;
                     return;
                 }
 
@@ -78,38 +63,26 @@ namespace WSP.Units.Player
 
             if (Unit.MoveTo(GameManager.CurrentLevel.Map.GetWorldPosition(targetPosition)))
             {
-                actionStarted = true;
+                EndTurn();
             }
         }
 
-        public void SetUnit(IUnit unit)
+        public override void SetUnit(IUnit unit)
         {
-            if (Unit != null)
-            {
-                Unit.OnActionFinished -= EndTurn;
-                Unit.OnDeath -= Kill;
-            }
+            base.SetUnit(unit);
 
-            Unit = unit;
-            Unit.OnActionFinished += EndTurn;
-            Unit.OnDeath += Kill;
             targetPosition = Unit.GridPosition;
         }
 
-        public void TurnStart()
+
+        public override void TurnStart()
         {
+            base.TurnStart();
+
             CameraController.SetTargetPosition(Unit.GridPosition);
-            actionStarted = false;
         }
 
-        void EndTurn()
-        {
-            if (!IsTurn) return;
-
-            OnTurnEnd?.Invoke();
-        }
-
-        void Kill()
+        protected override void Kill()
         {
             Debug.LogError("Player died");
         }

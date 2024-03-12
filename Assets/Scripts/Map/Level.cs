@@ -8,11 +8,17 @@ namespace WSP.Map
     {
         public Pathfinding.Map Map { get; }
         public UnitQueue Units { get; }
+        public IUnit Player { get; private set; }
 
         public Level(Pathfinding.Map map)
         {
             Map = map;
             Units = new UnitQueue();
+        }
+
+        public void SetPlayer(IUnit player)
+        {
+            Player = player;
         }
 
         public bool FindPath(Vector2Int start, Vector2Int target, out Path path)

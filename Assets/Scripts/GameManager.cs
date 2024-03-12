@@ -28,6 +28,7 @@ namespace WSP
             var unit = Instantiate(playerUnit, CurrentLevel.Map.GetWorldPosition(CurrentLevel.Map.StartRoom.Center), Quaternion.identity);
             player.SetUnit(unit);
             CurrentLevel.Units.Enqueue(player);
+            CurrentLevel.SetPlayer(unit);
         }
 
         void Start()
