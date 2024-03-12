@@ -5,6 +5,7 @@ namespace WSP.Map.Pathfinding
 {
     public static class Pathfinder
     {
+        static readonly float SQRT2 = Mathf.Sqrt(2);
         static List<Node> open = new();
         static List<Node> closed = new();
 
@@ -131,6 +132,20 @@ namespace WSP.Map.Pathfinding
             }
 
             return lowestFCostNode;
+        }
+
+        public static int Distance(Vector2Int start, Vector2Int target)
+        {
+            var deltaX = Mathf.Abs(start.x - target.x);
+            var deltaY = Mathf.Abs(start.y - target.y);
+
+            var min = Mathf.Min(deltaX, deltaY);
+            var max = Mathf.Max(deltaX, deltaY);
+
+            var diagonalSteps = min;
+            var straightSteps = max - min;
+
+            return (int)(SQRT2 * diagonalSteps + straightSteps);
         }
     }
 }
