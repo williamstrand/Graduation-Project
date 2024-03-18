@@ -2,6 +2,7 @@
 using UnityEngine;
 using WSP.Camera;
 using WSP.Input;
+using WSP.Targeting;
 using WSP.Units.Upgrades;
 
 namespace WSP.Units.Player
@@ -30,6 +31,20 @@ namespace WSP.Units.Player
 
         void Update()
         {
+            var mousePosition = controls.Game.MousePosition.ReadValue<Vector2>();
+            var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
+            var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
+
+            var type = TargetingReticle.TargetType.Normal;
+
+            if (GameManager.CurrentLevel.IsOccupied(gridPosition))
+            {
+                var target = GameManager.CurrentLevel.GetUnitAt(gridPosition);
+                type = target == Unit ? TargetingReticle.TargetType.None : TargetingReticle.TargetType.Enemy;
+            }
+
+            TargetingManager.SetTargetPosition(Unit.GridPosition, gridPosition, type);
+
             if (controls.Game.Stop.triggered)
             {
                 targetPosition = Unit.GridPosition;
@@ -38,20 +53,18 @@ namespace WSP.Units.Player
 
             if (controls.Game.LeftClick.triggered)
             {
-                var mousePosition = controls.Game.MousePosition.ReadValue<Vector2>();
-                var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
-                var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
                 targetPosition = gridPosition;
 
                 if (ActionStarted) return;
 
                 targetUnit = GameManager.CurrentLevel.IsOccupied(gridPosition) ? GameManager.CurrentLevel.GetUnitAt(gridPosition) : null;
+                if (targetUnit == Unit) targetUnit = null;
             }
 
             if (!IsTurn) return;
 
             CameraController.SetTargetPosition(Unit.GridPosition);
-            
+
             if (ActionStarted) return;
 
             if (targetUnit != null)
