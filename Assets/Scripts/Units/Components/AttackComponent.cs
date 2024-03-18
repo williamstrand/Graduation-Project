@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Components
 {
     public class AttackComponent : MonoBehaviour, IAttackComponent
     {
-        public Action OnAttackFinished { get; set; }
+        public Action OnActionFinished { get; set; }
+        public bool ActionStarted { get; private set; }
         public Action<IUnit, bool> OnAttackHit { get; set; }
 
         [SerializeField] Transform sprite;
         [SerializeField] float attackSpeed = 1;
 
-        public void Attack(IUnit attacker, IUnit target)
+        public void StartAction(IUnit attacker, ActionTarget target)
         {
-            StartCoroutine(AttackCoroutine(attacker, target));
+            if (target.TargetUnit == null) return;
+            if (attacker.Stats.AttackRange < Pathfinder.Distance(attacker.GridPosition, target.TargetUnit.GridPosition)) return;
+
+            ActionStarted = true;
+            StartCoroutine(AttackCoroutine(attacker, target.TargetUnit));
         }
 
         IEnumerator AttackCoroutine(IUnit attacker, IUnit target)
@@ -40,7 +46,8 @@ namespace WSP.Units.Components
                 yield return null;
             }
 
-            OnAttackFinished?.Invoke();
+            OnActionFinished?.Invoke();
+            ActionStarted = false;
         }
     }
 }

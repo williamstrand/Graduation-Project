@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using WSP.Units.Components;
 
 namespace WSP.Units
 {
@@ -7,7 +8,6 @@ namespace WSP.Units
     {
         Action OnDeath { get; set; }
         Action<IUnit> OnTargetKilled { get; set; }
-        Action OnActionFinished { get; set; }
         Action<int> OnLevelUp { get; set; }
         Action<float, float> OnXpGained { get; set; }
         Action<float, float> OnHealthChanged { get; set; }
@@ -20,8 +20,9 @@ namespace WSP.Units
         float Xp { get; }
         float XpToNextLevel { get; }
 
-        bool MoveTo(Vector2 position);
-        void Attack(IUnit target);
+        IMovementComponent Movement { get; }
+        IAttackComponent Attack { get; }
+
         bool Damage(float damage);
         void AddXp(float xp);
     }

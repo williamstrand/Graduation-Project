@@ -10,12 +10,11 @@ namespace WSP.Units
     {
         public Action OnDeath { get; set; }
         public Action<IUnit> OnTargetKilled { get; set; }
-        public Action OnActionFinished { get; set; }
         public Action<int> OnLevelUp { get; set; }
         public Action<float, float> OnXpGained { get; set; }
         public Action<float, float> OnHealthChanged { get; set; }
 
-        public Vector2Int GridPosition => movement.GridPosition;
+        public Vector2Int GridPosition => Movement.GridPosition;
         public int Level { get; private set; } = 1;
         public float CurrentHealth { get; private set; }
         public GameObject GameObject => gameObject;
@@ -23,28 +22,16 @@ namespace WSP.Units
         public float Xp { get; private set; }
         public float XpToNextLevel => 100 + Level * 50;
 
-        IMovementComponent movement;
-        IAttackComponent attack;
+        public IMovementComponent Movement { get; private set; }
+        public IAttackComponent Attack { get; private set; }
 
         protected void Awake()
         {
-            movement = GetComponent<MovementComponent>();
-            attack = GetComponent<AttackComponent>();
+            Movement = GetComponent<MovementComponent>();
+            Attack = GetComponent<AttackComponent>();
 
             CurrentHealth = Mathf.RoundToInt(Stats.Health);
-            attack.OnAttackFinished += ActionFinished;
-            attack.OnAttackHit += TargetHit;
-        }
-
-        public bool MoveTo(Vector2 position)
-        {
-            var gridPos = GameManager.CurrentLevel.Map.GetGridPosition(position);
-            return movement.MoveTo(GameManager.CurrentLevel.Map.GetWorldPosition(gridPos));
-        }
-
-        public void Attack(IUnit target)
-        {
-            attack.Attack(this, target);
+            Attack.OnAttackHit += TargetHit;
         }
 
         public bool Damage(float damage)
@@ -63,11 +50,6 @@ namespace WSP.Units
         void Kill()
         {
             OnDeath?.Invoke();
-        }
-
-        void ActionFinished()
-        {
-            OnActionFinished?.Invoke();
         }
 
         void TargetHit(IUnit target, bool killed)

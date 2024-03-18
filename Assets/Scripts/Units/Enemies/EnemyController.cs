@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Enemies
 {
@@ -15,14 +16,27 @@ namespace WSP.Units.Enemies
         void Update()
         {
             if (!IsTurn) return;
-            if (ActionStarted) return;
+            if (!CanAct) return;
 
-            var target = GameManager.CurrentLevel.Player.GridPosition;
+            TargetAction = GetAction(GameManager.CurrentLevel.Player.GridPosition);
+            var actionContext = TargetAction;
+            StartAction(actionContext);
+        }
 
-            if (Attack(GameManager.CurrentLevel.GetUnitAt(target))) return;
+        ActionContext GetAction(Vector2Int gridPosition)
+        {
+            var actionTarget = new ActionTarget
+            {
+                TargetPosition = gridPosition
+            };
 
-            Unit.MoveTo(target);
-            EndTurn();
+            if (Pathfinder.Distance(Unit.GridPosition, gridPosition) > Unit.Stats.AttackRange)
+            {
+                return new ActionContext(Unit.Movement, actionTarget);
+            }
+
+            actionTarget.TargetUnit = GameManager.CurrentLevel.Player;
+            return new ActionContext(Unit.Attack, actionTarget);
         }
 
         protected override void Kill()

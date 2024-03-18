@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using WSP.Map.Pathfinding;
 
 namespace WSP.Units
 {
@@ -10,44 +9,46 @@ namespace WSP.Units
         public IUnit Unit { get; private set; }
         public bool IsTurn { get; set; }
 
-        protected bool ActionStarted;
+        protected ActionContext CurrentAction;
+        protected ActionContext TargetAction;
+        protected bool CanAct => CurrentAction is not { ActionStarted: true };
 
         public virtual void SetUnit(IUnit unit)
         {
             if (Unit != null)
             {
-                Unit.OnActionFinished -= EndTurn;
                 Unit.OnDeath -= Kill;
             }
 
             Unit = unit;
-            Unit.OnActionFinished += EndTurn;
             Unit.OnDeath += Kill;
             Unit.GameObject.transform.SetParent(transform);
         }
 
-        public virtual void TurnStart()
-        {
-            ActionStarted = false;
-        }
+        public virtual void TurnStart() { }
 
-        protected virtual void EndTurn()
+        void EndTurn()
         {
+            if (!gameObject) return;
             if (!IsTurn) return;
+
+            if (CurrentAction != null)
+            {
+                CurrentAction.Action.OnActionFinished -= EndTurn;
+                CurrentAction = null;
+            }
 
             OnTurnEnd?.Invoke();
         }
 
-        protected virtual bool Attack(IUnit target)
+        protected void StartAction(ActionContext action)
         {
-            if (target == null) return false;
+            if (action == null) return;
+            if (!CanAct) return;
 
-            if (Pathfinder.Distance(Unit.GridPosition, target.GridPosition) > Unit.Stats.AttackRange) return false;
-
-            Unit.Attack(target);
-            ActionStarted = true;
-
-            return true;
+            CurrentAction = action;
+            CurrentAction.Action.OnActionFinished += EndTurn;
+            CurrentAction.StartAction(Unit);
         }
 
         protected abstract void Kill();
