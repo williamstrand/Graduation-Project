@@ -26,7 +26,6 @@ namespace WSP.Units.Player
             controls.Enable();
 
             targetPosition = Unit.GridPosition;
-            CameraController.SetTargetPosition(Unit.GridPosition);
         }
 
         void Update()
@@ -50,6 +49,9 @@ namespace WSP.Units.Player
             }
 
             if (!IsTurn) return;
+
+            CameraController.SetTargetPosition(Unit.GridPosition);
+            
             if (ActionStarted) return;
 
             if (targetUnit != null)
@@ -85,13 +87,13 @@ namespace WSP.Units.Player
             base.SetUnit(unit);
 
             targetPosition = Unit.GridPosition;
-            
+
             Unit.OnTargetKilled += killed => Unit.AddXp(killed.Level * 15);
             Unit.OnLevelUp += level => OnUnitLevelUp?.Invoke(level);
             Unit.OnXpGained += (current, max) => OnUnitXpGained?.Invoke(current, max);
             Unit.OnHealthChanged += (current, max) => OnUnitHealthChanged?.Invoke(current, max);
         }
-        
+
         public override void TurnStart()
         {
             base.TurnStart();
