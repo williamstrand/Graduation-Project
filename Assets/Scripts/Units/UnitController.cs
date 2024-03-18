@@ -23,6 +23,7 @@ namespace WSP.Units
             Unit = unit;
             Unit.OnActionFinished += EndTurn;
             Unit.OnDeath += Kill;
+            Unit.GameObject.transform.SetParent(transform);
         }
 
         public virtual void TurnStart()
@@ -33,11 +34,11 @@ namespace WSP.Units
         protected virtual void EndTurn()
         {
             if (!IsTurn) return;
-            
+
             OnTurnEnd?.Invoke();
         }
 
-        protected bool Attack(IUnit target)
+        protected virtual bool Attack(IUnit target)
         {
             if (target == null) return false;
 

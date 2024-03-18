@@ -7,6 +7,7 @@ namespace WSP.Units.Components
     public class AttackComponent : MonoBehaviour, IAttackComponent
     {
         public Action OnAttackFinished { get; set; }
+        public Action<IUnit, bool> OnAttackHit { get; set; }
 
         [SerializeField] Transform sprite;
         [SerializeField] float attackSpeed = 1;
@@ -27,7 +28,8 @@ namespace WSP.Units.Components
                 yield return null;
             }
 
-            target.Damage(attacker.Stats.Attack);
+            var targetKilled = target.Damage(Mathf.RoundToInt(attacker.Stats.Attack));
+            OnAttackHit?.Invoke(target, targetKilled);
 
             timer = 0;
             originalPosition = sprite.position;

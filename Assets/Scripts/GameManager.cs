@@ -1,6 +1,7 @@
 using UnityEngine;
 using WSP.Map;
 using WSP.Map.Pathfinding;
+using WSP.Ui;
 using WSP.Units;
 using WSP.Units.Player;
 
@@ -9,18 +10,21 @@ namespace WSP
     public class GameManager : MonoBehaviour
     {
         public static Level CurrentLevel { get; private set; }
+
         [SerializeField] GameObject square;
         [SerializeField] GameObject exit;
         Transform mapParent;
-        [SerializeField] PlayerController playerPrefab;
         MapGenerator mapGenerator;
-        IUnitController player;
 
+        [SerializeField] PlayerController playerPrefab;
         [SerializeField] Unit playerUnit;
+        IPlayerUnitController player;
+        [SerializeField] LevelUpManager levelUpManager;
+        [SerializeField] UiManager uiManager;
+
 
         void Awake()
         {
-            Singleton<GameManager>.Initialize(this);
             mapParent = new GameObject("Map").transform;
             GenerateMap();
 
@@ -29,6 +33,9 @@ namespace WSP
             player.SetUnit(unit);
             CurrentLevel.Units.Enqueue(player);
             CurrentLevel.SetPlayer(unit);
+
+            levelUpManager.SetPlayer(player);
+            uiManager.SetPlayer(player);
         }
 
         void Start()
