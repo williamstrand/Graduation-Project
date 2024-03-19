@@ -11,7 +11,6 @@ namespace WSP.Targeting
         public static Color FriendlyColor => instance.friendlyColor;
         public static Color EnemyColor => instance.enemyColor;
 
-
         [SerializeField] TargetingReticle reticle;
         [SerializeField] LineRenderer lineRenderer;
 
@@ -20,6 +19,10 @@ namespace WSP.Targeting
         [SerializeField] Color friendlyColor = Color.green;
         [SerializeField] Color enemyColor = Color.red;
 
+        Vector2Int currentOrigin;
+        Vector2Int currentPosition;
+        TargetingReticle.TargetType currentType;
+
         void Awake()
         {
             instance = this;
@@ -27,6 +30,12 @@ namespace WSP.Targeting
 
         public static void SetTargetPosition(Vector2Int origin, Vector2Int position, TargetingReticle.TargetType type = TargetingReticle.TargetType.None)
         {
+            if (instance.currentOrigin == origin && instance.currentPosition == position && instance.currentType == type) return;
+
+            instance.currentOrigin = origin;
+            instance.currentPosition = position;
+            instance.currentType = type;
+
             if (type == TargetingReticle.TargetType.None)
             {
                 instance.reticle.SetPosition(position, type);
