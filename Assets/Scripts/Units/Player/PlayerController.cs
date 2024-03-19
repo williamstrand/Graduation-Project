@@ -2,6 +2,7 @@
 using UnityEngine;
 using WSP.Camera;
 using WSP.Input;
+using WSP.Items;
 using WSP.Map.Pathfinding;
 using WSP.Targeting;
 using WSP.Units.Upgrades;
@@ -13,14 +14,25 @@ namespace WSP.Units.Player
         public Action<int> OnUnitLevelUp { get; set; }
         public Action<float, float> OnUnitXpGained { get; set; }
         public Action<float, float> OnUnitHealthChanged { get; set; }
+        public Action<Item[]> OnOpenInventory { get; set; }
 
         UnityEngine.Camera mainCamera;
 
-        ActionTarget target;
+        ActionTarget currentTarget;
 
         void Start()
         {
             mainCamera = UnityEngine.Camera.main;
+        }
+
+        void OnEnable()
+        {
+            InputHandler.Controls.Menu.Inventory.performed += _ => OpenInventory();
+        }
+
+        void OpenInventory()
+        {
+            OnOpenInventory?.Invoke(Unit.Inventory.GetAllItems());
         }
 
         void Update()
@@ -42,43 +54,45 @@ namespace WSP.Units.Player
         {
             if (InputHandler.Controls.Game.Stop.triggered)
             {
-                target = null;
+                currentTarget = null;
                 return null;
             }
 
+            if (targetPosition == Unit.GridPosition) return null;
+
             bool inRange;
-            if (target != null)
+
+            if (InputHandler.Controls.Game.Target.triggered)
             {
-                if (target.TargetPosition == Unit.GridPosition)
+                currentTarget = new ActionTarget
                 {
-                    target = null;
-                    return null;
-                }
+                    TargetPosition = targetPosition
+                };
 
-                if (target.TargetUnit == null) return new ActionContext(Unit.Movement, target);
+                if (!GameManager.CurrentLevel.IsOccupied(targetPosition)) return new ActionContext(Unit.Movement, currentTarget);
 
-                inRange = Pathfinder.Distance(Unit.GridPosition, target.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
-                if (!inRange) return new ActionContext(Unit.Movement, target);
+                currentTarget.TargetUnit = GameManager.CurrentLevel.GetUnitAt(targetPosition);
 
-                var ctx = new ActionContext(Unit.Attack, target);
-                target = null;
-                return ctx;
+                inRange = Pathfinder.Distance(Unit.GridPosition, currentTarget.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
+                return inRange ? new ActionContext(Unit.Attack, currentTarget) : new ActionContext(Unit.Movement, currentTarget);
             }
 
-            if (targetPosition == Unit.GridPosition) return null;
-            if (!InputHandler.Controls.Game.LeftClick.triggered) return null;
+            if (currentTarget == null) return null;
 
-            target = new ActionTarget
+            if (currentTarget.TargetPosition == Unit.GridPosition)
             {
-                TargetPosition = targetPosition
-            };
+                currentTarget = null;
+                return null;
+            }
 
-            if (!GameManager.CurrentLevel.IsOccupied(targetPosition)) return new ActionContext(Unit.Movement, target);
+            if (currentTarget.TargetUnit == null) return new ActionContext(Unit.Movement, currentTarget);
 
-            target.TargetUnit = GameManager.CurrentLevel.GetUnitAt(targetPosition);
+            inRange = Pathfinder.Distance(Unit.GridPosition, currentTarget.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
+            if (!inRange) return new ActionContext(Unit.Movement, currentTarget);
 
-            inRange = Pathfinder.Distance(Unit.GridPosition, target.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
-            return inRange ? new ActionContext(Unit.Attack, target) : new ActionContext(Unit.Movement, target);
+            var ctx = new ActionContext(Unit.Attack, currentTarget);
+            currentTarget = null;
+            return ctx;
         }
 
         Vector2Int GetTargetPosition()
@@ -136,7 +150,7 @@ namespace WSP.Units.Player
         void UnitTargetKilled(IUnit target)
         {
             Unit.AddXp(target.Level * 15);
-            this.target = null;
+            currentTarget = null;
             Debug.Log("Target killed");
         }
 

@@ -20,7 +20,10 @@ namespace WSP.Units.Enemies
 
             TargetAction = GetAction(GameManager.CurrentLevel.Player.GridPosition);
             var actionContext = TargetAction;
-            StartAction(actionContext);
+            if (!StartAction(actionContext))
+            {
+                EndTurn();
+            }
         }
 
         ActionContext GetAction(Vector2Int gridPosition)

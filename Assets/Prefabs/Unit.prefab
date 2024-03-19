@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 8039909557067810741}
   - component: {fileID: 8501405415805171946}
   - component: {fileID: -6264792778512200803}
+  - component: {fileID: 3528063865061802172}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -163,3 +164,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 9091278497197237223}
   attackSpeed: 3
+--- !u!114 &3528063865061802172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401608540523457847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2083420660df49e6b919f4b61d4eefa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Size>k__BackingField: 5

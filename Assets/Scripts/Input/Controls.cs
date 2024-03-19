@@ -30,24 +30,6 @@ namespace WSP.Input
             ""id"": ""64fbad85-01a8-4446-8f15-407aece0fc86"",
             ""actions"": [
                 {
-                    ""name"": ""Mouse Position"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""1544da35-ff4b-434a-8237-c403125ec368"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Left Click"",
-                    ""type"": ""Button"",
-                    ""id"": ""1652cf0c-4978-4304-81b0-d8203cb38bbf"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Stop"",
                     ""type"": ""Button"",
                     ""id"": ""61715131-198f-407d-ba4d-5977a4d3c6b6"",
@@ -55,31 +37,27 @@ namespace WSP.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Target"",
+                    ""type"": ""Button"",
+                    ""id"": ""536f89b9-3df5-4073-a84f-18e11909113b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouse Position"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""755d5ca2-e5ae-4992-be46-832925b738c9"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""c42db189-988b-4f99-9e10-fff2f27ffe69"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Mouse Position"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f95a9d00-be2a-44b0-a398-52704c6e6562"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Left Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""0f045b7c-535f-41e7-a9ec-87a702d675ed"",
@@ -90,6 +68,124 @@ namespace WSP.Input
                     ""action"": ""Stop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dba96855-8510-43b7-9042-c259d978c3f0"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Target"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""656419b6-efd9-482c-bdef-46bf8845af50"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mouse Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Menu"",
+            ""id"": ""a1c9d2f7-e006-4e2c-ba81-f79f6115afa8"",
+            ""actions"": [
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""71da22ff-ad93-4ea2-a8af-259f3770203f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5f53b22a-6935-4e44-a66d-44f059c48933"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""General"",
+            ""id"": ""c15ffd55-97f4-45e0-8218-96b83b5d0c4d"",
+            ""actions"": [
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""02942ebe-ec0f-42b0-8d4b-02b938543cb8"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""700e106b-4a7a-479f-8750-bf36d4d068f8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouse Position"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""11d98016-fa2d-40ee-af91-5a151d2bf650"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""4d9ea424-e028-4c52-85af-661f1d1886da"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bef8ce29-9fac-402e-9994-7e9908ad671d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""019fe615-61d8-4714-9b08-eec4791823e7"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mouse Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -98,9 +194,17 @@ namespace WSP.Input
 }");
             // Game
             m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
-            m_Game_MousePosition = m_Game.FindAction("Mouse Position", throwIfNotFound: true);
-            m_Game_LeftClick = m_Game.FindAction("Left Click", throwIfNotFound: true);
             m_Game_Stop = m_Game.FindAction("Stop", throwIfNotFound: true);
+            m_Game_Target = m_Game.FindAction("Target", throwIfNotFound: true);
+            m_Game_MousePosition = m_Game.FindAction("Mouse Position", throwIfNotFound: true);
+            // Menu
+            m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+            m_Menu_Inventory = m_Menu.FindAction("Inventory", throwIfNotFound: true);
+            // General
+            m_General = asset.FindActionMap("General", throwIfNotFound: true);
+            m_General_Scroll = m_General.FindAction("Scroll", throwIfNotFound: true);
+            m_General_LeftClick = m_General.FindAction("Left Click", throwIfNotFound: true);
+            m_General_MousePosition = m_General.FindAction("Mouse Position", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -162,16 +266,16 @@ namespace WSP.Input
         // Game
         private readonly InputActionMap m_Game;
         private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
-        private readonly InputAction m_Game_MousePosition;
-        private readonly InputAction m_Game_LeftClick;
         private readonly InputAction m_Game_Stop;
+        private readonly InputAction m_Game_Target;
+        private readonly InputAction m_Game_MousePosition;
         public struct GameActions
         {
             private @Controls m_Wrapper;
             public GameActions(@Controls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @MousePosition => m_Wrapper.m_Game_MousePosition;
-            public InputAction @LeftClick => m_Wrapper.m_Game_LeftClick;
             public InputAction @Stop => m_Wrapper.m_Game_Stop;
+            public InputAction @Target => m_Wrapper.m_Game_Target;
+            public InputAction @MousePosition => m_Wrapper.m_Game_MousePosition;
             public InputActionMap Get() { return m_Wrapper.m_Game; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -181,28 +285,28 @@ namespace WSP.Input
             {
                 if (instance == null || m_Wrapper.m_GameActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_GameActionsCallbackInterfaces.Add(instance);
-                @MousePosition.started += instance.OnMousePosition;
-                @MousePosition.performed += instance.OnMousePosition;
-                @MousePosition.canceled += instance.OnMousePosition;
-                @LeftClick.started += instance.OnLeftClick;
-                @LeftClick.performed += instance.OnLeftClick;
-                @LeftClick.canceled += instance.OnLeftClick;
                 @Stop.started += instance.OnStop;
                 @Stop.performed += instance.OnStop;
                 @Stop.canceled += instance.OnStop;
+                @Target.started += instance.OnTarget;
+                @Target.performed += instance.OnTarget;
+                @Target.canceled += instance.OnTarget;
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
             }
 
             private void UnregisterCallbacks(IGameActions instance)
             {
-                @MousePosition.started -= instance.OnMousePosition;
-                @MousePosition.performed -= instance.OnMousePosition;
-                @MousePosition.canceled -= instance.OnMousePosition;
-                @LeftClick.started -= instance.OnLeftClick;
-                @LeftClick.performed -= instance.OnLeftClick;
-                @LeftClick.canceled -= instance.OnLeftClick;
                 @Stop.started -= instance.OnStop;
                 @Stop.performed -= instance.OnStop;
                 @Stop.canceled -= instance.OnStop;
+                @Target.started -= instance.OnTarget;
+                @Target.performed -= instance.OnTarget;
+                @Target.canceled -= instance.OnTarget;
+                @MousePosition.started -= instance.OnMousePosition;
+                @MousePosition.performed -= instance.OnMousePosition;
+                @MousePosition.canceled -= instance.OnMousePosition;
             }
 
             public void RemoveCallbacks(IGameActions instance)
@@ -220,11 +324,129 @@ namespace WSP.Input
             }
         }
         public GameActions @Game => new GameActions(this);
+
+        // Menu
+        private readonly InputActionMap m_Menu;
+        private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
+        private readonly InputAction m_Menu_Inventory;
+        public struct MenuActions
+        {
+            private @Controls m_Wrapper;
+            public MenuActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Inventory => m_Wrapper.m_Menu_Inventory;
+            public InputActionMap Get() { return m_Wrapper.m_Menu; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+            public void AddCallbacks(IMenuActions instance)
+            {
+                if (instance == null || m_Wrapper.m_MenuActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_MenuActionsCallbackInterfaces.Add(instance);
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
+            }
+
+            private void UnregisterCallbacks(IMenuActions instance)
+            {
+                @Inventory.started -= instance.OnInventory;
+                @Inventory.performed -= instance.OnInventory;
+                @Inventory.canceled -= instance.OnInventory;
+            }
+
+            public void RemoveCallbacks(IMenuActions instance)
+            {
+                if (m_Wrapper.m_MenuActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IMenuActions instance)
+            {
+                foreach (var item in m_Wrapper.m_MenuActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_MenuActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public MenuActions @Menu => new MenuActions(this);
+
+        // General
+        private readonly InputActionMap m_General;
+        private List<IGeneralActions> m_GeneralActionsCallbackInterfaces = new List<IGeneralActions>();
+        private readonly InputAction m_General_Scroll;
+        private readonly InputAction m_General_LeftClick;
+        private readonly InputAction m_General_MousePosition;
+        public struct GeneralActions
+        {
+            private @Controls m_Wrapper;
+            public GeneralActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Scroll => m_Wrapper.m_General_Scroll;
+            public InputAction @LeftClick => m_Wrapper.m_General_LeftClick;
+            public InputAction @MousePosition => m_Wrapper.m_General_MousePosition;
+            public InputActionMap Get() { return m_Wrapper.m_General; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(GeneralActions set) { return set.Get(); }
+            public void AddCallbacks(IGeneralActions instance)
+            {
+                if (instance == null || m_Wrapper.m_GeneralActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_GeneralActionsCallbackInterfaces.Add(instance);
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
+                @LeftClick.started += instance.OnLeftClick;
+                @LeftClick.performed += instance.OnLeftClick;
+                @LeftClick.canceled += instance.OnLeftClick;
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
+            }
+
+            private void UnregisterCallbacks(IGeneralActions instance)
+            {
+                @Scroll.started -= instance.OnScroll;
+                @Scroll.performed -= instance.OnScroll;
+                @Scroll.canceled -= instance.OnScroll;
+                @LeftClick.started -= instance.OnLeftClick;
+                @LeftClick.performed -= instance.OnLeftClick;
+                @LeftClick.canceled -= instance.OnLeftClick;
+                @MousePosition.started -= instance.OnMousePosition;
+                @MousePosition.performed -= instance.OnMousePosition;
+                @MousePosition.canceled -= instance.OnMousePosition;
+            }
+
+            public void RemoveCallbacks(IGeneralActions instance)
+            {
+                if (m_Wrapper.m_GeneralActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IGeneralActions instance)
+            {
+                foreach (var item in m_Wrapper.m_GeneralActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_GeneralActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public GeneralActions @General => new GeneralActions(this);
         public interface IGameActions
         {
-            void OnMousePosition(InputAction.CallbackContext context);
-            void OnLeftClick(InputAction.CallbackContext context);
             void OnStop(InputAction.CallbackContext context);
+            void OnTarget(InputAction.CallbackContext context);
+            void OnMousePosition(InputAction.CallbackContext context);
+        }
+        public interface IMenuActions
+        {
+            void OnInventory(InputAction.CallbackContext context);
+        }
+        public interface IGeneralActions
+        {
+            void OnScroll(InputAction.CallbackContext context);
+            void OnLeftClick(InputAction.CallbackContext context);
+            void OnMousePosition(InputAction.CallbackContext context);
         }
     }
 }

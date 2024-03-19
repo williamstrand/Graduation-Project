@@ -12,9 +12,9 @@
             Target = target;
         }
 
-        public void StartAction(IUnit unit)
+        public bool StartAction(IUnit unit)
         {
-            Action.StartAction(unit, Target);
+            return Action.StartAction(unit, Target);
         }
     }
 }

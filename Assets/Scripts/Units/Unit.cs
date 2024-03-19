@@ -24,11 +24,13 @@ namespace WSP.Units
 
         public IMovementComponent Movement { get; private set; }
         public IAttackComponent Attack { get; private set; }
+        public IInventoryComponent Inventory { get; private set; }
 
         protected void Awake()
         {
             Movement = GetComponent<MovementComponent>();
             Attack = GetComponent<AttackComponent>();
+            Inventory = GetComponent<InventoryComponent>();
 
             CurrentHealth = Mathf.RoundToInt(Stats.Health);
             Attack.OnAttackHit += TargetHit;
@@ -43,6 +45,12 @@ namespace WSP.Units
 
             Kill();
             return true;
+        }
+
+        public void Heal(float heal)
+        {
+            CurrentHealth = Mathf.Clamp(CurrentHealth + heal, 0, Stats.Health);
+            OnHealthChanged?.Invoke(CurrentHealth, Stats.Health);
         }
 
         public void AddXp(int xp) { }

@@ -8,7 +8,7 @@ namespace WSP.Units
         Action OnActionFinished { get; set; }
         bool ActionStarted { get; }
 
-        void StartAction(IUnit origin, ActionTarget target);
+        bool StartAction(IUnit origin, ActionTarget target);
     }
 
     public class ActionTarget

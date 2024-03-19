@@ -27,7 +27,7 @@ namespace WSP.Units
 
         public virtual void TurnStart() { }
 
-        void EndTurn()
+        protected void EndTurn()
         {
             if (!gameObject) return;
             if (!IsTurn) return;
@@ -41,14 +41,14 @@ namespace WSP.Units
             OnTurnEnd?.Invoke();
         }
 
-        protected void StartAction(ActionContext action)
+        protected bool StartAction(ActionContext action)
         {
-            if (action == null) return;
-            if (!CanAct) return;
+            if (action == null) return false;
+            if (!CanAct) return false;
 
             CurrentAction = action;
             CurrentAction.Action.OnActionFinished += EndTurn;
-            CurrentAction.StartAction(Unit);
+            return CurrentAction.StartAction(Unit);
         }
 
         protected abstract void Kill();

@@ -16,31 +16,30 @@ namespace WSP
         Transform mapParent;
         MapGenerator mapGenerator;
 
+        IPlayerUnitController playerController;
         [SerializeField] PlayerController playerPrefab;
         [SerializeField] Unit playerUnit;
-        IPlayerUnitController player;
         [SerializeField] LevelUpManager levelUpManager;
         [SerializeField] UiManager uiManager;
-
 
         void Awake()
         {
             mapParent = new GameObject("Map").transform;
             GenerateMap();
 
-            player = Instantiate(playerPrefab);
+            playerController = Instantiate(playerPrefab);
             var unit = Instantiate(playerUnit, CurrentLevel.Map.GetWorldPosition(CurrentLevel.Map.StartRoom.Center), Quaternion.identity);
-            player.SetUnit(unit);
-            CurrentLevel.Units.Enqueue(player);
+            playerController.SetUnit(unit);
+            CurrentLevel.Units.Enqueue(playerController);
             CurrentLevel.SetPlayer(unit);
 
-            levelUpManager.SetPlayer(player);
-            uiManager.SetPlayer(player);
+            levelUpManager.SetPlayer(playerController);
+            uiManager.SetPlayer(playerController);
         }
 
         void Start()
         {
-            StartTurn(player);
+            StartTurn(playerController);
         }
 
         void GenerateMap()

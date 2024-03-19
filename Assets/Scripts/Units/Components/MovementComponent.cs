@@ -40,19 +40,20 @@ namespace WSP.Units.Components
             isMoving = false;
         }
 
-        public void StartAction(IUnit origin, ActionTarget target)
+        public bool StartAction(IUnit origin, ActionTarget target)
         {
-            if (isMoving) return;
-            if (target.TargetPosition == GridPosition) return;
+            if (isMoving) return false;
+            if (target.TargetPosition == GridPosition) return false;
 
             if (!GameManager.CurrentLevel.FindPath(GridPosition, target.TargetPosition, out var path))
             {
-                if (!Pathfinder.FindPath(GameManager.CurrentLevel.Map, GridPosition, target.TargetPosition, out path)) return;
+                if (!Pathfinder.FindPath(GameManager.CurrentLevel.Map, GridPosition, target.TargetPosition, out path)) return false;
             }
 
-            if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return;
+            if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return true;
 
             StartCoroutine(MoveCoroutine(path[1]));
+            return true;
         }
     }
 }

@@ -22,8 +22,10 @@ namespace WSP.Units
 
         IMovementComponent Movement { get; }
         IAttackComponent Attack { get; }
+        IInventoryComponent Inventory { get; }
 
         bool Damage(float damage);
+        void Heal(float heal);
         void AddXp(float xp);
     }
 }
