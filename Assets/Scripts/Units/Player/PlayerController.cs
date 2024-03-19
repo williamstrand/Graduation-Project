@@ -14,7 +14,6 @@ namespace WSP.Units.Player
         public Action<float, float> OnUnitXpGained { get; set; }
         public Action<float, float> OnUnitHealthChanged { get; set; }
 
-        Controls controls;
         UnityEngine.Camera mainCamera;
 
         ActionTarget target;
@@ -22,16 +21,13 @@ namespace WSP.Units.Player
         void Start()
         {
             mainCamera = UnityEngine.Camera.main;
-
-            controls = new Controls();
-            controls.Enable();
         }
 
         void Update()
         {
             var gridPosition = GetTargetPosition();
             TargetAction = GetAction(gridPosition);
-            Target(gridPosition);
+            ShowTargeting(gridPosition);
 
             if (!IsTurn) return;
 
@@ -44,7 +40,7 @@ namespace WSP.Units.Player
 
         ActionContext GetAction(Vector2Int targetPosition)
         {
-            if (controls.Game.Stop.triggered)
+            if (InputHandler.Controls.Game.Stop.triggered)
             {
                 target = null;
                 return null;
@@ -70,7 +66,7 @@ namespace WSP.Units.Player
             }
 
             if (targetPosition == Unit.GridPosition) return null;
-            if (!controls.Game.LeftClick.triggered) return null;
+            if (!InputHandler.Controls.Game.LeftClick.triggered) return null;
 
             target = new ActionTarget
             {
@@ -87,14 +83,14 @@ namespace WSP.Units.Player
 
         Vector2Int GetTargetPosition()
         {
-            var mousePosition = controls.Game.MousePosition.ReadValue<Vector2>();
+            var mousePosition = InputHandler.Controls.Game.MousePosition.ReadValue<Vector2>();
             var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
 
             return gridPosition;
         }
 
-        void Target(Vector2Int gridPosition)
+        void ShowTargeting(Vector2Int gridPosition)
         {
             var type = TargetingReticle.TargetType.Normal;
 
