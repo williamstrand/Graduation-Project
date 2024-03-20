@@ -7,7 +7,7 @@ namespace WSP.Map.Pathfinding
     {
         static readonly float SQRT2 = Mathf.Sqrt(2);
         static List<Node> open = new();
-        static List<Node> closed = new();
+        static HashSet<Vector2Int> allPositions = new();
 
         /// <summary>
         ///     Find a path from start to end.
@@ -20,9 +20,10 @@ namespace WSP.Map.Pathfinding
         public static bool FindPath(Map map, Vector2Int start, Vector2Int end, out Path path)
         {
             open.Clear();
-            closed.Clear();
+            allPositions.Clear();
 
             open.Add(new Node(start));
+            allPositions.Add(start);
 
             while (open.Count != 0)
             {
@@ -35,12 +36,9 @@ namespace WSP.Map.Pathfinding
                     return true;
                 }
 
-                var neighbours = map.GetNeighbours(q.Position);
-                for (var i = 0; i < neighbours.Count; i++)
+                var neighbours = map.GetNeighbours(q.Position, allPositions);
+                for (var i = 0; i < neighbours.Length; i++)
                 {
-                    if (InList(open, neighbours[i])) continue;
-                    if (InList(closed, neighbours[i])) continue;
-
                     var value = map.GetValue(neighbours[i]);
                     if (value == Map.Wall) continue;
 
@@ -54,11 +52,10 @@ namespace WSP.Map.Pathfinding
                     }
 
                     open.Add(node);
+                    allPositions.Add(node.Position);
                     node.GCost = q.GCost + 1;
                     node.HCost = GetDistance(node.Position, end);
                 }
-
-                closed.Add(q);
             }
 
             path = default;
@@ -71,14 +68,9 @@ namespace WSP.Map.Pathfinding
         /// <param name="list">the list to check in.</param>
         /// <param name="position">the position to check for.</param>
         /// <returns>true if it exists in the list.</returns>
-        static bool InList(List<Node> list, Vector2Int position)
+        static bool InList(HashSet<Vector2Int> list, Vector2Int position)
         {
-            for (var i = 0; i < list.Count; i++)
-            {
-                if (list[i].Position == position) return true;
-            }
-
-            return false;
+            return list.Contains(position);
         }
 
         /// <summary>

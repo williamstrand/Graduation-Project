@@ -113,6 +113,10 @@ namespace WSP.Units.Player
                 var targetUnit = GameManager.CurrentLevel.GetUnitAt(gridPosition);
                 type = targetUnit == Unit ? TargetingReticle.ReticleTargetType.None : TargetingReticle.ReticleTargetType.Enemy;
             }
+            else if (GameManager.CurrentLevel.Map.GetValue(gridPosition) == Map.Pathfinding.Map.Wall)
+            {
+                type = TargetingReticle.ReticleTargetType.None;
+            }
 
             TargetingManager.SetTargetPosition(Unit.GridPosition, gridPosition, type);
         }

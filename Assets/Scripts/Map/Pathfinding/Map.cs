@@ -111,22 +111,27 @@ namespace WSP.Map.Pathfinding
         ///     Gets a list of the neighbours of a grid position.
         /// </summary>
         /// <param name="gridPosition">the grid position.</param>
+        /// <param name="ignore">list of positions to ignore.</param>
         /// <returns>a list of neighbours.</returns>
-        public List<Vector2Int> GetNeighbours(Vector2Int gridPosition)
+        public Vector2Int[] GetNeighbours(Vector2Int gridPosition, ICollection<Vector2Int> ignore)
         {
-            var neighbours = new List<Vector2Int>();
+            var neighbours = new Vector2Int[8];
+            var i = 0;
             for (var x = -1; x <= 1; x++)
             {
                 for (var y = -1; y <= 1; y++)
                 {
-                    // if (Mathf.Abs(x) == Mathf.Abs(y)) continue;
                     if (x == 0 && y == 0) continue;
 
                     var checkX = gridPosition.x + x;
                     var checkY = gridPosition.y + y;
+                    var vector = new Vector2Int(checkX, checkY);
+                    if (ignore.Contains(vector)) continue;
+
                     if (checkX >= 0 && checkX < Width && checkY >= 0 && checkY < Height)
                     {
-                        neighbours.Add(new Vector2Int(checkX, checkY));
+                        neighbours[i] = vector;
+                        i++;
                     }
                 }
             }
