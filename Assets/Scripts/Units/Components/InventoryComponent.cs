@@ -15,21 +15,22 @@ namespace WSP.Units.Components
         void Awake()
         {
             inventory = new List<Item>();
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
-            inventory.Add(new Apple());
+            var allItems = Item.GetAllItems();
+            inventory.Add(allItems[0]);
+            inventory.Add(allItems[1]);
+            inventory.Add(allItems[1]);
+            inventory.Add(allItems[0]);
+            inventory.Add(allItems[1]);
+            inventory.Add(allItems[0]);
+            inventory.Add(allItems[1]);
+            inventory.Add(allItems[0]);
+            inventory.Add(allItems[1]);
+            inventory.Add(allItems[0]);
+            inventory.Add(allItems[1]);
+            inventory.Add(allItems[0]);
+            inventory.Add(allItems[0]);
+            inventory.Add(allItems[0]);
+            inventory.Add(allItems[0]);
         }
 
         public Item this[int index] => GetItem(index);
