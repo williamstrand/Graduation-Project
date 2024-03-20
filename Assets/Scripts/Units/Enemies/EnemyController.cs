@@ -5,7 +5,12 @@ namespace WSP.Units.Enemies
 {
     public class EnemyController : UnitController
     {
+        const int VisionRange = 7;
+
         [SerializeField] Unit unitPrefab;
+
+
+        IUnit player;
 
         void Start()
         {
@@ -18,7 +23,16 @@ namespace WSP.Units.Enemies
             if (!IsTurn) return;
             if (!CanAct) return;
 
-            TargetAction = GetAction(GameManager.CurrentLevel.Player.GridPosition);
+            if (player == null)
+            {
+                var randomDirection = new Vector2Int(Random.Range(-1, 1), Random.Range(-1, 1));
+                TargetAction = GetAction(Unit.GridPosition + randomDirection);
+            }
+            else
+            {
+                TargetAction = GetAction(GameManager.CurrentLevel.Player.GridPosition);
+            }
+
             var actionContext = TargetAction;
             if (!StartAction(actionContext))
             {
@@ -33,12 +47,25 @@ namespace WSP.Units.Enemies
                 TargetPosition = gridPosition
             };
 
+            if (player == null)
+            {
+                if (Pathfinder.Distance(Unit.GridPosition, GameManager.CurrentLevel.Player.GridPosition) < VisionRange)
+                {
+                    player = GameManager.CurrentLevel.Player;
+                    actionTarget.TargetPosition = player.GridPosition;
+                }
+                else
+                {
+                    return new ActionContext(Unit.Movement, actionTarget);
+                }
+            }
+
             if (Pathfinder.Distance(Unit.GridPosition, gridPosition) > Unit.Stats.AttackRange)
             {
                 return new ActionContext(Unit.Movement, actionTarget);
             }
 
-            actionTarget.TargetUnit = GameManager.CurrentLevel.Player;
+            actionTarget.TargetUnit = player;
             return new ActionContext(Unit.Attack, actionTarget);
         }
 

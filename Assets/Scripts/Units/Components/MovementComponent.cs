@@ -50,7 +50,7 @@ namespace WSP.Units.Components
                 if (!Pathfinder.FindPath(GameManager.CurrentLevel.Map, GridPosition, target.TargetPosition, out path)) return false;
             }
 
-            if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return true;
+            if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;
 
             StartCoroutine(MoveCoroutine(path[1]));
             return true;
