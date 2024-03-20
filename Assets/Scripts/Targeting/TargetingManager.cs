@@ -1,5 +1,9 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using WSP.Input;
+using WSP.Units;
+using WSP.Units.Player;
 
 namespace WSP.Targeting
 {
@@ -19,16 +23,61 @@ namespace WSP.Targeting
         [SerializeField] Color friendlyColor = Color.green;
         [SerializeField] Color enemyColor = Color.red;
 
+        TargetingReticle.ReticleTargetType currentType;
+        static UnityEngine.Camera mainCamera;
         Vector2Int currentOrigin;
         Vector2Int currentPosition;
-        TargetingReticle.TargetType currentType;
+        IAction currentAction;
+        IPlayerUnitController currentPlayerController;
+        ActionTarget currentTarget;
+        TargetingType currentTargetingType;
+        bool isTargeting;
 
         void Awake()
         {
             instance = this;
+            mainCamera = UnityEngine.Camera.main;
         }
 
-        public static void SetTargetPosition(Vector2Int origin, Vector2Int position, TargetingReticle.TargetType type = TargetingReticle.TargetType.None)
+
+        public static void StartTargeting(IPlayerUnitController origin, TargetingType targetingType, IAction action)
+        {
+            instance.currentPlayerController = origin;
+            instance.currentTargetingType = targetingType;
+            instance.reticle.Enable(true);
+            instance.currentAction = action;
+            InputHandler.Controls.Game.Target.performed += Execute;
+            instance.isTargeting = true;
+        }
+
+        static void Execute(InputAction.CallbackContext context)
+        {
+            if (!instance.isTargeting) return;
+
+            var mousePosition = InputHandler.Controls.General.MousePosition.ReadValue<Vector2>();
+            var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
+            var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
+            var target = new ActionTarget
+            {
+                TargetPosition = gridPosition
+            };
+
+            if (GameManager.CurrentLevel.IsOccupied(gridPosition))
+            {
+                target.TargetUnit = GameManager.CurrentLevel.GetUnitAt(gridPosition);
+            }
+
+            var actionContext = new ActionContext(instance.currentAction, target);
+
+            if (instance.currentPlayerController.StartAction(actionContext))
+            {
+                Debug.Log("Execute");
+                InputHandler.Controls.Game.Target.performed -= Execute;
+                instance.isTargeting = false;
+            }
+        }
+
+        public static void SetTargetPosition(Vector2Int origin, Vector2Int position, TargetingReticle.ReticleTargetType type = TargetingReticle.ReticleTargetType.None)
         {
             if (instance.currentOrigin == origin && instance.currentPosition == position && instance.currentType == type) return;
 
@@ -36,12 +85,40 @@ namespace WSP.Targeting
             instance.currentPosition = position;
             instance.currentType = type;
 
-            if (type == TargetingReticle.TargetType.None)
+            if (type == TargetingReticle.ReticleTargetType.None)
             {
                 instance.reticle.SetPosition(position, type);
+                instance.reticle.Enable(false);
                 instance.lineRenderer.positionCount = 0;
                 return;
             }
+
+            instance.reticle.Enable(true);
+
+            if (instance.isTargeting)
+            {
+                switch (instance.currentTargetingType)
+                {
+                    case TargetingType.Unit:
+                        if (type == TargetingReticle.ReticleTargetType.Enemy) instance.reticle.SetPosition(position, TargetingReticle.ReticleTargetType.Enemy);
+                        break;
+
+                    case TargetingType.Position:
+                        instance.reticle.SetPosition(position, type);
+                        break;
+
+                    case TargetingType.Line:
+                        instance.reticle.SetPosition(position, type);
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                return;
+            }
+
+            instance.reticle.SetPosition(position, type);
 
             if (GameManager.CurrentLevel.FindPath(origin, position, out var path))
             {
@@ -55,9 +132,9 @@ namespace WSP.Targeting
 
                 var color = type switch
                 {
-                    TargetingReticle.TargetType.Normal => instance.normalColor,
-                    TargetingReticle.TargetType.Friendly => instance.friendlyColor,
-                    TargetingReticle.TargetType.Enemy => instance.enemyColor,
+                    TargetingReticle.ReticleTargetType.Normal => instance.normalColor,
+                    TargetingReticle.ReticleTargetType.Friendly => instance.friendlyColor,
+                    TargetingReticle.ReticleTargetType.Enemy => instance.enemyColor,
                     _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
                 };
 
@@ -68,9 +145,6 @@ namespace WSP.Targeting
             {
                 instance.lineRenderer.positionCount = 0;
             }
-
-            instance.reticle.SetPosition(position, type);
-            instance.reticle.Enable(true);
         }
     }
 }

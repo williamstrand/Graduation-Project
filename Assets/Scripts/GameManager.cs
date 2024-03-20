@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using WSP.Map;
 using WSP.Map.Pathfinding;
@@ -10,6 +11,7 @@ namespace WSP
     public class GameManager : MonoBehaviour
     {
         public static Level CurrentLevel { get; private set; }
+        static GameManager instance;
 
         [SerializeField] GameObject square;
         [SerializeField] GameObject exit;
@@ -24,6 +26,7 @@ namespace WSP
 
         void Awake()
         {
+            instance = this;
             mapParent = new GameObject("Map").transform;
             GenerateMap();
 
@@ -31,7 +34,7 @@ namespace WSP
             var unit = Instantiate(playerUnit, CurrentLevel.Map.GetWorldPosition(CurrentLevel.Map.StartRoom.Center), Quaternion.identity);
             playerController.SetUnit(unit);
             CurrentLevel.Units.Enqueue(playerController);
-            CurrentLevel.SetPlayer(unit);
+            CurrentLevel.SetPlayer(playerController);
 
             levelUpManager.SetPlayer(playerController);
             uiManager.SetPlayer(playerController);
@@ -111,6 +114,11 @@ namespace WSP
             CurrentLevel.Units.Enqueue(CurrentLevel.Units.Dequeue());
 
             StartTurn(CurrentLevel.Units.Peek());
+        }
+
+        public static Coroutine ExecuteCoroutine(IEnumerator routine)
+        {
+            return instance.StartCoroutine(routine);
         }
     }
 }

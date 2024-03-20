@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace WSP.Units
 {
@@ -7,13 +6,8 @@ namespace WSP.Units
     {
         Action OnActionFinished { get; set; }
         bool ActionStarted { get; }
+        TargetingType TargetingType { get; }
 
         bool StartAction(IUnit origin, ActionTarget target);
-    }
-
-    public class ActionTarget
-    {
-        public IUnit TargetUnit;
-        public Vector2Int TargetPosition;
     }
 }

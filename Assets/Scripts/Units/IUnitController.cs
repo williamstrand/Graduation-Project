@@ -10,5 +10,6 @@ namespace WSP.Units
 
         void TurnStart();
         void SetUnit(IUnit unit);
+        bool StartAction(ActionContext action);
     }
 }

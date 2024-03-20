@@ -9,6 +9,7 @@ namespace WSP.Units.Components
     {
         public Action OnActionFinished { get; set; }
         public bool ActionStarted { get; private set; }
+        public TargetingType TargetingType => TargetingType.Unit;
         public Action<IUnit, bool> OnAttackHit { get; set; }
 
         [SerializeField] Transform sprite;

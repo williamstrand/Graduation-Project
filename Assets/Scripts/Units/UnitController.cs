@@ -41,8 +41,9 @@ namespace WSP.Units
             OnTurnEnd?.Invoke();
         }
 
-        protected bool StartAction(ActionContext action)
+        public bool StartAction(ActionContext action)
         {
+            if (!IsTurn) return false;
             if (action == null) return false;
             if (!CanAct) return false;
 

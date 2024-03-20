@@ -5,11 +5,22 @@ namespace WSP.Units
     [Serializable]
     public class Stats
     {
-        public float Health = 1;
-        public float Attack = 1;
+        public float Health;
+        public float Attack;
         public float PhysicalDefense;
         public float MagicDefense;
-        public float AttackRange = 1;
+        public float AttackRange;
+
+        public Stats(float startValues)
+        {
+            Health = startValues;
+            Attack = startValues;
+            PhysicalDefense = startValues;
+            MagicDefense = startValues;
+            AttackRange = startValues;
+        }
+
+        public Stats() { }
 
         public static Stats operator +(Stats a, Stats b)
         {

@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-
-namespace WSP.Units.Upgrades
+﻿namespace WSP.Units.Upgrades.UpgradeEffects
 {
-    [CreateAssetMenu(menuName = "Upgrades/Multiplicative Stat Upgrade")]
     public class MultiplicativeStatUpgrade : StatUpgrade
     {
+        public MultiplicativeStatUpgrade(Stats stats) : base(stats) { }
+
         public override void Apply(IUnit target)
         {
             target.Stats *= Stats;

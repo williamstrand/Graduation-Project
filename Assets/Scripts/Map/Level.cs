@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using WSP.Map.Pathfinding;
 using WSP.Units;
+using WSP.Units.Player;
 
 namespace WSP.Map
 {
@@ -8,7 +9,7 @@ namespace WSP.Map
     {
         public Pathfinding.Map Map { get; }
         public UnitQueue Units { get; }
-        public IUnit Player { get; private set; }
+        public IPlayerUnitController Player { get; private set; }
 
         public Level(Pathfinding.Map map)
         {
@@ -16,7 +17,7 @@ namespace WSP.Map
             Units = new UnitQueue();
         }
 
-        public void SetPlayer(IUnit player)
+        public void SetPlayer(IPlayerUnitController player)
         {
             Player = player;
         }

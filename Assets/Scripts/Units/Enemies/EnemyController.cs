@@ -30,7 +30,7 @@ namespace WSP.Units.Enemies
             }
             else
             {
-                TargetAction = GetAction(GameManager.CurrentLevel.Player.GridPosition);
+                TargetAction = GetAction(GameManager.CurrentLevel.Player.Unit.GridPosition);
             }
 
             var actionContext = TargetAction;
@@ -49,9 +49,9 @@ namespace WSP.Units.Enemies
 
             if (player == null)
             {
-                if (Pathfinder.Distance(Unit.GridPosition, GameManager.CurrentLevel.Player.GridPosition) < VisionRange)
+                if (Pathfinder.Distance(Unit.GridPosition, GameManager.CurrentLevel.Player.Unit.GridPosition) < VisionRange)
                 {
-                    player = GameManager.CurrentLevel.Player;
+                    player = GameManager.CurrentLevel.Player.Unit;
                     actionTarget.TargetPosition = player.GridPosition;
                 }
                 else

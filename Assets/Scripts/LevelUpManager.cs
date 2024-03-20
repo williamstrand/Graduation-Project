@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using WSP.Ui;
 using WSP.Units.Player;
 using WSP.Units.Upgrades;
+using WSP.Utility;
 using Object = UnityEngine.Object;
 
 namespace WSP
@@ -12,9 +14,7 @@ namespace WSP
     {
         IPlayerUnitController playerController;
         [SerializeField] LevelUpMenu levelUpMenuPrefab;
-        [SerializeField] UpgradeList upgradeList;
 
-        UpgradeList upgradeListInstance;
 
         LevelUpMenu levelUpMenu;
 
@@ -22,13 +22,12 @@ namespace WSP
         {
             playerController = player;
             playerController.OnUnitLevelUp += OpenLevelUpMenu;
-            upgradeListInstance = Object.Instantiate(upgradeList);
         }
 
         void OpenLevelUpMenu(int level)
         {
             levelUpMenu = Object.Instantiate(levelUpMenuPrefab, UiManager.Canvas.transform);
-            levelUpMenu.AddUpgrades(upgradeListInstance.Upgrades);
+            levelUpMenu.AddUpgrades(new List<Upgrade>(Utilities.GetAllOfType<Upgrade>()));
             levelUpMenu.SetPlayer(playerController);
         }
 

@@ -9,21 +9,20 @@ namespace WSP.Units.Components
     {
         public Action OnActionFinished { get; set; }
         public bool ActionStarted => false;
+        public TargetingType TargetingType => TargetingType.Position;
         public Vector2Int GridPosition { get; private set; }
 
-        Vector2 targetPosition;
         bool isMoving;
 
         void Start()
         {
-            targetPosition = transform.position;
-            GridPosition = GameManager.CurrentLevel.Map.GetGridPosition(targetPosition);
+            GridPosition = GameManager.CurrentLevel.Map.GetGridPosition(transform.position);
         }
 
         IEnumerator MoveCoroutine(Vector2Int target)
         {
             OnActionFinished?.Invoke();
-            targetPosition = GameManager.CurrentLevel.Map.GetWorldPosition(target);
+            var targetPosition = GameManager.CurrentLevel.Map.GetWorldPosition(target);
             GridPosition = target;
             isMoving = true;
 
@@ -55,5 +54,12 @@ namespace WSP.Units.Components
             StartCoroutine(MoveCoroutine(path[1]));
             return true;
         }
+
+        public void MoveTo(Vector2Int target)
+        {
+            GridPosition = target;
+            transform.position = GameManager.CurrentLevel.Map.GetWorldPosition(target);
+        }
+
     }
 }

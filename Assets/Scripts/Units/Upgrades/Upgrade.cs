@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
+using WSP.Units.Upgrades.UpgradeEffects;
 
 namespace WSP.Units.Upgrades
 {
-    public abstract class Upgrade : ScriptableObject, IUpgrade
+    public abstract class Upgrade : IUpgrade
     {
-        [field: SerializeField] public Sprite Icon { get; private set; }
-        public string Name => upgradeName == "" ? name : upgradeName;
-        [SerializeField] string upgradeName;
-        [field: SerializeField][field: TextArea(2, 20)]
-        public string Description { get; private set; }
+        public abstract Sprite Icon { get; }
+        public virtual string Name => GetType().Name;
+        public abstract string Description { get; }
 
-        public abstract void Apply(IUnit target);
+        protected IUpgradeEffect[] UpgradeTypes { get; set; }
+
+        public void Apply(IUnit target)
+        {
+            for (var i = 0; i < UpgradeTypes.Length; i++)
+            {
+                UpgradeTypes[i].Apply(target);
+            }
+        }
     }
 }

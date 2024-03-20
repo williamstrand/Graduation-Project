@@ -5,7 +5,7 @@ namespace WSP.Targeting
 {
     public class TargetingReticle : MonoBehaviour
     {
-        public enum TargetType
+        public enum ReticleTargetType
         {
             None,
             Normal,
@@ -16,24 +16,24 @@ namespace WSP.Targeting
         [SerializeField] SpriteRenderer spriteRenderer;
 
 
-        public void SetPosition(Vector2Int position, TargetType type = TargetType.None)
+        public void SetPosition(Vector2Int position, ReticleTargetType type = ReticleTargetType.None)
         {
             switch (type)
             {
-                case TargetType.None:
+                case ReticleTargetType.None:
                     Enable(false);
                     return;
 
-                case TargetType.Normal:
+                case ReticleTargetType.Normal:
 
                     spriteRenderer.color = TargetingManager.NormalColor;
                     break;
 
-                case TargetType.Friendly:
+                case ReticleTargetType.Friendly:
                     spriteRenderer.color = TargetingManager.FriendlyColor;
                     break;
 
-                case TargetType.Enemy:
+                case ReticleTargetType.Enemy:
                     spriteRenderer.color = TargetingManager.EnemyColor;
                     break;
 

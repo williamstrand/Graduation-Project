@@ -20,6 +20,11 @@ namespace WSP.Ui.Inventory
             gameObject.SetActive(IsOpen);
         }
 
+        void Start()
+        {
+            itemInfo.OnUseButtonPressed = Open;
+        }
+
         public void Open()
         {
             IsOpen = !IsOpen;
@@ -56,7 +61,7 @@ namespace WSP.Ui.Inventory
             if (item == currentOpenedItem) return;
 
             currentOpenedItem = item;
-            itemInfo.SetItemInfo(item);
+            itemInfo.SetItemInfo(item, GameManager.CurrentLevel.Player);
         }
     }
 }

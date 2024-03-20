@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using WSP.Items;
+using WSP.Utility;
 
 namespace WSP.Units.Components
 {
@@ -15,10 +16,10 @@ namespace WSP.Units.Components
         void Awake()
         {
             inventory = new List<Item>();
-            var allItems = Item.GetAllItems();
+            var allItems = Utilities.GetAllOfType<Item>();
             inventory.Add(allItems[0]);
             inventory.Add(allItems[1]);
-            inventory.Add(allItems[1]);
+            inventory.Add(allItems[2]);
             inventory.Add(allItems[0]);
             inventory.Add(allItems[1]);
             inventory.Add(allItems[0]);

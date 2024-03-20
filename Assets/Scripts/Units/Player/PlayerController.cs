@@ -106,12 +106,12 @@ namespace WSP.Units.Player
 
         void ShowTargeting(Vector2Int gridPosition)
         {
-            var type = TargetingReticle.TargetType.Normal;
+            var type = TargetingReticle.ReticleTargetType.Normal;
 
             if (GameManager.CurrentLevel.IsOccupied(gridPosition))
             {
                 var targetUnit = GameManager.CurrentLevel.GetUnitAt(gridPosition);
-                type = targetUnit == Unit ? TargetingReticle.TargetType.None : TargetingReticle.TargetType.Enemy;
+                type = targetUnit == Unit ? TargetingReticle.ReticleTargetType.None : TargetingReticle.ReticleTargetType.Enemy;
             }
 
             TargetingManager.SetTargetPosition(Unit.GridPosition, gridPosition, type);
