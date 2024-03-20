@@ -25,8 +25,16 @@ namespace WSP.Units.Enemies
 
             if (player == null)
             {
-                var randomDirection = new Vector2Int(Random.Range(-1, 1), Random.Range(-1, 1));
-                TargetAction = GetAction(Unit.GridPosition + randomDirection);
+                if (Pathfinder.Distance(Unit.GridPosition, GameManager.CurrentLevel.Player.Unit.GridPosition) < VisionRange)
+                {
+                    player = GameManager.CurrentLevel.Player.Unit;
+                    TargetAction = GetAction(GameManager.CurrentLevel.Player.Unit.GridPosition);
+                }
+                else
+                {
+                    var randomDirection = new Vector2Int(Random.Range(-1, 2), Random.Range(-1, 2));
+                    TargetAction = GetAction(Unit.GridPosition + randomDirection);
+                }
             }
             else
             {
@@ -49,15 +57,7 @@ namespace WSP.Units.Enemies
 
             if (player == null)
             {
-                if (Pathfinder.Distance(Unit.GridPosition, GameManager.CurrentLevel.Player.Unit.GridPosition) < VisionRange)
-                {
-                    player = GameManager.CurrentLevel.Player.Unit;
-                    actionTarget.TargetPosition = player.GridPosition;
-                }
-                else
-                {
-                    return new ActionContext(Unit.Movement, actionTarget);
-                }
+                return new ActionContext(Unit.Movement, actionTarget);
             }
 
             if (Pathfinder.Distance(Unit.GridPosition, gridPosition) > Unit.Stats.AttackRange)
