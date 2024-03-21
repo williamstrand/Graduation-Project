@@ -10,15 +10,13 @@ namespace WSP.Targeting
     public class TargetingManager : MonoBehaviour
     {
         static TargetingManager instance;
-
-        static TargetingReticle.ReticleTargetType currentType;
         static UnityEngine.Camera mainCamera;
+
         static Vector2Int currentOrigin;
-        static Vector2Int currentPosition;
+        static Vector2Int currentTarget;
+
         static IAction currentAction;
         static IPlayerUnitController currentPlayerController;
-        static ActionTarget currentTarget;
-        static TargetingType currentTargetingType;
         static bool isTargeting;
 
         public static Color NormalColor => instance.normalColor;
@@ -39,52 +37,64 @@ namespace WSP.Targeting
             mainCamera = UnityEngine.Camera.main;
         }
 
-        public static void StartTargeting(IPlayerUnitController origin, TargetingType targetingType, IAction action)
+        public static void StartActionTargeting(IPlayerUnitController origin, IAction action)
         {
             currentPlayerController = origin;
-            currentTargetingType = targetingType;
             currentAction = action;
 
-            InputHandler.Controls.Game.Target.performed += Execute;
+            InputHandler.Controls.Game.Target.performed += ExecuteAction;
             InputHandler.Controls.Game.CancelTarget.performed += CancelTargeting;
 
             isTargeting = true;
         }
 
-        static void CancelTargeting(InputAction.CallbackContext context)
+        public static void Target(Vector2Int origin, Vector2Int target)
         {
-            InputHandler.Controls.Game.Target.performed -= Execute;
+            var type = GetReticleTargetType(origin, target);
+            if (currentOrigin == origin && currentTarget == target && instance.reticle.Type == type) return;
+
+            currentOrigin = origin;
+            currentTarget = target;
+            instance.reticle.Type = type;
+
+            if (isTargeting)
+            {
+                HidePath();
+                currentAction.TargetingType.Target(currentOrigin, currentTarget, instance.reticle);
+                return;
+            }
+
+            SetReticlePosition();
+            DrawPath();
+        }
+
+        static void SetReticlePosition()
+        {
+            if (isTargeting) return;
+
+            if (instance.reticle.Type == TargetingReticle.ReticleTargetType.None)
+            {
+                instance.reticle.Enable(false);
+                HidePath();
+                return;
+            }
+
+            instance.reticle.Type = instance.reticle.Type;
+            instance.reticle.SetPosition(currentTarget);
+            instance.reticle.Enable(true);
+        }
+
+        static void CancelTargeting(InputAction.CallbackContext _)
+        {
+            InputHandler.Controls.Game.Target.performed -= ExecuteAction;
             InputHandler.Controls.Game.CancelTarget.performed -= CancelTargeting;
 
+            currentAction.TargetingType.StopTarget();
             isTargeting = false;
             instance.reticle.Enable(false);
         }
 
-        static void SetTargeting(Vector2Int position, TargetingReticle.ReticleTargetType type)
-        {
-            switch (currentTargetingType)
-            {
-                case TargetingType.Unit:
-                    if (type == TargetingReticle.ReticleTargetType.Enemy)
-                    {
-                        instance.reticle.SetPosition(position, TargetingReticle.ReticleTargetType.Enemy);
-                        break;
-                    }
-
-                    instance.reticle.Enable(false);
-                    break;
-
-                case TargetingType.Position:
-                    instance.reticle.SetPosition(position, type);
-                    break;
-
-                case TargetingType.Line:
-                    instance.reticle.SetPosition(position, type);
-                    break;
-            }
-        }
-
-        static void Execute(InputAction.CallbackContext context)
+        static void ExecuteAction(InputAction.CallbackContext _)
         {
             if (!isTargeting) return;
 
@@ -105,50 +115,30 @@ namespace WSP.Targeting
 
             if (!currentPlayerController.StartAction(actionContext)) return;
 
-            InputHandler.Controls.Game.Target.performed -= Execute;
-            isTargeting = false;
+            CancelTargeting(_);
         }
 
-        public static void SetTargetPosition(Vector2Int origin, Vector2Int position)
+        static void DrawPath()
         {
-            var type = GetReticleTargetType(origin, position);
-            if (currentOrigin == origin && currentPosition == position && currentType == type) return;
-
-            currentOrigin = origin;
-            currentPosition = position;
-            currentType = type;
-
-            // Set targeting
             if (isTargeting)
             {
-                instance.lineRenderer.positionCount = 0;
-                SetTargeting(position, type);
+                HidePath();
                 return;
             }
 
-            if (type == TargetingReticle.ReticleTargetType.None)
+            if (GameManager.CurrentLevel.Map.GetValue(currentOrigin) == Map.Pathfinding.Map.Wall)
             {
-                instance.reticle.Enable(false);
-                instance.lineRenderer.positionCount = 0;
+                HidePath();
                 return;
             }
 
-            instance.reticle.SetPosition(position, type);
-            instance.reticle.Enable(true);
-
-            // Draw path
-            DrawPath(origin, position, type);
-        }
-
-        static void DrawPath(Vector2Int origin, Vector2Int position, TargetingReticle.ReticleTargetType type)
-        {
-            if (GameManager.CurrentLevel.Map.GetValue(origin) == Map.Pathfinding.Map.Wall)
+            if (currentOrigin == currentTarget)
             {
-                instance.lineRenderer.positionCount = 0;
+                HidePath();
                 return;
             }
 
-            if (GameManager.CurrentLevel.FindPath(origin, position, out var path))
+            if (GameManager.CurrentLevel.FindPath(currentOrigin, currentTarget, out var path))
             {
                 instance.lineRenderer.positionCount = path.Count;
                 var offset = new Vector2(GameManager.CurrentLevel.Map.CellSize / 2, GameManager.CurrentLevel.Map.CellSize / 2);
@@ -158,12 +148,13 @@ namespace WSP.Targeting
                     instance.lineRenderer.SetPosition(i, path[i].Position + offset);
                 }
 
-                var color = type switch
+                var color = instance.reticle.Type switch
                 {
                     TargetingReticle.ReticleTargetType.Normal => instance.normalColor,
                     TargetingReticle.ReticleTargetType.Friendly => instance.friendlyColor,
                     TargetingReticle.ReticleTargetType.Enemy => instance.enemyColor,
-                    _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+                    TargetingReticle.ReticleTargetType.None => Color.clear,
+                    _ => throw new ArgumentOutOfRangeException(nameof(instance.reticle.Type), instance.reticle.Type, null)
                 };
 
                 instance.lineRenderer.startColor = color;
@@ -171,8 +162,13 @@ namespace WSP.Targeting
             }
             else
             {
-                instance.lineRenderer.positionCount = 0;
+                HidePath();
             }
+        }
+
+        static void HidePath()
+        {
+            instance.lineRenderer.positionCount = 0;
         }
 
         static TargetingReticle.ReticleTargetType GetReticleTargetType(Vector2Int origin, Vector2Int position)

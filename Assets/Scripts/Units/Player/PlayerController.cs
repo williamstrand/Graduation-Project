@@ -39,7 +39,7 @@ namespace WSP.Units.Player
         {
             var gridPosition = GetTargetPosition();
             TargetAction = GetAction(gridPosition);
-            ShowTargeting(gridPosition);
+            TargetingManager.Target(Unit.GridPosition, gridPosition);
 
             if (!IsTurn) return;
 
@@ -102,13 +102,6 @@ namespace WSP.Units.Player
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
 
             return gridPosition;
-        }
-
-        void ShowTargeting(Vector2Int gridPosition)
-        {
-
-
-            TargetingManager.SetTargetPosition(Unit.GridPosition, gridPosition);
         }
 
         public override void SetUnit(IUnit unit)

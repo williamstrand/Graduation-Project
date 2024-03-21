@@ -15,10 +15,16 @@ namespace WSP.Targeting
 
         [SerializeField] SpriteRenderer spriteRenderer;
 
+        public ReticleTargetType Type { get; set; }
 
-        public void SetPosition(Vector2Int position, ReticleTargetType type = ReticleTargetType.None)
+        public void SetSize(Vector2 size)
         {
-            switch (type)
+            spriteRenderer.size = size;
+        }
+
+        public void SetPosition(Vector2Int position)
+        {
+            switch (Type)
             {
                 case ReticleTargetType.None:
                     Enable(false);
@@ -38,7 +44,7 @@ namespace WSP.Targeting
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+                    throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
             }
 
             Enable(true);

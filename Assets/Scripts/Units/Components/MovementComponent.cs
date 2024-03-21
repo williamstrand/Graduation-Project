@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using WSP.Map.Pathfinding;
+using WSP.Targeting.TargetingTypes;
 
 namespace WSP.Units.Components
 {
@@ -9,7 +10,7 @@ namespace WSP.Units.Components
     {
         public Action OnActionFinished { get; set; }
         public bool ActionStarted => false;
-        public TargetingType TargetingType => TargetingType.Position;
+        public TargetingType TargetingType => new PositionTargeting();
         public Vector2Int GridPosition { get; private set; }
 
         bool isMoving;

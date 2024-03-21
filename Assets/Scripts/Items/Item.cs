@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Utility;
+using WSP.Targeting.TargetingTypes;
 using WSP.Units;
 
 namespace WSP.Items

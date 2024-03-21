@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace WSP.Utility
+namespace Utility
 {
     public static class Utilities
     {

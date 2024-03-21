@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using WSP.Map.Pathfinding;
+using WSP.Targeting.TargetingTypes;
 
 namespace WSP.Units.Components
 {
@@ -9,7 +10,7 @@ namespace WSP.Units.Components
     {
         public Action OnActionFinished { get; set; }
         public bool ActionStarted { get; private set; }
-        public TargetingType TargetingType => TargetingType.Unit;
+        public TargetingType TargetingType => new UnitTargeting();
         public Action<IUnit, bool> OnAttackHit { get; set; }
 
         [SerializeField] Projectile projectilePrefab;

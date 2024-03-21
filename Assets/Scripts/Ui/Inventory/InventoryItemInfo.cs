@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using WSP.Items;
 using WSP.Targeting;
+using WSP.Targeting.TargetingTypes;
 using WSP.Units;
 using WSP.Units.Player;
 
@@ -33,15 +34,17 @@ namespace WSP.Ui.Inventory
 
         void UseItem()
         {
+            if (!currentOrigin.IsTurn) return;
+
             OnUseButtonPressed?.Invoke();
-            if (currentItem.TargetingType == TargetingType.Self)
+            if (currentItem.TargetingType is SelfTargeting)
             {
                 var actionContext = new ActionContext(currentItem, null);
                 currentOrigin.StartAction(actionContext);
                 return;
             }
 
-            TargetingManager.StartTargeting(currentOrigin, currentItem.TargetingType, currentItem);
+            TargetingManager.StartActionTargeting(currentOrigin, currentItem);
         }
     }
 }

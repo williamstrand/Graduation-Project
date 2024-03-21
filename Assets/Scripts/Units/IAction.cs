@@ -1,4 +1,5 @@
 ﻿using System;
+using WSP.Targeting.TargetingTypes;
 
 namespace WSP.Units
 {

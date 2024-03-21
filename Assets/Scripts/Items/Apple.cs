@@ -1,4 +1,5 @@
-﻿using WSP.Units;
+﻿using WSP.Targeting.TargetingTypes;
+using WSP.Units;
 
 namespace WSP.Items
 {
@@ -6,7 +7,7 @@ namespace WSP.Items
     {
         protected virtual int HealAmount => 25;
         public override int Weight => 75;
-        public override TargetingType TargetingType => TargetingType.Self;
+        public override TargetingType TargetingType => new SelfTargeting();
 
         protected override bool ActivateEffect(IUnit origin, ActionTarget target)
         {

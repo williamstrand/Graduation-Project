@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using WSP.Targeting.TargetingTypes;
 using WSP.Units;
 
 namespace WSP.Items
@@ -9,7 +10,7 @@ namespace WSP.Items
         public override string Name => "Swap Gem";
         public override string Description => "Swap position with target.";
         public override int Weight => 30;
-        public override TargetingType TargetingType => TargetingType.Unit;
+        public override TargetingType TargetingType => new UnitTargeting();
 
         protected override bool ActivateEffect(IUnit origin, ActionTarget target)
         {
