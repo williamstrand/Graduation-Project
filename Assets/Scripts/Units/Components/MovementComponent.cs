@@ -43,6 +43,7 @@ namespace WSP.Units.Components
         {
             if (isMoving) return false;
             if (target.TargetPosition == GridPosition) return false;
+            if (GameManager.CurrentLevel.Map.GetValue(target.TargetPosition) == Map.Pathfinding.Map.Wall) return false;
 
             if (!GameManager.CurrentLevel.FindPath(GridPosition, target.TargetPosition, out var path))
             {
