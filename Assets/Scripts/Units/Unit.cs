@@ -28,9 +28,9 @@ namespace WSP.Units
 
         protected void Awake()
         {
-            Movement = GetComponent<MovementComponent>();
-            Attack = GetComponent<AttackComponent>();
-            Inventory = GetComponent<InventoryComponent>();
+            Movement = GetComponent<IMovementComponent>();
+            Attack = GetComponent<IAttackComponent>();
+            Inventory = GetComponent<IInventoryComponent>();
 
             CurrentHealth = Mathf.RoundToInt(Stats.Health);
             Attack.OnAttackHit += TargetHit;

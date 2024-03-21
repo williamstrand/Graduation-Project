@@ -5,7 +5,7 @@ using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Components
 {
-    public class AttackComponent : MonoBehaviour, IAttackComponent
+    public class MeleeAttackComponent : MonoBehaviour, IAttackComponent
     {
         public Action OnActionFinished { get; set; }
         public bool ActionStarted { get; private set; }

@@ -11,27 +11,26 @@ namespace WSP.Units.Components
         [field: SerializeField] public int Size { get; private set; }
         public int Amount => inventory.Count;
 
-        List<Item> inventory;
+        List<Item> inventory = new();
 
         void Awake()
         {
-            inventory = new List<Item>();
             var allItems = Utilities.GetAllOfType<Item>();
-            inventory.Add(allItems[0]);
-            inventory.Add(allItems[1]);
-            inventory.Add(allItems[2]);
-            inventory.Add(allItems[0]);
-            inventory.Add(allItems[1]);
-            inventory.Add(allItems[0]);
-            inventory.Add(allItems[1]);
-            inventory.Add(allItems[0]);
-            inventory.Add(allItems[1]);
-            inventory.Add(allItems[0]);
-            inventory.Add(allItems[1]);
-            inventory.Add(allItems[0]);
-            inventory.Add(allItems[0]);
-            inventory.Add(allItems[0]);
-            inventory.Add(allItems[0]);
+            AddItem(allItems[0]);
+            AddItem(allItems[1]);
+            AddItem(allItems[2]);
+            AddItem(allItems[0]);
+            AddItem(allItems[1]);
+            AddItem(allItems[0]);
+            AddItem(allItems[1]);
+            AddItem(allItems[0]);
+            AddItem(allItems[1]);
+            AddItem(allItems[0]);
+            AddItem(allItems[1]);
+            AddItem(allItems[0]);
+            AddItem(allItems[0]);
+            AddItem(allItems[0]);
+            AddItem(allItems[0]);
         }
 
         public Item this[int index] => GetItem(index);

@@ -145,8 +145,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Stats>k__BackingField:
-    Health: 5
-    Attack: 1
+    Health: 50
+    Attack: 10
     PhysicalDefense: 0
     MagicDefense: 0
     AttackRange: 1
