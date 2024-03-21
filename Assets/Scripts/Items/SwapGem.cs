@@ -9,13 +9,15 @@ namespace WSP.Items
         public override string Name => "Swap Gem";
         public override string Description => "Swap position with target.";
         public override int Weight => 30;
-        public override Sprite Icon => null;
         public override TargetingType TargetingType => TargetingType.Unit;
 
-        protected override void ActivateEffect(IUnit origin, ActionTarget target)
+        protected override bool ActivateEffect(IUnit origin, ActionTarget target)
         {
+            if (target.TargetUnit == null) return false;
+
             GameManager.ExecuteCoroutine(SwapCoroutine(origin, target.TargetUnit));
             ActionStarted = true;
+            return true;
         }
 
         IEnumerator SwapCoroutine(IUnit origin, IUnit target)

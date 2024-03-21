@@ -106,19 +106,9 @@ namespace WSP.Units.Player
 
         void ShowTargeting(Vector2Int gridPosition)
         {
-            var type = TargetingReticle.ReticleTargetType.Normal;
 
-            if (GameManager.CurrentLevel.IsOccupied(gridPosition))
-            {
-                var targetUnit = GameManager.CurrentLevel.GetUnitAt(gridPosition);
-                type = targetUnit == Unit ? TargetingReticle.ReticleTargetType.None : TargetingReticle.ReticleTargetType.Enemy;
-            }
-            else if (GameManager.CurrentLevel.Map.GetValue(gridPosition) == Map.Pathfinding.Map.Wall)
-            {
-                type = TargetingReticle.ReticleTargetType.None;
-            }
 
-            TargetingManager.SetTargetPosition(Unit.GridPosition, gridPosition, type);
+            TargetingManager.SetTargetPosition(Unit.GridPosition, gridPosition);
         }
 
         public override void SetUnit(IUnit unit)
@@ -155,7 +145,6 @@ namespace WSP.Units.Player
         {
             Unit.AddXp(target.Level * 15);
             currentTarget = null;
-            Debug.Log("Target killed");
         }
 
         void UnitHealthChanged(float current, float max)

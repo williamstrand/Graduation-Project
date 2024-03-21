@@ -38,7 +38,17 @@ namespace WSP.Ui.Inventory
                 {
                     var slot = Instantiate(slotPrefab, content);
                     var index = i;
+                    slot.SetItem(currentItems[index]);
                     slot.OnClick = () => OpenInfo(currentItems[index]);
+                }
+
+                if (currentItems.Length > 0)
+                {
+                    OpenInfo(currentItems[0]);
+                }
+                else
+                {
+                    itemInfo.gameObject.SetActive(false);
                 }
             }
             else

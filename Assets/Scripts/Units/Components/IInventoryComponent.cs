@@ -10,5 +10,6 @@ namespace WSP.Units.Components
         Item this[int index] { get; }
         Item[] GetAllItems();
         bool AddItem(Item item);
+        bool RemoveItem(Item item);
     }
 }

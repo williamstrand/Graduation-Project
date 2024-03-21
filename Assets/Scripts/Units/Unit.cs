@@ -19,6 +19,7 @@ namespace WSP.Units
         public float CurrentHealth { get; private set; }
         public GameObject GameObject => gameObject;
         [field: SerializeField] public Stats Stats { get; set; }
+        [field: SerializeField] public Stats StatsPerLevel { get; set; } = new(1);
         public float Xp { get; private set; }
         public float XpToNextLevel => 100 + Level * 50;
 
@@ -53,8 +54,6 @@ namespace WSP.Units
             OnHealthChanged?.Invoke(CurrentHealth, Stats.Health);
         }
 
-        public void AddXp(int xp) { }
-
         void Kill()
         {
             OnDeath?.Invoke();
@@ -69,6 +68,7 @@ namespace WSP.Units
         {
             Level++;
             OnLevelUp?.Invoke(Level);
+            Stats += StatsPerLevel;
         }
 
         public void AddXp(float amount)

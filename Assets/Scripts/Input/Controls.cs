@@ -55,6 +55,15 @@ namespace WSP.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel Target"",
+                    ""type"": ""Button"",
+                    ""id"": ""7c9df6f0-5147-47b6-9c87-8dfad445fd75"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -88,6 +97,17 @@ namespace WSP.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Mouse Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""227b0162-36bb-474e-bec5-a3a2c076ddfa"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel Target"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -197,6 +217,7 @@ namespace WSP.Input
             m_Game_Stop = m_Game.FindAction("Stop", throwIfNotFound: true);
             m_Game_Target = m_Game.FindAction("Target", throwIfNotFound: true);
             m_Game_MousePosition = m_Game.FindAction("Mouse Position", throwIfNotFound: true);
+            m_Game_CancelTarget = m_Game.FindAction("Cancel Target", throwIfNotFound: true);
             // Menu
             m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
             m_Menu_Inventory = m_Menu.FindAction("Inventory", throwIfNotFound: true);
@@ -269,6 +290,7 @@ namespace WSP.Input
         private readonly InputAction m_Game_Stop;
         private readonly InputAction m_Game_Target;
         private readonly InputAction m_Game_MousePosition;
+        private readonly InputAction m_Game_CancelTarget;
         public struct GameActions
         {
             private @Controls m_Wrapper;
@@ -276,6 +298,7 @@ namespace WSP.Input
             public InputAction @Stop => m_Wrapper.m_Game_Stop;
             public InputAction @Target => m_Wrapper.m_Game_Target;
             public InputAction @MousePosition => m_Wrapper.m_Game_MousePosition;
+            public InputAction @CancelTarget => m_Wrapper.m_Game_CancelTarget;
             public InputActionMap Get() { return m_Wrapper.m_Game; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -294,6 +317,9 @@ namespace WSP.Input
                 @MousePosition.started += instance.OnMousePosition;
                 @MousePosition.performed += instance.OnMousePosition;
                 @MousePosition.canceled += instance.OnMousePosition;
+                @CancelTarget.started += instance.OnCancelTarget;
+                @CancelTarget.performed += instance.OnCancelTarget;
+                @CancelTarget.canceled += instance.OnCancelTarget;
             }
 
             private void UnregisterCallbacks(IGameActions instance)
@@ -307,6 +333,9 @@ namespace WSP.Input
                 @MousePosition.started -= instance.OnMousePosition;
                 @MousePosition.performed -= instance.OnMousePosition;
                 @MousePosition.canceled -= instance.OnMousePosition;
+                @CancelTarget.started -= instance.OnCancelTarget;
+                @CancelTarget.performed -= instance.OnCancelTarget;
+                @CancelTarget.canceled -= instance.OnCancelTarget;
             }
 
             public void RemoveCallbacks(IGameActions instance)
@@ -437,6 +466,7 @@ namespace WSP.Input
             void OnStop(InputAction.CallbackContext context);
             void OnTarget(InputAction.CallbackContext context);
             void OnMousePosition(InputAction.CallbackContext context);
+            void OnCancelTarget(InputAction.CallbackContext context);
         }
         public interface IMenuActions
         {

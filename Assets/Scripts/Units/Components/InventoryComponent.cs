@@ -53,5 +53,10 @@ namespace WSP.Units.Components
             inventory.Add(item);
             return true;
         }
+
+        public bool RemoveItem(Item item)
+        {
+            return inventory.Remove(item);
+        }
     }
 }

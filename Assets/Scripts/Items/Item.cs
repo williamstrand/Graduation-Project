@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Utility;
 using WSP.Units;
 
 namespace WSP.Items
@@ -14,17 +15,19 @@ namespace WSP.Items
         public virtual string Name => GetType().Name;
         public virtual string Description => "";
         public abstract int Weight { get; }
-        public abstract Sprite Icon { get; }
+        public virtual Sprite Icon => IconLoader.LoadIcon(Name);
 
         public bool StartAction(IUnit origin, ActionTarget target)
         {
             if (ActionStarted) return false;
 
             ActionStarted = true;
-            ActivateEffect(origin, target);
+            if (!ActivateEffect(origin, target)) return false;
+
+            origin.Inventory.RemoveItem(this);
             return true;
         }
 
-        protected abstract void ActivateEffect(IUnit origin, ActionTarget target);
+        protected abstract bool ActivateEffect(IUnit origin, ActionTarget target);
     }
 }

@@ -16,6 +16,7 @@ namespace WSP.Units
         float CurrentHealth { get; }
         GameObject GameObject { get; }
         Stats Stats { get; set; }
+        Stats StatsPerLevel { get; set; }
         int Level { get; }
         float Xp { get; }
         float XpToNextLevel { get; }
