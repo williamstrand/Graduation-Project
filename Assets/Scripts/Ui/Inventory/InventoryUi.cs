@@ -19,10 +19,6 @@ namespace WSP.Ui.Inventory
         {
             IsOpen = false;
             gameObject.SetActive(IsOpen);
-        }
-
-        void Start()
-        {
             itemInfo.OnUseButtonPressed = Close;
         }
 
