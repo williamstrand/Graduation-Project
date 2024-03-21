@@ -12,23 +12,21 @@ namespace WSP
     [Serializable]
     public class LevelUpManager
     {
-        IPlayerUnitController playerController;
+        IPlayerUnitController PlayerController => GameManager.CurrentLevel.Player;
         [SerializeField] LevelUpMenu levelUpMenuPrefab;
-
 
         LevelUpMenu levelUpMenu;
 
-        public void SetPlayer(IPlayerUnitController player)
+        public void Initialize()
         {
-            playerController = player;
-            playerController.OnUnitLevelUp += OpenLevelUpMenu;
+            PlayerController.OnUnitLevelUp += OpenLevelUpMenu;
         }
 
         void OpenLevelUpMenu(int level)
         {
             levelUpMenu = Object.Instantiate(levelUpMenuPrefab, UiManager.Canvas.transform);
             levelUpMenu.AddUpgrades(new List<Upgrade>(Utilities.GetAllOfType<Upgrade>()));
-            levelUpMenu.SetPlayer(playerController);
+            levelUpMenu.SetPlayer(PlayerController);
         }
 
         void CloseLevelUpMenu()

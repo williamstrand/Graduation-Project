@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 using WSP.Input;
 using WSP.Items;
+using WSP.Units.Player;
 
 namespace WSP.Ui.Inventory
 {
-    public class InventoryUi : MonoBehaviour, IMenu
+    public class InventoryUi : MonoBehaviour
     {
         [SerializeField] InventorySlot slotPrefab;
         [SerializeField] Transform content;
         [SerializeField] InventoryItemInfo itemInfo;
 
-        public bool IsOpen { get; private set; }
-        Item[] currentItems;
+        bool IsOpen { get; set; }
+        static IPlayerUnitController PlayerController => GameManager.CurrentLevel.Player;
         Item currentOpenedItem;
 
         void Awake()
@@ -22,48 +23,50 @@ namespace WSP.Ui.Inventory
 
         void Start()
         {
-            itemInfo.OnUseButtonPressed = Open;
+            itemInfo.OnUseButtonPressed = Close;
         }
 
         public void Open()
         {
-            IsOpen = !IsOpen;
-            gameObject.SetActive(IsOpen);
+            if (IsOpen) return;
 
-            if (IsOpen)
+            IsOpen = true;
+            gameObject.SetActive(true);
+
+            InputHandler.Controls.Game.Disable();
+
+            CreateItemSlots();
+
+            if (PlayerController.Unit.Inventory.Amount > 0)
             {
-                InputHandler.Controls.Game.Disable();
-
-                for (var i = 0; i < currentItems.Length; i++)
-                {
-                    var slot = Instantiate(slotPrefab, content);
-                    var index = i;
-                    slot.SetItem(currentItems[index]);
-                    slot.OnClick = () => OpenInfo(currentItems[index]);
-                }
-
-                if (currentItems.Length > 0)
-                {
-                    OpenInfo(currentItems[0]);
-                }
-                else
-                {
-                    itemInfo.gameObject.SetActive(false);
-                }
+                OpenInfo(PlayerController.Unit.Inventory[0]);
             }
             else
             {
-                InputHandler.Controls.Game.Enable();
-                foreach (Transform child in content)
-                {
-                    Destroy(child.gameObject);
-                }
+                itemInfo.gameObject.SetActive(false);
             }
         }
 
-        public void SetItems(Item[] items)
+        void Close()
         {
-            currentItems = items;
+            InputHandler.Controls.Game.Enable();
+            foreach (Transform child in content)
+            {
+                Destroy(child.gameObject);
+            }
+
+            IsOpen = false;
+            gameObject.SetActive(false);
+        }
+
+        void CreateItemSlots()
+        {
+            for (var i = 0; i < PlayerController.Unit.Inventory.Amount; i++)
+            {
+                var slot = Instantiate(slotPrefab, content);
+                slot.SetItem(PlayerController.Unit.Inventory[i]);
+                slot.OnClick = OpenInfo;
+            }
         }
 
         void OpenInfo(Item item)

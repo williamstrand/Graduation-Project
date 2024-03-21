@@ -36,8 +36,8 @@ namespace WSP
             CurrentLevel.Units.Enqueue(playerController);
             CurrentLevel.SetPlayer(playerController);
 
-            levelUpManager.SetPlayer(playerController);
-            uiManager.SetPlayer(playerController);
+            levelUpManager.Initialize();
+            uiManager.Initialize();
         }
 
         void Start()

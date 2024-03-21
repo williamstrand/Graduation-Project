@@ -19,12 +19,12 @@ namespace WSP.Ui.Inventory
         [SerializeField] Button useButton;
 
         Item currentItem;
-        IPlayerUnitController currentOrigin;
+        IPlayerUnitController currentPlayer;
 
-        public void SetItemInfo(Item item, IPlayerUnitController origin)
+        public void SetItemInfo(Item item, IPlayerUnitController player)
         {
             currentItem = item;
-            currentOrigin = origin;
+            currentPlayer = player;
             gameObject.SetActive(true);
             image.sprite = item.Icon;
             nameText.text = item.Name;
@@ -34,17 +34,17 @@ namespace WSP.Ui.Inventory
 
         void UseItem()
         {
-            if (!currentOrigin.IsTurn) return;
+            if (!currentPlayer.IsTurn) return;
 
             OnUseButtonPressed?.Invoke();
             if (currentItem.TargetingType is SelfTargeting)
             {
                 var actionContext = new ActionContext(currentItem, null);
-                currentOrigin.StartAction(actionContext);
+                currentPlayer.StartAction(actionContext);
                 return;
             }
 
-            TargetingManager.StartActionTargeting(currentOrigin, currentItem);
+            TargetingManager.StartActionTargeting(currentPlayer, currentItem);
         }
     }
 }

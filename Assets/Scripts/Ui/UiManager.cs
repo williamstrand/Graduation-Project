@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using WSP.Items;
+﻿using UnityEngine;
 using WSP.Ui.Inventory;
 using WSP.Units.Player;
 
@@ -19,33 +17,28 @@ namespace WSP.Ui
         [SerializeField] UiText levelCounter;
         [SerializeField] InventoryUi inventoryUi;
 
-        IPlayerUnitController playerController;
+        static IPlayerUnitController PlayerController => GameManager.CurrentLevel.Player;
 
-        List<IMenu> menus = new();
 
         void Awake()
         {
             instance = this;
 
             Canvas = GetComponent<Canvas>();
-
-            menus.Add(inventoryUi);
         }
 
-        public void SetPlayer(IPlayerUnitController player)
+        public void Initialize()
         {
-            playerController = player;
+            PlayerController.OnUnitXpGained += UpdateXpBar;
+            xpBar.UpdateBar(PlayerController.Unit.Xp, PlayerController.Unit.XpToNextLevel);
 
-            playerController.OnUnitXpGained += UpdateXpBar;
-            xpBar.UpdateBar(playerController.Unit.Xp, playerController.Unit.XpToNextLevel);
+            PlayerController.OnUnitHealthChanged += UpdateHealthBar;
+            healthBar.UpdateBar(PlayerController.Unit.CurrentHealth, PlayerController.Unit.Stats.Health);
 
-            playerController.OnUnitHealthChanged += UpdateHealthBar;
-            healthBar.UpdateBar(playerController.Unit.CurrentHealth, playerController.Unit.Stats.Health);
+            PlayerController.OnUnitLevelUp += UpdateLevelCounter;
+            UpdateLevelCounter(PlayerController.Unit.Level);
 
-            playerController.OnUnitLevelUp += UpdateLevelCounter;
-            UpdateLevelCounter(player.Unit.Level);
-
-            playerController.OnOpenInventory += OpenInventory;
+            PlayerController.OnOpenInventory += OpenInventory;
         }
 
         void UpdateHealthBar(float health, float maxHealth)
@@ -63,20 +56,9 @@ namespace WSP.Ui
             levelCounter.UpdateText(level.ToString());
         }
 
-        void OpenInventory(Item[] items)
+        void OpenInventory()
         {
-            inventoryUi.SetItems(items);
             inventoryUi.Open();
-        }
-
-        public static bool MenuOpen()
-        {
-            for (var i = 0; i < instance.menus.Count; i++)
-            {
-                if (instance.menus[i].IsOpen) return true;
-            }
-
-            return false;
         }
     }
 }

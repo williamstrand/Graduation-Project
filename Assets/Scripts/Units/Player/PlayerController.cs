@@ -2,7 +2,6 @@
 using UnityEngine;
 using WSP.Camera;
 using WSP.Input;
-using WSP.Items;
 using WSP.Map.Pathfinding;
 using WSP.Targeting;
 using WSP.Units.Upgrades;
@@ -14,7 +13,7 @@ namespace WSP.Units.Player
         public Action<int> OnUnitLevelUp { get; set; }
         public Action<float, float> OnUnitXpGained { get; set; }
         public Action<float, float> OnUnitHealthChanged { get; set; }
-        public Action<Item[]> OnOpenInventory { get; set; }
+        public Action OnOpenInventory { get; set; }
 
         UnityEngine.Camera mainCamera;
 
@@ -32,7 +31,7 @@ namespace WSP.Units.Player
 
         void OpenInventory()
         {
-            OnOpenInventory?.Invoke(Unit.Inventory.GetAllItems());
+            OnOpenInventory?.Invoke();
         }
 
         void Update()
