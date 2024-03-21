@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using WSP.Input;
 using WSP.Units;
@@ -161,7 +162,8 @@ namespace WSP.Targeting
                 {
                     TargetingReticle.ReticleTargetType.Normal => instance.normalColor,
                     TargetingReticle.ReticleTargetType.Friendly => instance.friendlyColor,
-                    TargetingReticle.ReticleTargetType.Enemy => instance.enemyColor
+                    TargetingReticle.ReticleTargetType.Enemy => instance.enemyColor,
+                    _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
                 };
 
                 instance.lineRenderer.startColor = color;
