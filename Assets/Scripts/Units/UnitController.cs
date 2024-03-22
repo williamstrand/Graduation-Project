@@ -6,7 +6,7 @@ namespace WSP.Units
     public abstract class UnitController : MonoBehaviour, IUnitController
     {
         public Action OnTurnEnd { get; set; }
-        public IUnit Unit { get; private set; }
+        public IUnit Unit { get; protected set; }
         public bool IsTurn { get; set; }
 
         protected ActionContext CurrentAction;
@@ -48,8 +48,14 @@ namespace WSP.Units
             if (!CanAct) return false;
 
             CurrentAction = action;
+            TargetAction = null;
             CurrentAction.Action.OnActionFinished += EndTurn;
             return CurrentAction.StartAction(Unit);
+        }
+
+        protected void StartTargetAction()
+        {
+            StartAction(TargetAction);
         }
 
         protected abstract void Kill();

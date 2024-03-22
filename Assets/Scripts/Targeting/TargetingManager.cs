@@ -17,7 +17,8 @@ namespace WSP.Targeting
 
         static IAction currentAction;
         static IPlayerUnitController currentPlayerController;
-        static bool isTargeting;
+        public static bool InTargetSelectionMode { get; private set; }
+        static bool updateInTargetSelectionMode;
 
         public static Color NormalColor => instance.normalColor;
         public static Color FriendlyColor => instance.friendlyColor;
@@ -37,6 +38,14 @@ namespace WSP.Targeting
             mainCamera = UnityEngine.Camera.main;
         }
 
+        void LateUpdate()
+        {
+            if (!updateInTargetSelectionMode) return;
+
+            InTargetSelectionMode = !InTargetSelectionMode;
+            updateInTargetSelectionMode = false;
+        }
+
         public static void StartActionTargeting(IPlayerUnitController origin, IAction action)
         {
             currentPlayerController = origin;
@@ -45,7 +54,7 @@ namespace WSP.Targeting
             InputHandler.Controls.Game.Target.performed += ExecuteAction;
             InputHandler.Controls.Game.CancelTarget.performed += CancelTargeting;
 
-            isTargeting = true;
+            InTargetSelectionMode = true;
         }
 
         public static void Target(Vector2Int origin, Vector2Int target)
@@ -57,7 +66,7 @@ namespace WSP.Targeting
             currentTarget = target;
             instance.reticle.Type = type;
 
-            if (isTargeting)
+            if (InTargetSelectionMode)
             {
                 HidePath();
                 currentAction.TargetingType.Target(currentOrigin, currentTarget, instance.reticle);
@@ -70,7 +79,7 @@ namespace WSP.Targeting
 
         static void SetReticlePosition()
         {
-            if (isTargeting) return;
+            if (InTargetSelectionMode) return;
 
             if (instance.reticle.Type == TargetingReticle.ReticleTargetType.None)
             {
@@ -90,13 +99,13 @@ namespace WSP.Targeting
             InputHandler.Controls.Game.CancelTarget.performed -= CancelTargeting;
 
             currentAction.TargetingType.StopTarget();
-            isTargeting = false;
             instance.reticle.Enable(false);
+            updateInTargetSelectionMode = true;
         }
 
         static void ExecuteAction(InputAction.CallbackContext _)
         {
-            if (!isTargeting) return;
+            if (!InTargetSelectionMode) return;
 
             var mousePosition = InputHandler.Controls.General.MousePosition.ReadValue<Vector2>();
             var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
@@ -115,12 +124,16 @@ namespace WSP.Targeting
 
             if (!currentPlayerController.StartAction(actionContext)) return;
 
+            InputHandler.Controls.Game.Target.performed -= ExecuteAction;
+            InputHandler.Controls.Game.CancelTarget.performed -= CancelTargeting;
+
+            currentAction.TargetingType.StopTarget();
             CancelTargeting(_);
         }
 
         static void DrawPath()
         {
-            if (isTargeting)
+            if (InTargetSelectionMode)
             {
                 HidePath();
                 return;

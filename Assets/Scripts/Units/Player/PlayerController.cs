@@ -37,7 +37,7 @@ namespace WSP.Units.Player
         void Update()
         {
             var gridPosition = GetTargetPosition();
-            TargetAction = GetAction(gridPosition);
+            GetAction(gridPosition);
             TargetingManager.Target(Unit.GridPosition, gridPosition);
 
             if (!IsTurn) return;
@@ -46,52 +46,72 @@ namespace WSP.Units.Player
 
             if (!CanAct) return;
 
-            StartAction(TargetAction);
+            StartTargetAction();
         }
 
-        ActionContext GetAction(Vector2Int targetPosition)
+        void GetAction(Vector2Int targetPosition)
         {
+            if (TargetingManager.InTargetSelectionMode) return;
+
             if (InputHandler.Controls.Game.Stop.triggered)
             {
-                currentTarget = null;
-                return null;
+                Stop();
+                return;
             }
 
-            if (targetPosition == Unit.GridPosition) return null;
+            if (targetPosition == Unit.GridPosition) return;
 
-            bool inRange;
-
+            // Gets target position and unit if the target button is pressed.
             if (InputHandler.Controls.Game.Target.triggered)
             {
-                currentTarget = new ActionTarget
-                {
-                    TargetPosition = targetPosition
-                };
-
-                if (!GameManager.CurrentLevel.IsOccupied(targetPosition)) return new ActionContext(Unit.Movement, currentTarget);
-
-                currentTarget.TargetUnit = GameManager.CurrentLevel.GetUnitAt(targetPosition);
-
-                inRange = Pathfinder.Distance(Unit.GridPosition, currentTarget.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
-                return inRange ? new ActionContext(Unit.Attack, currentTarget) : new ActionContext(Unit.Movement, currentTarget);
+                GetTarget(targetPosition);
             }
 
-            if (currentTarget == null) return null;
+            // If there is a target, check if the target is in range and set the action accordingly.
+            if (TargetAction != null) return;
+            if (currentTarget == null) return;
 
             if (currentTarget.TargetPosition == Unit.GridPosition)
             {
-                currentTarget = null;
-                return null;
+                Stop();
+                return;
             }
 
-            if (currentTarget.TargetUnit == null) return new ActionContext(Unit.Movement, currentTarget);
+            if (currentTarget.TargetUnit == null)
+            {
+                TargetAction = new ActionContext(Unit.Movement, currentTarget);
+                return;
+            }
 
-            inRange = Pathfinder.Distance(Unit.GridPosition, currentTarget.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
-            if (!inRange) return new ActionContext(Unit.Movement, currentTarget);
+            var inRange = Pathfinder.Distance(Unit.GridPosition, currentTarget.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
+            if (!inRange)
+            {
+                TargetAction = new ActionContext(Unit.Movement, currentTarget);
+                return;
+            }
 
-            var ctx = new ActionContext(Unit.Attack, currentTarget);
+            TargetAction = new ActionContext(Unit.Attack, currentTarget);
             currentTarget = null;
-            return ctx;
+        }
+
+        void Stop()
+        {
+            currentTarget = null;
+            TargetAction = null;
+        }
+
+        void GetTarget(Vector2Int targetPosition)
+        {
+            TargetAction = null;
+            currentTarget = new ActionTarget
+            {
+                TargetPosition = targetPosition
+            };
+
+            if (GameManager.CurrentLevel.IsOccupied(targetPosition))
+            {
+                currentTarget.TargetUnit = GameManager.CurrentLevel.GetUnitAt(targetPosition);
+            }
         }
 
         Vector2Int GetTargetPosition()

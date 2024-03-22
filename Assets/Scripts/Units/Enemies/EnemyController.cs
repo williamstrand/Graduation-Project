@@ -71,8 +71,12 @@ namespace WSP.Units.Enemies
 
         protected override void Kill()
         {
-            Destroy(Unit.GameObject);
-            GameManager.CurrentLevel.Units.Remove(this);
+            if (Unit.GameObject != null)
+            {
+                Destroy(Unit.GameObject);
+                GameManager.CurrentLevel.Units.Remove(this);
+                Unit = null;
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ namespace WSP.Units.Components
         public bool StartAction(IUnit attacker, ActionTarget target)
         {
             if (target.TargetUnit == null) return false;
+            if (target.TargetUnit.GameObject == null) return false;
             if (attacker.Stats.AttackRange < Pathfinder.Distance(attacker.GridPosition, target.TargetUnit.GridPosition)) return false;
 
             ActionStarted = true;

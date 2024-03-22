@@ -14,7 +14,9 @@
 
         public bool StartAction(IUnit unit)
         {
-            return Action.StartAction(unit, Target);
+            if (Target?.TargetUnit == null) return Action.StartAction(unit, Target);
+
+            return Target.TargetUnit == GameManager.CurrentLevel.GetUnitAt(Target.TargetPosition) && Action.StartAction(unit, Target);
         }
     }
 }
