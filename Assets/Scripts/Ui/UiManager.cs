@@ -58,7 +58,14 @@ namespace WSP.Ui
 
         void OpenInventory()
         {
-            inventoryUi.Open();
+            if (!inventoryUi.IsOpen)
+            {
+                inventoryUi.Open();
+            }
+            else
+            {
+                inventoryUi.Close();
+            }
         }
     }
 }

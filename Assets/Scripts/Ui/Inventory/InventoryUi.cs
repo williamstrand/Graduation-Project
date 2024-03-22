@@ -11,7 +11,7 @@ namespace WSP.Ui.Inventory
         [SerializeField] Transform content;
         [SerializeField] InventoryItemInfo itemInfo;
 
-        bool IsOpen { get; set; }
+        public bool IsOpen { get; private set; }
         static IPlayerUnitController PlayerController => GameManager.CurrentLevel.Player;
         Item currentOpenedItem;
 
@@ -43,8 +43,10 @@ namespace WSP.Ui.Inventory
             }
         }
 
-        void Close()
+        public void Close()
         {
+            if (!IsOpen) return;
+
             InputHandler.Controls.Game.Enable();
             foreach (Transform child in content)
             {
