@@ -83,6 +83,7 @@ namespace WSP.Units.Player
                 return;
             }
 
+            currentTarget.TargetPosition = currentTarget.TargetUnit.GridPosition;
             var inRange = Pathfinder.Distance(Unit.GridPosition, currentTarget.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
             if (!inRange)
             {
