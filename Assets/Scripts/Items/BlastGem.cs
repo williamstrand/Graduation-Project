@@ -2,6 +2,7 @@
 using UnityEngine;
 using WSP.Targeting.TargetingTypes;
 using WSP.Units;
+using WSP.VFX;
 
 namespace WSP.Items
 {
@@ -9,13 +10,14 @@ namespace WSP.Items
     {
         const int Width = 3;
         const int Height = 3;
-        const float Duration = 1f;
         const int Damage = 50;
 
         public override string Name => "Blast Gem";
         public override string Description => "Triggers an explosion.";
         public override int Weight => 30;
         public override TargetingType TargetingType { get; } = new AreaTargeting(Width, Height);
+
+        static VfxObject VFX => VfxLoader.LoadVfx("Blast VFX");
 
         protected override bool ActivateEffect(IUnit origin, ActionTarget target)
         {
@@ -26,24 +28,38 @@ namespace WSP.Items
 
         IEnumerator BlastCouroutine(ActionTarget target)
         {
-            var timer = 0f;
-            while (timer < Duration)
-            {
-                timer += Time.deltaTime;
-                yield return null;
-            }
+            yield return new WaitForSeconds(.5f);
+
 
             for (var x = -Width / 2; x <= Width / 2; x++)
             {
                 for (var y = -Height / 2; y <= Height / 2; y++)
                 {
-                    var unit = GameManager.CurrentLevel.GetUnitAt(target.TargetPosition + new Vector2Int(x, y));
-                    unit?.Damage(Damage);
+                    var position = target.TargetPosition + new Vector2Int(x, y);
+
+                    var vfx = Object.Instantiate(VFX, (Vector2)position, Quaternion.identity);
+                    vfx.Play();
+                    vfx.OnFinished += () => Object.Destroy(vfx.gameObject);
+
+                    var unit = GameManager.CurrentLevel.GetUnitAt(position);
+                    if (unit != null)
+                    {
+                        vfx.OnFinished += () => DamageUnit(unit);
+                    }
+
+                    yield return new WaitForSeconds(.05f);
                 }
             }
 
+            yield return new WaitForSeconds(1);
+
             ActionStarted = false;
             OnActionFinished?.Invoke();
+        }
+
+        void DamageUnit(IUnit unit)
+        {
+            unit.Damage(Damage);
         }
     }
 }
