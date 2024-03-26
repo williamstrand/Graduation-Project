@@ -17,7 +17,7 @@ namespace WSP.Items
         public override int Weight => 30;
         public override TargetingType TargetingType { get; } = new AreaTargeting(Width, Height);
 
-        static VfxObject VFX => VfxLoader.LoadVfx("Blast VFX");
+        static VfxObject VFX => VfxLoader.LoadAsset("Blast VFX");
 
         protected override bool ActivateEffect(IUnit origin, ActionTarget target)
         {
