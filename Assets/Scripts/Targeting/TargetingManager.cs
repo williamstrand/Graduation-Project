@@ -110,17 +110,8 @@ namespace WSP.Targeting
             var mousePosition = InputHandler.Controls.General.MousePosition.ReadValue<Vector2>();
             var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
-            var target = new ActionTarget
-            {
-                TargetPosition = gridPosition
-            };
 
-            if (GameManager.CurrentLevel.IsOccupied(gridPosition))
-            {
-                target.TargetUnit = GameManager.CurrentLevel.GetUnitAt(gridPosition);
-            }
-
-            var actionContext = new ActionContext(currentAction, target);
+            var actionContext = new ActionContext(currentAction, gridPosition);
 
             if (!currentPlayerController.StartAction(actionContext)) return;
 

@@ -17,16 +17,17 @@ namespace WSP.Units.Components
         [SerializeField] float attackSpeed = 1;
         [SerializeField] float projectileSpeed = 5;
 
-        public bool StartAction(IUnit attacker, ActionTarget target)
+        public bool StartAction(IUnit attacker, Vector2Int target)
         {
-            if (target.TargetUnit == null) return false;
-            if (target.TargetUnit.GameObject == null) return false;
+            var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
+            if (targetUnit == null) return false;
+            if (targetUnit.GameObject == null) return false;
 
-            var inRange = Pathfinder.Distance(attacker.GridPosition, target.TargetUnit.GridPosition) <= attacker.Stats.AttackRange;
+            var inRange = Pathfinder.Distance(attacker.GridPosition, targetUnit.GridPosition) <= attacker.Stats.AttackRange;
             if (!inRange) return false;
 
             ActionStarted = true;
-            StartCoroutine(AttackCoroutine(attacker, target.TargetUnit));
+            StartCoroutine(AttackCoroutine(attacker, targetUnit));
             return true;
         }
 

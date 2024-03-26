@@ -16,13 +16,14 @@ namespace WSP.Units.Components
         [SerializeField] Transform sprite;
         [SerializeField] float attackSpeed = 1;
 
-        public bool StartAction(IUnit attacker, ActionTarget target)
+        public bool StartAction(IUnit attacker, Vector2Int target)
         {
-            if (target.TargetUnit == null) return false;
-            if (attacker.Stats.AttackRange < Pathfinder.Distance(attacker.GridPosition, target.TargetUnit.GridPosition)) return false;
+            var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
+            if (targetUnit == null) return false;
+            if (attacker.Stats.AttackRange < Pathfinder.Distance(attacker.GridPosition, targetUnit.GridPosition)) return false;
 
             ActionStarted = true;
-            StartCoroutine(AttackCoroutine(attacker, target.TargetUnit));
+            StartCoroutine(AttackCoroutine(attacker, targetUnit));
             return true;
         }
 

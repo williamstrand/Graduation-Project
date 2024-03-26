@@ -26,7 +26,7 @@ namespace WSP.Items
         public abstract int Weight { get; }
         public Sprite Icon => IconLoader.LoadAsset(Name);
 
-        public bool StartAction(IUnit origin, ActionTarget target)
+        public bool StartAction(IUnit origin, Vector2Int target)
         {
             if (ActionStarted) return false;
 
@@ -37,6 +37,6 @@ namespace WSP.Items
             return true;
         }
 
-        protected abstract bool ActivateEffect(IUnit origin, ActionTarget target);
+        protected abstract bool ActivateEffect(IUnit origin, Vector2Int target);
     }
 }

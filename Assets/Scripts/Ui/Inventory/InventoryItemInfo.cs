@@ -39,7 +39,7 @@ namespace WSP.Ui.Inventory
             OnUseButtonPressed?.Invoke();
             if (currentItem.TargetingType is SelfTargeting)
             {
-                var actionContext = new ActionContext(currentItem, null);
+                var actionContext = new ActionContext(currentItem, Vector2Int.zero);
                 currentPlayer.StartAction(actionContext);
                 return;
             }

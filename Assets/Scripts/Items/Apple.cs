@@ -1,4 +1,5 @@
-﻿using WSP.Targeting.TargetingTypes;
+﻿using UnityEngine;
+using WSP.Targeting.TargetingTypes;
 using WSP.Units;
 
 namespace WSP.Items
@@ -9,7 +10,7 @@ namespace WSP.Items
         public override int Weight => 75;
         public override TargetingType TargetingType => new SelfTargeting();
 
-        protected override bool ActivateEffect(IUnit origin, ActionTarget target)
+        protected override bool ActivateEffect(IUnit origin, Vector2Int target)
         {
             origin.Heal(HealAmount);
             ActionStarted = false;

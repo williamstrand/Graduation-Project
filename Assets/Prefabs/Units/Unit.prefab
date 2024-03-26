@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 8501405415805171946}
   - component: {fileID: -6264792778512200803}
   - component: {fileID: 3528063865061802172}
+  - component: {fileID: 717441134438132300}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -150,6 +151,12 @@ MonoBehaviour:
     PhysicalDefense: 0
     MagicDefense: 0
     AttackRange: 1
+  <StatsPerLevel>k__BackingField:
+    Health: 1
+    Attack: 1
+    PhysicalDefense: 1
+    MagicDefense: 1
+    AttackRange: 1
 --- !u!114 &-6264792778512200803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,3 +184,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Size>k__BackingField: 5
+--- !u!114 &717441134438132300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401608540523457847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca716a489fe469c8334f7c5952f0b09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpecialAttacks: 4

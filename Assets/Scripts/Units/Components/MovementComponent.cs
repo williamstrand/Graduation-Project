@@ -40,15 +40,15 @@ namespace WSP.Units.Components
             isMoving = false;
         }
 
-        public bool StartAction(IUnit origin, ActionTarget target)
+        public bool StartAction(IUnit origin, Vector2Int target)
         {
             if (isMoving) return false;
-            if (target.TargetPosition == GridPosition) return false;
-            if (GameManager.CurrentLevel.Map.GetValue(target.TargetPosition) == Map.Pathfinding.Map.Wall) return false;
+            if (target == GridPosition) return false;
+            if (GameManager.CurrentLevel.Map.GetValue(target) == Map.Pathfinding.Map.Wall) return false;
 
-            if (!GameManager.CurrentLevel.FindPath(GridPosition, target.TargetPosition, out var path))
+            if (!GameManager.CurrentLevel.FindPath(GridPosition, target, out var path))
             {
-                if (!Pathfinder.FindPath(GameManager.CurrentLevel.Map, GridPosition, target.TargetPosition, out path)) return false;
+                if (!Pathfinder.FindPath(GameManager.CurrentLevel.Map, GridPosition, target, out path)) return false;
             }
 
             if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;

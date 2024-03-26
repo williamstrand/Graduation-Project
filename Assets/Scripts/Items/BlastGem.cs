@@ -19,23 +19,22 @@ namespace WSP.Items
 
         static VfxObject VFX => VfxLoader.LoadAsset("Blast VFX");
 
-        protected override bool ActivateEffect(IUnit origin, ActionTarget target)
+        protected override bool ActivateEffect(IUnit origin, Vector2Int target)
         {
             ActionStarted = true;
             GameManager.ExecuteCoroutine(BlastCouroutine(target));
             return true;
         }
 
-        IEnumerator BlastCouroutine(ActionTarget target)
+        IEnumerator BlastCouroutine(Vector2Int target)
         {
             yield return new WaitForSeconds(.5f);
-
 
             for (var x = -Width / 2; x <= Width / 2; x++)
             {
                 for (var y = -Height / 2; y <= Height / 2; y++)
                 {
-                    var position = target.TargetPosition + new Vector2Int(x, y);
+                    var position = target + new Vector2Int(x, y);
 
                     var vfx = Object.Instantiate(VFX, (Vector2)position, Quaternion.identity);
                     vfx.Play();

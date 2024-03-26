@@ -12,11 +12,12 @@ namespace WSP.Items
         public override int Weight => 30;
         public override TargetingType TargetingType => new UnitTargeting();
 
-        protected override bool ActivateEffect(IUnit origin, ActionTarget target)
+        protected override bool ActivateEffect(IUnit origin, Vector2Int target)
         {
-            if (target.TargetUnit == null) return false;
+            var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
+            if (targetUnit == null) return false;
 
-            GameManager.ExecuteCoroutine(SwapCoroutine(origin, target.TargetUnit));
+            GameManager.ExecuteCoroutine(SwapCoroutine(origin, targetUnit));
             ActionStarted = true;
             return true;
         }

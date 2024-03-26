@@ -64,6 +64,42 @@ namespace WSP.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Special 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""a216f09f-550e-4b81-ab4c-4f64b83b2e24"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Special 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""6783eace-3b38-44d9-96ff-6421122b4961"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Special 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""7ece111a-3b3c-4afa-a3a7-49ad3e4760b4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Special 4"",
+                    ""type"": ""Button"",
+                    ""id"": ""65f5f6dd-8e28-4aa5-ab82-0e82aaa9d274"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -108,6 +144,50 @@ namespace WSP.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Cancel Target"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1422ea25-32e8-42e2-b330-feb63ed3d954"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Special 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bbcdce23-6450-485a-87c1-4725046cc493"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Special 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""71a1b554-f3e9-4b73-9585-3da92e8ee548"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Special 3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50c0a708-8c1a-446f-a658-e3d4ce27bcb2"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Special 4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -218,6 +298,10 @@ namespace WSP.Input
             m_Game_Target = m_Game.FindAction("Target", throwIfNotFound: true);
             m_Game_MousePosition = m_Game.FindAction("Mouse Position", throwIfNotFound: true);
             m_Game_CancelTarget = m_Game.FindAction("Cancel Target", throwIfNotFound: true);
+            m_Game_Special1 = m_Game.FindAction("Special 1", throwIfNotFound: true);
+            m_Game_Special2 = m_Game.FindAction("Special 2", throwIfNotFound: true);
+            m_Game_Special3 = m_Game.FindAction("Special 3", throwIfNotFound: true);
+            m_Game_Special4 = m_Game.FindAction("Special 4", throwIfNotFound: true);
             // Menu
             m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
             m_Menu_Inventory = m_Menu.FindAction("Inventory", throwIfNotFound: true);
@@ -291,6 +375,10 @@ namespace WSP.Input
         private readonly InputAction m_Game_Target;
         private readonly InputAction m_Game_MousePosition;
         private readonly InputAction m_Game_CancelTarget;
+        private readonly InputAction m_Game_Special1;
+        private readonly InputAction m_Game_Special2;
+        private readonly InputAction m_Game_Special3;
+        private readonly InputAction m_Game_Special4;
         public struct GameActions
         {
             private @Controls m_Wrapper;
@@ -299,6 +387,10 @@ namespace WSP.Input
             public InputAction @Target => m_Wrapper.m_Game_Target;
             public InputAction @MousePosition => m_Wrapper.m_Game_MousePosition;
             public InputAction @CancelTarget => m_Wrapper.m_Game_CancelTarget;
+            public InputAction @Special1 => m_Wrapper.m_Game_Special1;
+            public InputAction @Special2 => m_Wrapper.m_Game_Special2;
+            public InputAction @Special3 => m_Wrapper.m_Game_Special3;
+            public InputAction @Special4 => m_Wrapper.m_Game_Special4;
             public InputActionMap Get() { return m_Wrapper.m_Game; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -320,6 +412,18 @@ namespace WSP.Input
                 @CancelTarget.started += instance.OnCancelTarget;
                 @CancelTarget.performed += instance.OnCancelTarget;
                 @CancelTarget.canceled += instance.OnCancelTarget;
+                @Special1.started += instance.OnSpecial1;
+                @Special1.performed += instance.OnSpecial1;
+                @Special1.canceled += instance.OnSpecial1;
+                @Special2.started += instance.OnSpecial2;
+                @Special2.performed += instance.OnSpecial2;
+                @Special2.canceled += instance.OnSpecial2;
+                @Special3.started += instance.OnSpecial3;
+                @Special3.performed += instance.OnSpecial3;
+                @Special3.canceled += instance.OnSpecial3;
+                @Special4.started += instance.OnSpecial4;
+                @Special4.performed += instance.OnSpecial4;
+                @Special4.canceled += instance.OnSpecial4;
             }
 
             private void UnregisterCallbacks(IGameActions instance)
@@ -336,6 +440,18 @@ namespace WSP.Input
                 @CancelTarget.started -= instance.OnCancelTarget;
                 @CancelTarget.performed -= instance.OnCancelTarget;
                 @CancelTarget.canceled -= instance.OnCancelTarget;
+                @Special1.started -= instance.OnSpecial1;
+                @Special1.performed -= instance.OnSpecial1;
+                @Special1.canceled -= instance.OnSpecial1;
+                @Special2.started -= instance.OnSpecial2;
+                @Special2.performed -= instance.OnSpecial2;
+                @Special2.canceled -= instance.OnSpecial2;
+                @Special3.started -= instance.OnSpecial3;
+                @Special3.performed -= instance.OnSpecial3;
+                @Special3.canceled -= instance.OnSpecial3;
+                @Special4.started -= instance.OnSpecial4;
+                @Special4.performed -= instance.OnSpecial4;
+                @Special4.canceled -= instance.OnSpecial4;
             }
 
             public void RemoveCallbacks(IGameActions instance)
@@ -467,6 +583,10 @@ namespace WSP.Input
             void OnTarget(InputAction.CallbackContext context);
             void OnMousePosition(InputAction.CallbackContext context);
             void OnCancelTarget(InputAction.CallbackContext context);
+            void OnSpecial1(InputAction.CallbackContext context);
+            void OnSpecial2(InputAction.CallbackContext context);
+            void OnSpecial3(InputAction.CallbackContext context);
+            void OnSpecial4(InputAction.CallbackContext context);
         }
         public interface IMenuActions
         {

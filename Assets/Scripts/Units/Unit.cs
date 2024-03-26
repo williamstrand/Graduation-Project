@@ -4,8 +4,8 @@ using WSP.Units.Components;
 
 namespace WSP.Units
 {
-    [RequireComponent(typeof(IMovementComponent),
-        typeof(IAttackComponent))]
+    [RequireComponent(typeof(IMovementComponent), typeof(IAttackComponent))]
+    [RequireComponent(typeof(IInventoryComponent), typeof(ISpecialAttackComponent))]
     public class Unit : MonoBehaviour, IUnit
     {
         public Action OnDeath { get; set; }
@@ -26,12 +26,14 @@ namespace WSP.Units
         public IMovementComponent Movement { get; private set; }
         public IAttackComponent Attack { get; private set; }
         public IInventoryComponent Inventory { get; private set; }
+        public ISpecialAttackComponent SpecialAttack { get; private set; }
 
         protected void Awake()
         {
             Movement = GetComponent<IMovementComponent>();
             Attack = GetComponent<IAttackComponent>();
             Inventory = GetComponent<IInventoryComponent>();
+            SpecialAttack = GetComponent<ISpecialAttackComponent>();
 
             CurrentHealth = Mathf.RoundToInt(Stats.Health);
             Attack.OnAttackHit += TargetHit;

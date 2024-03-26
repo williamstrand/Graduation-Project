@@ -4,6 +4,7 @@ using WSP.Camera;
 using WSP.Input;
 using WSP.Map.Pathfinding;
 using WSP.Targeting;
+using WSP.Units.SpecialAttacks;
 using WSP.Units.Upgrades;
 
 namespace WSP.Units.Player
@@ -19,9 +20,16 @@ namespace WSP.Units.Player
 
         ActionTarget currentTarget;
 
+        class ActionTarget
+        {
+            public IUnit TargetUnit;
+            public Vector2Int TargetPosition;
+        }
+
         void Start()
         {
             mainCamera = UnityEngine.Camera.main;
+            Unit.SpecialAttack.SetSpecialAttack(0, new Fireball());
         }
 
         void OnEnable()
@@ -67,6 +75,12 @@ namespace WSP.Units.Player
                 GetTarget(targetPosition);
             }
 
+            if (InputHandler.Controls.Game.Special1.triggered)
+            {
+                var actionContext = new ActionContext(Unit.SpecialAttack[0], targetPosition);
+                TargetAction = actionContext;
+            }
+
             // If there is a target, check if the target is in range and set the action accordingly.
             if (TargetAction != null) return;
             if (currentTarget == null) return;
@@ -79,7 +93,7 @@ namespace WSP.Units.Player
 
             if (currentTarget.TargetUnit == null)
             {
-                TargetAction = new ActionContext(Unit.Movement, currentTarget);
+                TargetAction = new ActionContext(Unit.Movement, currentTarget.TargetPosition);
                 return;
             }
 
@@ -87,11 +101,11 @@ namespace WSP.Units.Player
             var inRange = Pathfinder.Distance(Unit.GridPosition, currentTarget.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
             if (!inRange)
             {
-                TargetAction = new ActionContext(Unit.Movement, currentTarget);
+                TargetAction = new ActionContext(Unit.Movement, currentTarget.TargetPosition);
                 return;
             }
 
-            TargetAction = new ActionContext(Unit.Attack, currentTarget);
+            TargetAction = new ActionContext(Unit.Attack, currentTarget.TargetPosition);
             currentTarget = null;
         }
 

@@ -50,23 +50,18 @@ namespace WSP.Units.Enemies
 
         ActionContext GetAction(Vector2Int gridPosition)
         {
-            var actionTarget = new ActionTarget
-            {
-                TargetPosition = gridPosition
-            };
 
             if (player == null)
             {
-                return new ActionContext(Unit.Movement, actionTarget);
+                return new ActionContext(Unit.Movement, gridPosition);
             }
 
             if (Pathfinder.Distance(Unit.GridPosition, gridPosition) > Unit.Stats.AttackRange)
             {
-                return new ActionContext(Unit.Movement, actionTarget);
+                return new ActionContext(Unit.Movement, gridPosition);
             }
 
-            actionTarget.TargetUnit = player;
-            return new ActionContext(Unit.Attack, actionTarget);
+            return new ActionContext(Unit.Attack, player.GridPosition);
         }
 
         protected override void Kill()
