@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using WSP.Camera;
 using WSP.Input;
 using WSP.Map.Pathfinding;
@@ -16,8 +17,6 @@ namespace WSP.Units.Player
         public Action<float, float> OnUnitHealthChanged { get; set; }
         public Action OnOpenInventory { get; set; }
 
-        UnityEngine.Camera mainCamera;
-
         ActionTarget currentTarget;
 
         class ActionTarget
@@ -28,13 +27,22 @@ namespace WSP.Units.Player
 
         void Start()
         {
-            mainCamera = UnityEngine.Camera.main;
             Unit.SpecialAttack.SetSpecialAttack(0, new Fireball());
         }
 
         void OnEnable()
         {
-            InputHandler.Controls.Menu.Inventory.performed += _ => OpenInventory();
+            InputHandler.Controls.Menu.Inventory.performed += OnInventory;
+        }
+
+        void OnDisable()
+        {
+            InputHandler.Controls.Menu.Inventory.performed -= OnInventory;
+        }
+
+        void OnInventory(InputAction.CallbackContext context)
+        {
+            OpenInventory();
         }
 
         void OpenInventory()
@@ -44,9 +52,8 @@ namespace WSP.Units.Player
 
         void Update()
         {
-            var gridPosition = GetTargetPosition();
+            var gridPosition = TargetingManager.GetTarget();
             GetAction(gridPosition);
-            TargetingManager.Target(Unit.GridPosition, gridPosition);
 
             if (!IsTurn) return;
 
@@ -127,15 +134,6 @@ namespace WSP.Units.Player
             {
                 currentTarget.TargetUnit = GameManager.CurrentLevel.GetUnitAt(targetPosition);
             }
-        }
-
-        Vector2Int GetTargetPosition()
-        {
-            var mousePosition = InputHandler.Controls.Game.MousePosition.ReadValue<Vector2>();
-            var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
-            var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
-
-            return gridPosition;
         }
 
         public override void SetUnit(IUnit unit)

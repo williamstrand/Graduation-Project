@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace WSP.Targeting
 {
@@ -24,31 +23,13 @@ namespace WSP.Targeting
 
         public void SetPosition(Vector2Int position)
         {
-            switch (Type)
-            {
-                case ReticleTargetType.None:
-                    Enable(false);
-                    return;
-
-                case ReticleTargetType.Normal:
-
-                    spriteRenderer.color = TargetingManager.NormalColor;
-                    break;
-
-                case ReticleTargetType.Friendly:
-                    spriteRenderer.color = TargetingManager.FriendlyColor;
-                    break;
-
-                case ReticleTargetType.Enemy:
-                    spriteRenderer.color = TargetingManager.EnemyColor;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(Type), Type, null);
-            }
-
             Enable(true);
             transform.position = new Vector3(position.x, position.y, 0);
+        }
+
+        public void SetColor(Color color)
+        {
+            spriteRenderer.color = color;
         }
 
         public void Enable(bool enable)

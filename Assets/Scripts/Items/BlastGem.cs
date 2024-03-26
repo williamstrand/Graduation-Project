@@ -30,24 +30,21 @@ namespace WSP.Items
         {
             yield return new WaitForSeconds(.5f);
 
-            for (var x = -Width / 2; x <= Width / 2; x++)
+            var targets = TargetingType.GetTargets(Vector2Int.zero, target);
+
+            for (var i = 0; i < targets.Length; i++)
             {
-                for (var y = -Height / 2; y <= Height / 2; y++)
+                var vfx = Object.Instantiate(VFX, (Vector2)targets[i], Quaternion.identity);
+                vfx.Play();
+                vfx.OnFinished += () => Object.Destroy(vfx.gameObject);
+
+                var unit = GameManager.CurrentLevel.GetUnitAt(targets[i]);
+                if (unit != null)
                 {
-                    var position = target + new Vector2Int(x, y);
-
-                    var vfx = Object.Instantiate(VFX, (Vector2)position, Quaternion.identity);
-                    vfx.Play();
-                    vfx.OnFinished += () => Object.Destroy(vfx.gameObject);
-
-                    var unit = GameManager.CurrentLevel.GetUnitAt(position);
-                    if (unit != null)
-                    {
-                        vfx.OnFinished += () => DamageUnit(unit);
-                    }
-
-                    yield return new WaitForSeconds(.05f);
+                    vfx.OnFinished += () => DamageUnit(unit);
                 }
+
+                yield return new WaitForSeconds(.05f);
             }
 
             yield return new WaitForSeconds(1);

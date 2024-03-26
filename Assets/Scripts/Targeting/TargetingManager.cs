@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using WSP.Input;
+using WSP.Targeting.TargetingTypes;
 using WSP.Units;
 using WSP.Units.Player;
 
@@ -10,32 +11,59 @@ namespace WSP.Targeting
     public class TargetingManager : MonoBehaviour
     {
         static TargetingManager instance;
-        static UnityEngine.Camera mainCamera;
 
-        static Vector2Int currentOrigin;
-        static Vector2Int currentTarget;
+        UnityEngine.Camera mainCamera;
 
-        static IAction currentAction;
-        static IPlayerUnitController currentPlayerController;
+        Vector2Int currentOrigin;
+        Vector2Int currentTarget;
+
+        IAction currentAction;
+        IPlayerUnitController currentPlayerController;
         public static bool InTargetSelectionMode { get; private set; }
-        static bool updateInTargetSelectionMode;
+        bool updateInTargetSelectionMode;
 
-        public static Color NormalColor => instance.normalColor;
-        public static Color FriendlyColor => instance.friendlyColor;
-        public static Color EnemyColor => instance.enemyColor;
+        [HideInInspector] public bool ShouldDrawPath = true;
 
-        [SerializeField] TargetingReticle reticle;
+        [field: SerializeField] public TargetingReticle Reticle { get; private set; }
         [SerializeField] LineRenderer lineRenderer;
 
-        [Header("Colors")]
-        [SerializeField] Color normalColor = Color.grey;
-        [SerializeField] Color friendlyColor = Color.green;
-        [SerializeField] Color enemyColor = Color.red;
+        TargetingType defaultTargetingType = new DefaultTargeting();
+        TargetingType currentTargetingType;
+
+        [field: Header("Colors")]
+        [field: SerializeField] public Color NormalColor { get; private set; } = Color.grey;
+        [field: SerializeField] public Color FriendlyColor { get; private set; } = Color.green;
+        [field: SerializeField] public Color EnemyColor { get; private set; } = Color.red;
+
+        Vector2Int MousePosition
+        {
+            get
+            {
+                var mousePosition = InputHandler.Controls.General.MousePosition.ReadValue<Vector2>();
+                var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
+                return GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
+            }
+        }
 
         void Awake()
         {
             instance = this;
             mainCamera = UnityEngine.Camera.main;
+            SetTargetingType(defaultTargetingType);
+        }
+
+        void Update()
+        {
+            Target(GameManager.CurrentLevel.Player.Unit.GridPosition, MousePosition);
+
+            if (ShouldDrawPath)
+            {
+                DrawPath();
+            }
+            else
+            {
+                HidePath();
+            }
         }
 
         void LateUpdate()
@@ -46,90 +74,70 @@ namespace WSP.Targeting
             updateInTargetSelectionMode = false;
         }
 
-        public static void StartActionTargeting(IPlayerUnitController origin, IAction action)
+        public static Vector2Int GetTarget()
         {
-            currentPlayerController = origin;
-            currentAction = action;
-
-            InputHandler.Controls.Game.Target.performed += ExecuteAction;
-            InputHandler.Controls.Game.CancelTarget.performed += CancelTargeting;
-
-            InTargetSelectionMode = true;
+            return instance.currentTarget;
         }
 
-        public static void Target(Vector2Int origin, Vector2Int target)
+        public static void StartActionTargeting(IPlayerUnitController origin, IAction action)
+        {
+            instance.currentPlayerController = origin;
+            instance.currentAction = action;
+
+            InputHandler.Controls.Game.Target.performed += instance.ExecuteAction;
+            InputHandler.Controls.Game.CancelTarget.performed += instance.CancelTargeting;
+
+            InTargetSelectionMode = true;
+            instance.SetTargetingType(instance.currentAction.TargetingType);
+        }
+
+        void SetTargetingType(TargetingType targetingType)
+        {
+            currentTargetingType?.StopTarget();
+            currentTargetingType = targetingType;
+            currentTargetingType.StartTarget(this);
+        }
+
+        void Target(Vector2Int origin, Vector2Int target)
         {
             var type = GetReticleTargetType(origin, target);
-            if (currentOrigin == origin && currentTarget == target && instance.reticle.Type == type) return;
+            if (currentOrigin == origin && currentTarget == target && Reticle.Type == type) return;
 
             currentOrigin = origin;
             currentTarget = target;
-            instance.reticle.Type = type;
+            Reticle.Type = type;
 
-            if (InTargetSelectionMode)
-            {
-                HidePath();
-                currentAction.TargetingType.Target(currentOrigin, currentTarget, instance.reticle);
-                return;
-            }
-
-            SetReticlePosition();
-            DrawPath();
+            currentTargetingType.Target(currentOrigin, currentTarget);
         }
 
-        static void SetReticlePosition()
-        {
-            if (InTargetSelectionMode) return;
-
-            if (instance.reticle.Type == TargetingReticle.ReticleTargetType.None)
-            {
-                instance.reticle.Enable(false);
-                HidePath();
-                return;
-            }
-
-            instance.reticle.Type = instance.reticle.Type;
-            instance.reticle.SetPosition(currentTarget);
-            instance.reticle.Enable(true);
-        }
-
-        static void CancelTargeting(InputAction.CallbackContext _)
+        void CancelTargeting(InputAction.CallbackContext _)
         {
             InputHandler.Controls.Game.Target.performed -= ExecuteAction;
             InputHandler.Controls.Game.CancelTarget.performed -= CancelTargeting;
 
-            currentAction.TargetingType.StopTarget();
-            instance.reticle.Enable(false);
+            SetTargetingType(defaultTargetingType);
+
             updateInTargetSelectionMode = true;
         }
 
-        static void ExecuteAction(InputAction.CallbackContext _)
+        void ExecuteAction(InputAction.CallbackContext _)
         {
             if (!InTargetSelectionMode) return;
 
-            var mousePosition = InputHandler.Controls.General.MousePosition.ReadValue<Vector2>();
-            var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
-            var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
-
-            var actionContext = new ActionContext(currentAction, gridPosition);
+            var actionContext = new ActionContext(currentAction, MousePosition);
 
             if (!currentPlayerController.StartAction(actionContext)) return;
 
             InputHandler.Controls.Game.Target.performed -= ExecuteAction;
             InputHandler.Controls.Game.CancelTarget.performed -= CancelTargeting;
 
-            currentAction.TargetingType.StopTarget();
+            SetTargetingType(defaultTargetingType);
+
             CancelTargeting(_);
         }
 
-        static void DrawPath()
+        void DrawPath()
         {
-            if (InTargetSelectionMode)
-            {
-                HidePath();
-                return;
-            }
-
             if (GameManager.CurrentLevel.Map.GetValue(currentOrigin) == Map.Pathfinding.Map.Wall)
             {
                 HidePath();
@@ -144,25 +152,25 @@ namespace WSP.Targeting
 
             if (GameManager.CurrentLevel.FindPath(currentOrigin, currentTarget, out var path))
             {
-                instance.lineRenderer.positionCount = path.Count;
+                lineRenderer.positionCount = path.Count;
                 var offset = new Vector2(GameManager.CurrentLevel.Map.CellSize / 2, GameManager.CurrentLevel.Map.CellSize / 2);
 
                 for (var i = 0; i < path.Count; i++)
                 {
-                    instance.lineRenderer.SetPosition(i, path[i].Position + offset);
+                    lineRenderer.SetPosition(i, path[i].Position + offset);
                 }
 
-                var color = instance.reticle.Type switch
+                var color = Reticle.Type switch
                 {
-                    TargetingReticle.ReticleTargetType.Normal => instance.normalColor,
-                    TargetingReticle.ReticleTargetType.Friendly => instance.friendlyColor,
-                    TargetingReticle.ReticleTargetType.Enemy => instance.enemyColor,
+                    TargetingReticle.ReticleTargetType.Normal => NormalColor,
+                    TargetingReticle.ReticleTargetType.Friendly => FriendlyColor,
+                    TargetingReticle.ReticleTargetType.Enemy => EnemyColor,
                     TargetingReticle.ReticleTargetType.None => Color.clear,
-                    _ => throw new ArgumentOutOfRangeException(nameof(instance.reticle.Type), instance.reticle.Type, null)
+                    _ => throw new ArgumentOutOfRangeException(nameof(Reticle.Type), Reticle.Type, null)
                 };
 
-                instance.lineRenderer.startColor = color;
-                instance.lineRenderer.endColor = color;
+                lineRenderer.startColor = color;
+                lineRenderer.endColor = color;
             }
             else
             {
@@ -170,12 +178,12 @@ namespace WSP.Targeting
             }
         }
 
-        static void HidePath()
+        void HidePath()
         {
-            instance.lineRenderer.positionCount = 0;
+            lineRenderer.positionCount = 0;
         }
 
-        static TargetingReticle.ReticleTargetType GetReticleTargetType(Vector2Int origin, Vector2Int position)
+        TargetingReticle.ReticleTargetType GetReticleTargetType(Vector2Int origin, Vector2Int position)
         {
             if (GameManager.CurrentLevel.IsOccupied(position))
             {

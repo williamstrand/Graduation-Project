@@ -4,18 +4,23 @@ namespace WSP.Targeting.TargetingTypes
 {
     public class UnitTargeting : TargetingType
     {
-        public override void Target(Vector2Int origin, Vector2Int target, TargetingReticle reticle)
+        public override void Target(Vector2Int origin, Vector2Int target)
         {
-            if (reticle.Type == TargetingReticle.ReticleTargetType.Enemy)
+            if (TargetingManager.Reticle.Type == TargetingReticle.ReticleTargetType.Enemy)
             {
-                reticle.SetPosition(target);
-                reticle.Enable(true);
+                TargetingManager.Reticle.SetPosition(target);
+                TargetingManager.Reticle.Enable(true);
                 return;
             }
 
-            reticle.Enable(false);
+            TargetingManager.Reticle.Enable(false);
         }
 
         public override void StopTarget() { }
+
+        public override Vector2Int[] GetTargets(Vector2Int origin, Vector2Int target)
+        {
+            return new[] { target };
+        }
     }
 }
