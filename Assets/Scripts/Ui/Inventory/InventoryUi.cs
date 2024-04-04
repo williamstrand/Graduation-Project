@@ -29,7 +29,7 @@ namespace WSP.Ui.Inventory
             IsOpen = true;
             gameObject.SetActive(true);
 
-            InputHandler.Controls.Game.Disable();
+            InputHandler.SetGameControlsEnabled(false);
 
             CreateItemSlots();
 
@@ -47,7 +47,7 @@ namespace WSP.Ui.Inventory
         {
             if (!IsOpen) return;
 
-            InputHandler.Controls.Game.Enable();
+            InputHandler.SetGameControlsEnabled(true);
             foreach (Transform child in content)
             {
                 Destroy(child.gameObject);

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using WSP.Camera;
 using WSP.Input;
 using WSP.Map.Pathfinding;
@@ -32,17 +31,15 @@ namespace WSP.Units.Player
 
         void OnEnable()
         {
-            InputHandler.Controls.Menu.Inventory.performed += OnInventory;
+            InputHandler.OnInventory += OpenInventory;
+            InputHandler.OnTarget += Target;
+            InputHandler.OnStop += Stop;
+            InputHandler.OnSpecialAttack += UseSpecialAttack;
         }
 
         void OnDisable()
         {
-            InputHandler.Controls.Menu.Inventory.performed -= OnInventory;
-        }
-
-        void OnInventory(InputAction.CallbackContext context)
-        {
-            OpenInventory();
+            InputHandler.OnInventory -= OpenInventory;
         }
 
         void OpenInventory()
@@ -64,29 +61,21 @@ namespace WSP.Units.Player
             StartTargetAction();
         }
 
-        void GetAction(Vector2Int targetPosition)
+        void Target(Vector2 position)
         {
             if (TargetingManager.InTargetSelectionMode) return;
 
-            if (InputHandler.Controls.Game.Stop.triggered)
-            {
-                Stop();
-                return;
-            }
+            var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(position);
 
+            if (gridPosition == Unit.GridPosition) return;
+
+            GetTarget(gridPosition);
+        }
+
+        void GetAction(Vector2Int targetPosition)
+        {
+            if (TargetingManager.InTargetSelectionMode) return;
             if (targetPosition == Unit.GridPosition) return;
-
-            // Gets target position and unit if the target button is pressed.
-            if (InputHandler.Controls.Game.Target.triggered)
-            {
-                GetTarget(targetPosition);
-            }
-
-            if (InputHandler.Controls.Game.Special1.triggered)
-            {
-                var actionContext = new ActionContext(Unit.SpecialAttack[0], targetPosition);
-                TargetAction = actionContext;
-            }
 
             // If there is a target, check if the target is in range and set the action accordingly.
             if (TargetAction != null) return;
@@ -134,6 +123,14 @@ namespace WSP.Units.Player
             {
                 currentTarget.TargetUnit = GameManager.CurrentLevel.GetUnitAt(targetPosition);
             }
+        }
+
+        void UseSpecialAttack(int index)
+        {
+            if (Unit.SpecialAttack.SpecialAttacks[index] == null) return;
+
+            var actionContext = new ActionContext(Unit.SpecialAttack[0], GameManager.CurrentLevel.Map.GetGridPosition(InputHandler.MousePosition));
+            TargetAction = actionContext;
         }
 
         public override void SetUnit(IUnit unit)

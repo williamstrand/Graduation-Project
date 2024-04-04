@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using WSP.Input;
 using WSP.Targeting.TargetingTypes;
 using WSP.Units;
@@ -35,16 +34,6 @@ namespace WSP.Targeting
         [field: SerializeField] public Color FriendlyColor { get; private set; } = Color.green;
         [field: SerializeField] public Color EnemyColor { get; private set; } = Color.red;
 
-        Vector2Int MousePosition
-        {
-            get
-            {
-                var mousePosition = InputHandler.Controls.General.MousePosition.ReadValue<Vector2>();
-                var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
-                return GameManager.CurrentLevel.Map.GetGridPosition(worldPosition);
-            }
-        }
-
         void Awake()
         {
             instance = this;
@@ -54,7 +43,9 @@ namespace WSP.Targeting
 
         void Update()
         {
-            Target(GameManager.CurrentLevel.Player.Unit.GridPosition, MousePosition);
+            var mousePosition = InputHandler.MousePosition;
+            var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(mousePosition);
+            Target(GameManager.CurrentLevel.Player.Unit.GridPosition, gridPosition);
 
             if (ShouldDrawPath)
             {
@@ -84,8 +75,8 @@ namespace WSP.Targeting
             instance.currentPlayerController = origin;
             instance.currentAction = action;
 
-            InputHandler.Controls.Game.Target.performed += instance.ExecuteAction;
-            InputHandler.Controls.Game.CancelTarget.performed += instance.CancelTargeting;
+            InputHandler.OnTarget += instance.ExecuteAction;
+            InputHandler.OnCancel += instance.CancelTargeting;
 
             InTargetSelectionMode = true;
             instance.SetTargetingType(instance.currentAction.TargetingType);
@@ -110,30 +101,31 @@ namespace WSP.Targeting
             currentTargetingType.Target(currentOrigin, currentTarget);
         }
 
-        void CancelTargeting(InputAction.CallbackContext _)
+        void CancelTargeting()
         {
-            InputHandler.Controls.Game.Target.performed -= ExecuteAction;
-            InputHandler.Controls.Game.CancelTarget.performed -= CancelTargeting;
+            InputHandler.OnTarget -= ExecuteAction;
+            InputHandler.OnCancel -= CancelTargeting;
 
             SetTargetingType(defaultTargetingType);
 
             updateInTargetSelectionMode = true;
         }
 
-        void ExecuteAction(InputAction.CallbackContext _)
+        void ExecuteAction(Vector2 position)
         {
             if (!InTargetSelectionMode) return;
 
-            var actionContext = new ActionContext(currentAction, MousePosition);
+            var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(position);
+            var actionContext = new ActionContext(currentAction, gridPosition);
 
             if (!currentPlayerController.StartAction(actionContext)) return;
 
-            InputHandler.Controls.Game.Target.performed -= ExecuteAction;
-            InputHandler.Controls.Game.CancelTarget.performed -= CancelTargeting;
+            InputHandler.OnTarget -= ExecuteAction;
+            InputHandler.OnCancel -= CancelTargeting;
 
             SetTargetingType(defaultTargetingType);
 
-            CancelTargeting(_);
+            CancelTargeting();
         }
 
         void DrawPath()
