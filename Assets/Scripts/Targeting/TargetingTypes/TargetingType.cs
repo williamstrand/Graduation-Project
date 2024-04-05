@@ -4,11 +4,11 @@ namespace WSP.Targeting.TargetingTypes
 {
     public abstract class TargetingType
     {
-        protected TargetingManager TargetingManager;
+        protected TargetingComponent TargetingComponent;
 
-        public virtual void StartTarget(TargetingManager targetingManager)
+        public virtual void StartTarget(TargetingComponent targetingComponent)
         {
-            TargetingManager = targetingManager;
+            TargetingComponent = targetingComponent;
         }
 
         public abstract void Target(Vector2Int origin, Vector2Int target);

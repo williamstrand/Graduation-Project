@@ -3,9 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WSP.Items;
-using WSP.Targeting;
-using WSP.Targeting.TargetingTypes;
-using WSP.Units;
 using WSP.Units.Player;
 
 namespace WSP.Ui.Inventory
@@ -37,14 +34,7 @@ namespace WSP.Ui.Inventory
             if (!currentPlayer.IsTurn) return;
 
             OnUseButtonPressed?.Invoke();
-            if (currentItem.TargetingType is SelfTargeting)
-            {
-                var actionContext = new ActionContext(currentItem, Vector2Int.zero);
-                currentPlayer.StartAction(actionContext);
-                return;
-            }
-
-            TargetingManager.StartActionTargeting(currentPlayer, currentItem);
+            currentPlayer.TargetingComponent.StartActionTargeting(currentItem);
         }
     }
 }

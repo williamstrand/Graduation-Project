@@ -16,12 +16,19 @@ namespace WSP.Units.Player
         public Action<float, float> OnUnitHealthChanged { get; set; }
         public Action OnOpenInventory { get; set; }
 
+        public TargetingComponent TargetingComponent { get; private set; }
+
         ActionTarget currentTarget;
 
         class ActionTarget
         {
             public IUnit TargetUnit;
             public Vector2Int TargetPosition;
+        }
+
+        void Awake()
+        {
+            TargetingComponent = GetComponent<TargetingComponent>();
         }
 
         void Start()
@@ -49,7 +56,7 @@ namespace WSP.Units.Player
 
         void Update()
         {
-            var gridPosition = TargetingManager.GetTarget();
+            var gridPosition = TargetingComponent.CurrentTarget;
             GetAction(gridPosition);
 
             if (!IsTurn) return;
@@ -63,7 +70,7 @@ namespace WSP.Units.Player
 
         void Target(Vector2 position)
         {
-            if (TargetingManager.InTargetSelectionMode) return;
+            if (TargetingComponent.InTargetSelectionMode) return;
 
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(position);
 
@@ -74,10 +81,9 @@ namespace WSP.Units.Player
 
         void GetAction(Vector2Int targetPosition)
         {
-            if (TargetingManager.InTargetSelectionMode) return;
+            if (TargetingComponent.InTargetSelectionMode) return;
             if (targetPosition == Unit.GridPosition) return;
 
-            // If there is a target, check if the target is in range and set the action accordingly.
             if (TargetAction != null) return;
             if (currentTarget == null) return;
 
@@ -129,8 +135,7 @@ namespace WSP.Units.Player
         {
             if (Unit.SpecialAttack.SpecialAttacks[index] == null) return;
 
-            var actionContext = new ActionContext(Unit.SpecialAttack[0], GameManager.CurrentLevel.Map.GetGridPosition(InputHandler.MousePosition));
-            TargetAction = actionContext;
+            TargetingComponent.StartActionTargeting(Unit.SpecialAttack[index]);
         }
 
         public override void SetUnit(IUnit unit)

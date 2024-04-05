@@ -20,6 +20,7 @@ namespace WSP.Units.Enemies
 
         void Update()
         {
+            if (Unit == null) return;
             if (!IsTurn) return;
             if (!CanAct) return;
 

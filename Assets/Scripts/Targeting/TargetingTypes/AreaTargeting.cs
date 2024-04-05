@@ -13,22 +13,22 @@ namespace WSP.Targeting.TargetingTypes
             this.height = height;
         }
 
-        public override void StartTarget(TargetingManager targetingManager)
+        public override void StartTarget(TargetingComponent targetingComponent)
         {
-            base.StartTarget(targetingManager);
-            TargetingManager.Reticle.SetSize(new Vector2(width * GameManager.CurrentLevel.Map.CellSize, height * GameManager.CurrentLevel.Map.CellSize));
-            TargetingManager.Reticle.Enable(true);
+            base.StartTarget(targetingComponent);
+            TargetingComponent.Reticle.SetSize(new Vector2(width * GameManager.CurrentLevel.Map.CellSize, height * GameManager.CurrentLevel.Map.CellSize));
+            TargetingComponent.Reticle.Enable(true);
         }
 
         public override void Target(Vector2Int origin, Vector2Int target)
         {
-            TargetingManager.Reticle.SetPosition(target);
+            TargetingComponent.Reticle.SetPosition(target);
         }
 
         public override void StopTarget()
         {
-            TargetingManager.Reticle.SetSize(new Vector2(1, 1));
-            TargetingManager.Reticle.Enable(false);
+            TargetingComponent.Reticle.SetSize(new Vector2(1, 1));
+            TargetingComponent.Reticle.Enable(false);
         }
 
         public override Vector2Int[] GetTargets(Vector2Int origin, Vector2Int target)

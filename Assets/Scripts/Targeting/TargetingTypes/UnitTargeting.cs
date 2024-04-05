@@ -6,14 +6,14 @@ namespace WSP.Targeting.TargetingTypes
     {
         public override void Target(Vector2Int origin, Vector2Int target)
         {
-            if (TargetingManager.Reticle.Type == TargetingReticle.ReticleTargetType.Enemy)
+            if (TargetingComponent.Reticle.Type == TargetingReticle.ReticleTargetType.Enemy)
             {
-                TargetingManager.Reticle.SetPosition(target);
-                TargetingManager.Reticle.Enable(true);
+                TargetingComponent.Reticle.SetPosition(target);
+                TargetingComponent.Reticle.Enable(true);
                 return;
             }
 
-            TargetingManager.Reticle.Enable(false);
+            TargetingComponent.Reticle.Enable(false);
         }
 
         public override void StopTarget() { }

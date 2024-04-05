@@ -7,24 +7,20 @@ using WSP.Units.Player;
 
 namespace WSP.Targeting
 {
-    public class TargetingManager : MonoBehaviour
+    public class TargetingComponent : MonoBehaviour
     {
-        static TargetingManager instance;
-
-        UnityEngine.Camera mainCamera;
-
         Vector2Int currentOrigin;
-        Vector2Int currentTarget;
+        public Vector2Int CurrentTarget { get; private set; }
 
         IAction currentAction;
-        IPlayerUnitController currentPlayerController;
-        public static bool InTargetSelectionMode { get; private set; }
+        IPlayerUnitController playerController;
+        public bool InTargetSelectionMode { get; private set; }
         bool updateInTargetSelectionMode;
 
         [HideInInspector] public bool ShouldDrawPath = true;
 
         [field: SerializeField] public TargetingReticle Reticle { get; private set; }
-        [SerializeField] LineRenderer lineRenderer;
+        LineRenderer lineRenderer;
 
         TargetingType defaultTargetingType = new DefaultTargeting();
         TargetingType currentTargetingType;
@@ -36,9 +32,9 @@ namespace WSP.Targeting
 
         void Awake()
         {
-            instance = this;
-            mainCamera = UnityEngine.Camera.main;
             SetTargetingType(defaultTargetingType);
+            lineRenderer = GetComponent<LineRenderer>();
+            playerController = GetComponent<IPlayerUnitController>();
         }
 
         void Update()
@@ -65,21 +61,22 @@ namespace WSP.Targeting
             updateInTargetSelectionMode = false;
         }
 
-        public static Vector2Int GetTarget()
+        public void StartActionTargeting(IAction action)
         {
-            return instance.currentTarget;
-        }
+            if (action.TargetingType is SelfTargeting)
+            {
+                var actionContext = new ActionContext(action, Vector2Int.zero);
+                playerController.StartAction(actionContext);
+                return;
+            }
 
-        public static void StartActionTargeting(IPlayerUnitController origin, IAction action)
-        {
-            instance.currentPlayerController = origin;
-            instance.currentAction = action;
+            currentAction = action;
 
-            InputHandler.OnTarget += instance.ExecuteAction;
-            InputHandler.OnCancel += instance.CancelTargeting;
+            InputHandler.OnTarget += ExecuteAction;
+            InputHandler.OnCancel += CancelTargeting;
 
             InTargetSelectionMode = true;
-            instance.SetTargetingType(instance.currentAction.TargetingType);
+            SetTargetingType(currentAction.TargetingType);
         }
 
         void SetTargetingType(TargetingType targetingType)
@@ -92,13 +89,13 @@ namespace WSP.Targeting
         void Target(Vector2Int origin, Vector2Int target)
         {
             var type = GetReticleTargetType(origin, target);
-            if (currentOrigin == origin && currentTarget == target && Reticle.Type == type) return;
+            if (currentOrigin == origin && CurrentTarget == target && Reticle.Type == type) return;
 
             currentOrigin = origin;
-            currentTarget = target;
+            CurrentTarget = target;
             Reticle.Type = type;
 
-            currentTargetingType.Target(currentOrigin, currentTarget);
+            currentTargetingType.Target(currentOrigin, CurrentTarget);
         }
 
         void CancelTargeting()
@@ -118,7 +115,7 @@ namespace WSP.Targeting
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(position);
             var actionContext = new ActionContext(currentAction, gridPosition);
 
-            if (!currentPlayerController.StartAction(actionContext)) return;
+            if (!playerController.StartAction(actionContext)) return;
 
             InputHandler.OnTarget -= ExecuteAction;
             InputHandler.OnCancel -= CancelTargeting;
@@ -136,13 +133,13 @@ namespace WSP.Targeting
                 return;
             }
 
-            if (currentOrigin == currentTarget)
+            if (currentOrigin == CurrentTarget)
             {
                 HidePath();
                 return;
             }
 
-            if (GameManager.CurrentLevel.FindPath(currentOrigin, currentTarget, out var path))
+            if (GameManager.CurrentLevel.FindPath(currentOrigin, CurrentTarget, out var path))
             {
                 lineRenderer.positionCount = path.Count;
                 var offset = new Vector2(GameManager.CurrentLevel.Map.CellSize / 2, GameManager.CurrentLevel.Map.CellSize / 2);
