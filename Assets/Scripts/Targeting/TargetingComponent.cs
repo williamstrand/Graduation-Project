@@ -9,19 +9,19 @@ namespace WSP.Targeting
 {
     public class TargetingComponent : MonoBehaviour
     {
-        Vector2Int currentOrigin;
         public Vector2Int CurrentTarget { get; private set; }
+        Vector2Int currentOrigin;
 
         IAction currentAction;
         IPlayerUnitController playerController;
         public bool InTargetSelectionMode { get; private set; }
 
-        [HideInInspector] public bool ShouldDrawPath = true;
+        public bool ShouldDrawPath { get; set; } = true;
 
         [field: SerializeField] public TargetingReticle Reticle { get; private set; }
         LineRenderer lineRenderer;
 
-        TargetingType defaultTargetingType = new DefaultTargeting();
+        TargetingType DefaultTargetingType { get; } = new DefaultTargeting();
         TargetingType currentTargetingType;
 
         [field: Header("Colors")]
@@ -31,9 +31,13 @@ namespace WSP.Targeting
 
         void Awake()
         {
-            SetTargetingType(defaultTargetingType);
             lineRenderer = GetComponent<LineRenderer>();
             playerController = GetComponent<IPlayerUnitController>();
+        }
+
+        void Start()
+        {
+            SetTargetingType(DefaultTargetingType);
         }
 
         void Update()
@@ -94,7 +98,7 @@ namespace WSP.Targeting
             InputHandler.OnTarget -= ExecuteAction;
             InputHandler.OnCancel -= CancelTargeting;
 
-            SetTargetingType(defaultTargetingType);
+            SetTargetingType(DefaultTargetingType);
 
             InTargetSelectionMode = false;
         }
@@ -107,11 +111,6 @@ namespace WSP.Targeting
             var actionContext = new ActionContext(currentAction, gridPosition);
 
             if (!playerController.StartAction(actionContext)) return;
-
-            InputHandler.OnTarget -= ExecuteAction;
-            InputHandler.OnCancel -= CancelTargeting;
-
-            SetTargetingType(defaultTargetingType);
 
             CancelTargeting();
         }

@@ -50,12 +50,8 @@ namespace WSP.Units
             CurrentAction = action;
             TargetAction = null;
             CurrentAction.Action.OnActionFinished += EndTurn;
-            return CurrentAction.StartAction(Unit);
-        }
 
-        protected void StartTargetAction()
-        {
-            StartAction(TargetAction);
+            return CurrentAction.StartAction(Unit);
         }
 
         protected abstract void Kill();

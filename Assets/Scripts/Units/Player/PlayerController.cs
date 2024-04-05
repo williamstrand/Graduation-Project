@@ -47,6 +47,9 @@ namespace WSP.Units.Player
         void OnDisable()
         {
             InputHandler.OnInventory -= OpenInventory;
+            InputHandler.OnTarget -= Target;
+            InputHandler.OnStop -= Stop;
+            InputHandler.OnSpecialAttack -= UseSpecialAttack;
         }
 
         void OpenInventory()
@@ -65,7 +68,7 @@ namespace WSP.Units.Player
 
             if (!CanAct) return;
 
-            StartTargetAction();
+            StartAction(TargetAction);
         }
 
         void Target(Vector2 position)
@@ -76,7 +79,16 @@ namespace WSP.Units.Player
 
             if (gridPosition == Unit.GridPosition) return;
 
-            GetTarget(gridPosition);
+            TargetAction = null;
+            currentTarget = new ActionTarget
+            {
+                TargetPosition = gridPosition
+            };
+
+            if (GameManager.CurrentLevel.IsOccupied(gridPosition))
+            {
+                currentTarget.TargetUnit = GameManager.CurrentLevel.GetUnitAt(gridPosition);
+            }
         }
 
         void GetAction(Vector2Int targetPosition)
@@ -115,20 +127,6 @@ namespace WSP.Units.Player
         {
             currentTarget = null;
             TargetAction = null;
-        }
-
-        void GetTarget(Vector2Int targetPosition)
-        {
-            TargetAction = null;
-            currentTarget = new ActionTarget
-            {
-                TargetPosition = targetPosition
-            };
-
-            if (GameManager.CurrentLevel.IsOccupied(targetPosition))
-            {
-                currentTarget.TargetUnit = GameManager.CurrentLevel.GetUnitAt(targetPosition);
-            }
         }
 
         void UseSpecialAttack(int index)
