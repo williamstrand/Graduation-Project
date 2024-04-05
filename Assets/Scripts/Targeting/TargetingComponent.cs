@@ -16,7 +16,7 @@ namespace WSP.Targeting
         IPlayerUnitController playerController;
         public bool InTargetSelectionMode { get; private set; }
 
-        public bool ShouldDrawPath { get; set; } = true;
+        bool shouldDrawPath = true;
 
         [field: SerializeField] public TargetingReticle Reticle { get; private set; }
         LineRenderer lineRenderer;
@@ -46,14 +46,7 @@ namespace WSP.Targeting
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(mousePosition);
             Target(gridPosition);
 
-            if (ShouldDrawPath)
-            {
-                DrawPath();
-            }
-            else
-            {
-                HidePath();
-            }
+            DrawPath();
         }
 
         public void StartActionTargeting(IAction action)
@@ -79,6 +72,9 @@ namespace WSP.Targeting
             currentTargetingType?.StopTarget();
             currentTargetingType = targetingType;
             currentTargetingType.StartTarget(this);
+
+            CurrentTarget = Vector2Int.zero;
+            currentOrigin = playerController.Unit.GridPosition;
         }
 
         void Target(Vector2Int target)
@@ -117,15 +113,21 @@ namespace WSP.Targeting
 
         void DrawPath()
         {
-            if (GameManager.CurrentLevel.Map.GetValue(currentOrigin) == Map.Pathfinding.Map.Wall)
+            if (!shouldDrawPath)
             {
                 HidePath();
                 return;
             }
 
+            if (GameManager.CurrentLevel.Map.GetValue(currentOrigin) == Map.Pathfinding.Map.Wall)
+            {
+                lineRenderer.positionCount = 0;
+                return;
+            }
+
             if (currentOrigin == CurrentTarget)
             {
-                HidePath();
+                lineRenderer.positionCount = 0;
                 return;
             }
 
@@ -153,13 +155,19 @@ namespace WSP.Targeting
             }
             else
             {
-                HidePath();
+                lineRenderer.positionCount = 0;
             }
         }
 
-        void HidePath()
+        public void HidePath()
         {
+            shouldDrawPath = false;
             lineRenderer.positionCount = 0;
+        }
+
+        public void ShowPath()
+        {
+            shouldDrawPath = true;
         }
 
         TargetingReticle.ReticleTargetType GetReticleTargetType(Vector2Int origin, Vector2Int position)

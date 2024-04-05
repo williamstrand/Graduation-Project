@@ -9,7 +9,7 @@ namespace WSP.Targeting.TargetingTypes
         {
             base.StartTarget(targetingComponent);
 
-            TargetingComponent.ShouldDrawPath = true;
+            TargetingComponent.ShowPath();
             TargetingComponent.Reticle.Enable(true);
         }
 
@@ -18,12 +18,12 @@ namespace WSP.Targeting.TargetingTypes
             if (TargetingComponent.Reticle.Type == TargetingReticle.ReticleTargetType.None)
             {
                 TargetingComponent.Reticle.Enable(false);
-                TargetingComponent.ShouldDrawPath = false;
+                TargetingComponent.HidePath();
                 return;
             }
 
             TargetingComponent.Reticle.Enable(true);
-            TargetingComponent.ShouldDrawPath = true;
+            TargetingComponent.ShowPath();
             TargetingComponent.Reticle.SetPosition(target);
             TargetingComponent.Reticle.SetColor(TargetingComponent.Reticle.Type switch
             {
@@ -37,7 +37,7 @@ namespace WSP.Targeting.TargetingTypes
 
         public override void StopTarget()
         {
-            TargetingComponent.ShouldDrawPath = false;
+            TargetingComponent.HidePath();
             TargetingComponent.Reticle.Enable(false);
         }
 
