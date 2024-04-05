@@ -9,6 +9,7 @@ namespace WSP.Targeting.TargetingTypes
             if (TargetingComponent.Reticle.Type == TargetingReticle.ReticleTargetType.Enemy)
             {
                 TargetingComponent.Reticle.SetPosition(target);
+                TargetingComponent.Reticle.SetColor(TargetingComponent.EnemyColor);
                 TargetingComponent.Reticle.Enable(true);
                 return;
             }

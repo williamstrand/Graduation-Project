@@ -15,7 +15,6 @@ namespace WSP.Targeting
         IAction currentAction;
         IPlayerUnitController playerController;
         public bool InTargetSelectionMode { get; private set; }
-        bool updateInTargetSelectionMode;
 
         [HideInInspector] public bool ShouldDrawPath = true;
 
@@ -41,7 +40,7 @@ namespace WSP.Targeting
         {
             var mousePosition = InputHandler.MousePosition;
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(mousePosition);
-            Target(GameManager.CurrentLevel.Player.Unit.GridPosition, gridPosition);
+            Target(gridPosition);
 
             if (ShouldDrawPath)
             {
@@ -51,14 +50,6 @@ namespace WSP.Targeting
             {
                 HidePath();
             }
-        }
-
-        void LateUpdate()
-        {
-            if (!updateInTargetSelectionMode) return;
-
-            InTargetSelectionMode = !InTargetSelectionMode;
-            updateInTargetSelectionMode = false;
         }
 
         public void StartActionTargeting(IAction action)
@@ -86,12 +77,12 @@ namespace WSP.Targeting
             currentTargetingType.StartTarget(this);
         }
 
-        void Target(Vector2Int origin, Vector2Int target)
+        void Target(Vector2Int target)
         {
-            var type = GetReticleTargetType(origin, target);
-            if (currentOrigin == origin && CurrentTarget == target && Reticle.Type == type) return;
+            var type = GetReticleTargetType(playerController.Unit.GridPosition, target);
+            if (currentOrigin == playerController.Unit.GridPosition && CurrentTarget == target && Reticle.Type == type) return;
 
-            currentOrigin = origin;
+            currentOrigin = playerController.Unit.GridPosition;
             CurrentTarget = target;
             Reticle.Type = type;
 
@@ -105,7 +96,7 @@ namespace WSP.Targeting
 
             SetTargetingType(defaultTargetingType);
 
-            updateInTargetSelectionMode = true;
+            InTargetSelectionMode = false;
         }
 
         void ExecuteAction(Vector2 position)
