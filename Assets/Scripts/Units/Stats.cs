@@ -9,9 +9,9 @@ namespace WSP.Units
         public float Attack;
         public float PhysicalDefense;
         public float MagicDefense;
-        public float AttackRange;
+        public int AttackRange;
 
-        public Stats(float startValues)
+        public Stats(int startValues)
         {
             Health = startValues;
             Attack = startValues;

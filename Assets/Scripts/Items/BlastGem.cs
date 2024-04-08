@@ -19,6 +19,8 @@ namespace WSP.Items
 
         static VfxObject VFX => VfxLoader.LoadAsset("Blast VFX");
 
+        public override int Range => 4;
+
         protected override bool ActivateEffect(IUnit origin, Vector2Int target)
         {
             ActionStarted = true;

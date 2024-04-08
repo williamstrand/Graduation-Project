@@ -37,6 +37,8 @@ namespace WSP.Units
 
             CurrentHealth = Mathf.RoundToInt(Stats.Health);
             Attack.OnAttackHit += TargetHit;
+
+            Attack.SetRange(Stats.AttackRange);
         }
 
         public bool Damage(float damage)

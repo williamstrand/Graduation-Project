@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Utility;
+using WSP.Map.Pathfinding;
 using WSP.Targeting.TargetingTypes;
 using WSP.Units;
 using WSP.VFX;
@@ -11,7 +12,7 @@ namespace WSP.Items
     {
         const string IconBundleName = "icons";
         const string DefaultIconName = "Empty Icon";
-        protected static AssetLoader<Sprite> IconLoader { get; } = new(IconBundleName, DefaultIconName);
+        static AssetLoader<Sprite> IconLoader { get; } = new(IconBundleName, DefaultIconName);
 
         const string VfxBundleName = "vfx";
         protected static AssetLoader<VfxObject> VfxLoader { get; } = new(VfxBundleName);
@@ -26,6 +27,8 @@ namespace WSP.Items
         public abstract int Weight { get; }
         public Sprite Icon => IconLoader.LoadAsset(Name);
 
+        public virtual int Range => -1;
+
         public bool StartAction(IUnit origin, Vector2Int target)
         {
             if (ActionStarted) return false;
@@ -35,6 +38,11 @@ namespace WSP.Items
 
             origin.Inventory.RemoveItem(this);
             return true;
+        }
+
+        public bool IsInRange(Vector2Int origin, Vector2Int target)
+        {
+            return Range <= 0 || Pathfinder.Distance(origin, target) <= Range;
         }
 
         protected abstract bool ActivateEffect(IUnit origin, Vector2Int target);

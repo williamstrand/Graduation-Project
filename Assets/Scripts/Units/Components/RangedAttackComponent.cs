@@ -11,6 +11,7 @@ namespace WSP.Units.Components
         public Action OnActionFinished { get; set; }
         public bool ActionStarted { get; private set; }
         public TargetingType TargetingType => new UnitTargeting();
+        public int Range { get; private set; }
         public Action<IUnit, bool> OnAttackHit { get; set; }
 
         [SerializeField] Projectile projectilePrefab;
@@ -29,6 +30,11 @@ namespace WSP.Units.Components
             ActionStarted = true;
             StartCoroutine(AttackCoroutine(attacker, targetUnit));
             return true;
+        }
+
+        public bool IsInRange(Vector2Int origin, Vector2Int target)
+        {
+            return Range <= 0 || Pathfinder.Distance(origin, target) <= Range;
         }
 
         IEnumerator AttackCoroutine(IUnit attacker, IUnit target)
@@ -52,6 +58,11 @@ namespace WSP.Units.Components
 
             OnActionFinished?.Invoke();
             ActionStarted = false;
+        }
+
+        public void SetRange(int range)
+        {
+            Range = range;
         }
     }
 }

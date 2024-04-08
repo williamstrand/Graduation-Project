@@ -12,6 +12,8 @@ namespace WSP.Items
         public override int Weight => 30;
         public override TargetingType TargetingType => new UnitTargeting();
 
+        public override int Range => 5;
+
         protected override bool ActivateEffect(IUnit origin, Vector2Int target)
         {
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);

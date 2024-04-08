@@ -2,7 +2,6 @@
 using UnityEngine;
 using WSP.Camera;
 using WSP.Input;
-using WSP.Map.Pathfinding;
 using WSP.Targeting;
 using WSP.Units.SpecialAttacks;
 using WSP.Units.Upgrades;
@@ -112,7 +111,8 @@ namespace WSP.Units.Player
             }
 
             currentTarget.TargetPosition = currentTarget.TargetUnit.GridPosition;
-            var inRange = Pathfinder.Distance(Unit.GridPosition, currentTarget.TargetUnit.GridPosition) <= Unit.Stats.AttackRange;
+            Unit.Attack.SetRange(Unit.Stats.AttackRange);
+            var inRange = Unit.Attack.IsInRange(Unit.GridPosition, currentTarget.TargetPosition);
             if (!inRange)
             {
                 TargetAction = new ActionContext(Unit.Movement, currentTarget.TargetPosition);

@@ -11,6 +11,7 @@ namespace WSP.Units.Components
         public Action OnActionFinished { get; set; }
         public bool ActionStarted => false;
         public TargetingType TargetingType => new PositionTargeting();
+        public int Range => -1;
         public Vector2Int GridPosition { get; private set; }
 
         bool isMoving;
@@ -54,6 +55,11 @@ namespace WSP.Units.Components
             if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;
 
             StartCoroutine(MoveCoroutine(path[1]));
+            return true;
+        }
+
+        public bool IsInRange(Vector2Int origin, Vector2Int target)
+        {
             return true;
         }
 

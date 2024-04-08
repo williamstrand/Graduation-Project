@@ -46,6 +46,7 @@ namespace WSP.Units
             if (!IsTurn) return false;
             if (action == null) return false;
             if (!CanAct) return false;
+            if (!action.Action.IsInRange(Unit.GridPosition, action.Target)) return false;
 
             CurrentAction = action;
             TargetAction = null;

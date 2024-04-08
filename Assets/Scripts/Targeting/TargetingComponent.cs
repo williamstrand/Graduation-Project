@@ -12,7 +12,7 @@ namespace WSP.Targeting
         public Vector2Int CurrentTarget { get; private set; }
         Vector2Int currentOrigin;
 
-        IAction currentAction;
+        public IAction CurrentAction { get; private set; }
         IPlayerUnitController playerController;
         public bool InTargetSelectionMode { get; private set; }
 
@@ -58,13 +58,13 @@ namespace WSP.Targeting
                 return;
             }
 
-            currentAction = action;
+            CurrentAction = action;
 
             InputHandler.OnTarget += ExecuteAction;
             InputHandler.OnCancel += CancelTargeting;
 
             InTargetSelectionMode = true;
-            SetTargetingType(currentAction.TargetingType);
+            SetTargetingType(CurrentAction.TargetingType);
         }
 
         void SetTargetingType(TargetingType targetingType)
@@ -104,7 +104,7 @@ namespace WSP.Targeting
             if (!InTargetSelectionMode) return;
 
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(position);
-            var actionContext = new ActionContext(currentAction, gridPosition);
+            var actionContext = new ActionContext(CurrentAction, gridPosition);
 
             if (!playerController.StartAction(actionContext)) return;
 
@@ -113,11 +113,7 @@ namespace WSP.Targeting
 
         void DrawPath()
         {
-            if (!shouldDrawPath)
-            {
-                HidePath();
-                return;
-            }
+            if (!shouldDrawPath) return;
 
             if (GameManager.CurrentLevel.Map.GetValue(currentOrigin) == Map.Pathfinding.Map.Wall)
             {

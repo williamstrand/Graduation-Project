@@ -22,6 +22,13 @@ namespace WSP.Targeting.TargetingTypes
 
         public override void Target(Vector2Int origin, Vector2Int target)
         {
+            if (!TargetingComponent.CurrentAction.IsInRange(origin, target))
+            {
+                TargetingComponent.Reticle.Enable(false);
+                return;
+            }
+
+            TargetingComponent.Reticle.Enable(true);
             TargetingComponent.Reticle.SetPosition(target);
         }
 

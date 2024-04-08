@@ -10,6 +10,9 @@ namespace WSP.Units
         bool ActionStarted { get; }
         TargetingType TargetingType { get; }
 
+        int Range { get; }
+
         bool StartAction(IUnit origin, Vector2Int target);
+        bool IsInRange(Vector2Int origin, Vector2Int target);
     }
 }
