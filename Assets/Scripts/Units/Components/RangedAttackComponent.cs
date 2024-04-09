@@ -9,10 +9,16 @@ namespace WSP.Units.Components
     public class RangedAttackComponent : MonoBehaviour, IAttackComponent
     {
         public Action OnActionFinished { get; set; }
+        public Action<IUnit, bool> OnAttackHit { get; set; }
+
         public bool ActionStarted { get; private set; }
         public TargetingType TargetingType => new UnitTargeting();
+        public string Name => "Ranged Attack";
+        public string Description => "Deals damage to a single target.";
+        public int Cooldown => 0;
+        public int CooldownRemaining { get; set; }
+        public Sprite Icon => null;
         public int Range { get; private set; }
-        public Action<IUnit, bool> OnAttackHit { get; set; }
 
         [SerializeField] Projectile projectilePrefab;
         [SerializeField] float attackSpeed = 1;

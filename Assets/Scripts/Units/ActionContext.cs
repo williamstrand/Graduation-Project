@@ -13,12 +13,5 @@ namespace WSP.Units
             Action = action;
             Target = target;
         }
-
-        public bool StartAction(IUnit unit)
-        {
-            return Action.StartAction(unit, Target);
-
-            // return Target.TargetUnit == GameManager.CurrentLevel.GetUnitAt(Target.TargetPosition) && Action.StartAction(unit, Target);
-        }
     }
 }

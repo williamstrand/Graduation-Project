@@ -5,6 +5,7 @@ namespace WSP.Units
 {
     public abstract class UnitController : MonoBehaviour, IUnitController
     {
+        public Action OnTurnStart { get; set; }
         public Action OnTurnEnd { get; set; }
         public IUnit Unit { get; protected set; }
         public bool IsTurn { get; set; }
@@ -23,20 +24,25 @@ namespace WSP.Units
             Unit = unit;
             Unit.OnDeath += Kill;
             Unit.GameObject.transform.SetParent(transform);
+            Unit.OnActionFinished += ActionFinished;
         }
 
-        public virtual void TurnStart() { }
+        public virtual void TurnStart()
+        {
+            OnTurnStart?.Invoke();
+        }
+
+        void ActionFinished(IAction action)
+        {
+            EndTurn();
+        }
 
         protected void EndTurn()
         {
             if (!gameObject) return;
             if (!IsTurn) return;
 
-            if (CurrentAction != null)
-            {
-                CurrentAction.Action.OnActionFinished -= EndTurn;
-                CurrentAction = null;
-            }
+            CurrentAction = null;
 
             OnTurnEnd?.Invoke();
         }
@@ -50,9 +56,8 @@ namespace WSP.Units
 
             CurrentAction = action;
             TargetAction = null;
-            CurrentAction.Action.OnActionFinished += EndTurn;
 
-            return CurrentAction.StartAction(Unit);
+            return Unit.StartAction(CurrentAction);
         }
 
         protected abstract void Kill();

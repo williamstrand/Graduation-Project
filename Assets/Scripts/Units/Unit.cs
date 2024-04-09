@@ -13,6 +13,7 @@ namespace WSP.Units
         public Action<int> OnLevelUp { get; set; }
         public Action<float, float> OnXpGained { get; set; }
         public Action<float, float> OnHealthChanged { get; set; }
+        public Action<IAction> OnActionFinished { get; set; }
 
         public Vector2Int GridPosition => Movement.GridPosition;
         public int Level { get; private set; } = 1;
@@ -27,6 +28,8 @@ namespace WSP.Units
         public IAttackComponent Attack { get; private set; }
         public IInventoryComponent Inventory { get; private set; }
         public ISpecialAttackComponent SpecialAttack { get; private set; }
+
+        IAction currentAction;
 
         protected void Awake()
         {
@@ -87,6 +90,26 @@ namespace WSP.Units
             }
 
             OnXpGained?.Invoke(Xp, XpToNextLevel);
+        }
+
+        public bool StartAction(ActionContext action)
+        {
+            currentAction = action.Action;
+            currentAction.OnActionFinished += ActionSuccess;
+            var success = currentAction.StartAction(this, action.Target);
+
+            if (success) return true;
+
+            currentAction.OnActionFinished -= ActionSuccess;
+            currentAction = null;
+            return false;
+        }
+
+        void ActionSuccess()
+        {
+            OnActionFinished?.Invoke(currentAction);
+            currentAction.OnActionFinished -= ActionSuccess;
+            currentAction = null;
         }
     }
 }

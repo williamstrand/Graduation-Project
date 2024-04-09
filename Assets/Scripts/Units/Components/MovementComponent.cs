@@ -11,6 +11,11 @@ namespace WSP.Units.Components
         public Action OnActionFinished { get; set; }
         public bool ActionStarted => false;
         public TargetingType TargetingType => new PositionTargeting();
+        public string Name => "Move";
+        public string Description => "Move to a target position.";
+        public int Cooldown => 0;
+        public int CooldownRemaining { get; set; }
+        public Sprite Icon => null;
         public int Range => -1;
         public Vector2Int GridPosition { get; private set; }
 

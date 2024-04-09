@@ -10,6 +10,12 @@ namespace WSP.Units
         bool ActionStarted { get; }
         TargetingType TargetingType { get; }
 
+        string Name { get; }
+        string Description { get; }
+        int Cooldown { get; }
+        int CooldownRemaining { get; set; }
+        Sprite Icon { get; }
+
         int Range { get; }
 
         bool StartAction(IUnit origin, Vector2Int target);

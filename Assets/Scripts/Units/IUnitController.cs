@@ -4,6 +4,7 @@ namespace WSP.Units
 {
     public interface IUnitController
     {
+        Action OnTurnStart { get; set; }
         Action OnTurnEnd { get; set; }
         IUnit Unit { get; }
         bool IsTurn { get; set; }

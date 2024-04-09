@@ -11,6 +11,7 @@ namespace WSP.Units
         Action<int> OnLevelUp { get; set; }
         Action<float, float> OnXpGained { get; set; }
         Action<float, float> OnHealthChanged { get; set; }
+        Action<IAction> OnActionFinished { get; set; }
 
         Vector2Int GridPosition { get; }
         float CurrentHealth { get; }
@@ -29,5 +30,6 @@ namespace WSP.Units
         bool Damage(float damage);
         void Heal(float heal);
         void AddXp(float xp);
+        bool StartAction(ActionContext action);
     }
 }

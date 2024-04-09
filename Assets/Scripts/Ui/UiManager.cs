@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using WSP.Ui.Inventory;
+using WSP.Units;
 using WSP.Units.Player;
 
 namespace WSP.Ui
@@ -9,21 +10,16 @@ namespace WSP.Ui
     {
         public static Canvas Canvas { get; private set; }
 
-
-        static UiManager instance;
-
         [SerializeField] Bar healthBar;
         [SerializeField] Bar xpBar;
         [SerializeField] UiText levelCounter;
         [SerializeField] InventoryUi inventoryUi;
+        [SerializeField] SpecialAttackUi specialAttackUi;
 
         static IPlayerUnitController PlayerController => GameManager.CurrentLevel.Player;
 
-
         void Awake()
         {
-            instance = this;
-
             Canvas = GetComponent<Canvas>();
         }
 
@@ -39,6 +35,8 @@ namespace WSP.Ui
             UpdateLevelCounter(PlayerController.Unit.Level);
 
             PlayerController.OnOpenInventory += OpenInventory;
+
+            PlayerController.Unit.SpecialAttack.OnSpecialAttacksChanged += UpdateSpecialAttackUi;
         }
 
         void UpdateHealthBar(float health, float maxHealth)
@@ -66,6 +64,11 @@ namespace WSP.Ui
             {
                 inventoryUi.Close();
             }
+        }
+
+        void UpdateSpecialAttackUi(IAction[] specialAttacks)
+        {
+            specialAttackUi.UpdateUi(specialAttacks);
         }
     }
 }

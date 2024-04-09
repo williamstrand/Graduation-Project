@@ -24,6 +24,8 @@ namespace WSP.Items
 
         public virtual string Name => GetType().Name;
         public virtual string Description => "";
+        public int Cooldown => 0;
+        public int CooldownRemaining { get; set; }
         public abstract int Weight { get; }
         public Sprite Icon => IconLoader.LoadAsset(Name);
 

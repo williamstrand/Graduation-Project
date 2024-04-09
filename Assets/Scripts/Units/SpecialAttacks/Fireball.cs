@@ -10,10 +10,13 @@ namespace WSP.Units.SpecialAttacks
         const int Damage = 50;
 
         public override TargetingType TargetingType => new UnitTargeting();
+        public override string Name => "Fireball";
+        public override string Description { get; } = "Deals " + Damage + " damage to a single target.";
+        public override int Cooldown { get; protected set; } = 3;
 
         VfxObject FireballVFX => VfxLoader.LoadAsset("Blast VFX");
 
-        public override bool StartAction(IUnit origin, Vector2Int target)
+        protected override bool ExecuteAction(IUnit origin, Vector2Int target)
         {
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
             if (targetUnit == null) return false;

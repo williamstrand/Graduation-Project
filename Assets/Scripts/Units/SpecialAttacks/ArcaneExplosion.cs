@@ -13,8 +13,11 @@ namespace WSP.Units.SpecialAttacks
         static VfxObject VFX => VfxLoader.LoadAsset("Arcane Blast VFX");
 
         public override TargetingType TargetingType { get; } = new AuraTargeting(Radius);
+        public override string Name => "Arcane Explosion";
+        public override string Description { get; } = "Deals " + Damage + " damage to all enemies in a " + Mathf.FloorToInt((float)Radius / 2) + " tile radius.";
+        public override int Cooldown { get; protected set; } = 4;
 
-        public override bool StartAction(IUnit origin, Vector2Int target)
+        protected override bool ExecuteAction(IUnit origin, Vector2Int target)
         {
             ActionStarted = true;
             GameManager.ExecuteCoroutine(ArcaneExplosionCouroutine(origin.GridPosition));
