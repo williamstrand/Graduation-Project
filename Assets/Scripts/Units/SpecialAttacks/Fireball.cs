@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Utility;
 using WSP.Targeting.TargetingTypes;
 using WSP.VFX;
 
@@ -12,7 +11,6 @@ namespace WSP.Units.SpecialAttacks
 
         public override TargetingType TargetingType => new UnitTargeting();
 
-        AssetLoader<VfxObject> VfxLoader { get; } = new("vfx");
         VfxObject FireballVFX => VfxLoader.LoadAsset("Blast VFX");
 
         public override bool StartAction(IUnit origin, Vector2Int target)

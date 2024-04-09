@@ -33,6 +33,7 @@ namespace WSP.Units.Player
         void Start()
         {
             Unit.SpecialAttack.SetSpecialAttack(0, new Fireball());
+            Unit.SpecialAttack.SetSpecialAttack(1, new ArcaneExplosion());
         }
 
         void OnEnable()

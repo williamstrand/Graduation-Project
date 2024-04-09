@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1862634347
+CRC: 2530668132
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f5540752619f323a4264b5efc1082938
+    Hash: ad81ce9a9761838390465ada27c20a6d
   TypeTreeHash:
     serializedVersion: 2
     Hash: 637be48a0fe27287a94c147655f42632
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f5540752619f323a4264b5efc1082938
+    Hash: ad81ce9a9761838390465ada27c20a6d
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -38,5 +38,6 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/Prefabs/VFX/Arcane Blast VFX.prefab
 - Assets/Prefabs/VFX/Blast VFX.prefab
 Dependencies: []
