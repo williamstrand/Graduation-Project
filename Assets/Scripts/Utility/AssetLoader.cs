@@ -18,12 +18,12 @@ namespace Utility
         {
             AssetBundleName = assetBundleName;
             Assets = new Dictionary<string, T>();
-            DefaultAsset = LoadAsset(defaultName);
+            DefaultAsset = defaultName == "" ? null : LoadAsset(defaultName);
         }
 
         public T LoadAsset(string name)
         {
-            if (name == "") return null;
+            if (name == "") return DefaultAsset;
 
             // Check if asset is already loaded
             if (Assets.TryGetValue(name, out var loadedAsset)) return loadedAsset;
@@ -41,7 +41,16 @@ namespace Utility
             // If no asset was found, return default asset
             if (asset == null)
             {
-                if (!assetBundle.LoadAsset<GameObject>(name).TryGetComponent(out asset))
+                var gameObject = assetBundle.LoadAsset<GameObject>(name);
+                if (gameObject)
+                {
+                    if (!gameObject.TryGetComponent(out asset))
+                    {
+                        Debug.LogError($"{typeof(T).Name} not found in AssetBundle.");
+                        return DefaultAsset;
+                    }
+                }
+                else
                 {
                     Debug.LogError($"{typeof(T).Name} not found in AssetBundle.");
                     return DefaultAsset;

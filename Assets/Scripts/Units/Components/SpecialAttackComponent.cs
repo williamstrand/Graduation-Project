@@ -46,6 +46,7 @@ namespace WSP.Units.Components
         {
             foreach (var specialAttack in SpecialAttacks)
             {
+                if(specialAttack == null) continue;
                 specialAttack.CooldownRemaining = Mathf.Max(0, specialAttack.CooldownRemaining - 1);
             }
 

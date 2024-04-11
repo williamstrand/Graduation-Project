@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Utility;
 using WSP.Units;
 
 namespace WSP.Ui
@@ -14,15 +15,29 @@ namespace WSP.Ui
 
         [SerializeField] ActionTextPopup actionTextPopup;
 
+        static AssetLoader<Sprite> SpriteLoader;
+
         IAction currentAction;
+
+        void Awake()
+        {
+            SpriteLoader ??= new AssetLoader<Sprite>(Constants.IconBundle, Constants.EmptyIcon);
+        }
 
         public void Set(IAction action)
         {
+            if (action == null)
+            {
+                currentAction = null;
+                icon.sprite = SpriteLoader.LoadAsset(Constants.EmptyIcon);
+                
+                cooldownOverlay.enabled = false;
+                cooldownText.enabled = false;
+                return;
+            }
+
+            icon.sprite = action == currentAction ? icon.sprite : action.Icon;
             currentAction = action;
-
-            if (action == null) return;
-
-            icon.sprite = action.Icon;
 
             if (action.CooldownRemaining > 0)
             {

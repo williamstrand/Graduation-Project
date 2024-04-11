@@ -10,7 +10,6 @@ namespace WSP.Units.SpecialAttacks
         const int Damage = 50;
 
         public override TargetingType TargetingType => new UnitTargeting();
-        public override string Name => "Fireball";
         public override string Description { get; } = "Deals " + Damage + " damage to a single target.";
         public override int Cooldown { get; protected set; } = 3;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Utility;
 using WSP.Map.Pathfinding;
@@ -12,21 +13,16 @@ namespace WSP.Units.SpecialAttacks
         public Action OnActionFinished { get; set; }
         public bool ActionStarted { get; protected set; }
         public abstract TargetingType TargetingType { get; }
-        public abstract string Name { get; }
+        public virtual string Name => GetType().Name;
         public abstract string Description { get; }
-
-        const string VfxBundleName = "vfx";
-        protected static AssetLoader<VfxObject> VfxLoader { get; } = new(VfxBundleName);
-
-        const string IconBundleName = "icons";
-        const string DefaultIconName = "Empty Icon";
-        static AssetLoader<Sprite> IconLoader { get; } = new(IconBundleName, DefaultIconName);
-
-
+        
         public abstract int Cooldown { get; protected set; }
         public int CooldownRemaining { get; set; }
-        public Sprite Icon { get; } = IconLoader.LoadAsset("");
+        public Sprite Icon  => IconLoader.LoadAsset(Name);
         public virtual int Range => -1;
+
+        protected static AssetLoader<VfxObject> VfxLoader { get; } = new(Constants.VfxBundle);
+        static AssetLoader<Sprite> IconLoader { get; } = new(Constants.IconBundle, Constants.EmptyIcon);
 
         public virtual bool StartAction(IUnit origin, Vector2Int target)
         {

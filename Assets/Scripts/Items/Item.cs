@@ -10,12 +10,9 @@ namespace WSP.Items
 {
     public abstract class Item : IAction
     {
-        const string IconBundleName = "icons";
-        const string DefaultIconName = "Empty Icon";
-        static AssetLoader<Sprite> IconLoader { get; } = new(IconBundleName, DefaultIconName);
+        static AssetLoader<Sprite> IconLoader { get; } = new(Constants.IconBundle, Constants.EmptyIcon);
 
-        const string VfxBundleName = "vfx";
-        protected static AssetLoader<VfxObject> VfxLoader { get; } = new(VfxBundleName);
+        protected static AssetLoader<VfxObject> VfxLoader { get; } = new(Constants.VfxBundle);
 
         public Action OnActionFinished { get; set; }
 
