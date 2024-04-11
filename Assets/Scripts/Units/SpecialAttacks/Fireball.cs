@@ -13,6 +13,8 @@ namespace WSP.Units.SpecialAttacks
         public override string Description { get; } = "Deals " + Damage + " damage to a single target.";
         public override int Cooldown { get; protected set; } = 3;
 
+        public override int Range => 5;
+
         VfxObject FireballVFX => VfxLoader.LoadAsset("Blast VFX");
 
         protected override bool ExecuteAction(IUnit origin, Vector2Int target)

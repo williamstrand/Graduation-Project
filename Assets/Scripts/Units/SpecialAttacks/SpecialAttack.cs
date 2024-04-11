@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using Utility;
 using WSP.Map.Pathfinding;
@@ -15,10 +14,10 @@ namespace WSP.Units.SpecialAttacks
         public abstract TargetingType TargetingType { get; }
         public virtual string Name => GetType().Name;
         public abstract string Description { get; }
-        
+
         public abstract int Cooldown { get; protected set; }
         public int CooldownRemaining { get; set; }
-        public Sprite Icon  => IconLoader.LoadAsset(Name);
+        public Sprite Icon => IconLoader.LoadAsset(Name);
         public virtual int Range => -1;
 
         protected static AssetLoader<VfxObject> VfxLoader { get; } = new(Constants.VfxBundle);
@@ -29,7 +28,8 @@ namespace WSP.Units.SpecialAttacks
             if (CooldownRemaining > 0) return false;
 
             var success = ExecuteAction(origin, target);
-            if (success) CooldownRemaining = Cooldown;
+            if (success) CooldownRemaining = Cooldown + 1;
+
             return success;
         }
 
