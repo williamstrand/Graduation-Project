@@ -16,6 +16,9 @@ namespace WSP.Units.Components
         public int Cooldown => 0;
         public int CooldownRemaining { get; set; }
         public Sprite Icon => null;
+
+        public Stats Stats { get; set; }
+
         public int Range { get; private set; }
         public Action<IUnit, bool> OnAttackHit { get; set; }
 

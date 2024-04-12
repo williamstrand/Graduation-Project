@@ -18,6 +18,9 @@ namespace WSP.Units.SpecialAttacks
         public abstract int Cooldown { get; protected set; }
         public int CooldownRemaining { get; set; }
         public Sprite Icon => IconLoader.LoadAsset(Name);
+
+        public Stats Stats { get; set; } = new(1);
+
         public virtual int Range => -1;
 
         protected static AssetLoader<VfxObject> VfxLoader { get; } = new(Constants.VfxBundle);

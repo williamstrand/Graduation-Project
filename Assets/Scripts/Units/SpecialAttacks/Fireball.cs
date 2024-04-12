@@ -7,10 +7,12 @@ namespace WSP.Units.SpecialAttacks
 {
     public class Fireball : SpecialAttack
     {
-        const int Damage = 50;
+        const int BaseDamage = 50;
+        const float MagicPowerDamageScaling = 1.5f;
+        float Damage => BaseDamage + MagicPowerDamageScaling * Stats.MagicPower;
 
         public override TargetingType TargetingType => new UnitTargeting();
-        public override string Description { get; } = "Deals " + Damage + " damage to a single target.";
+        public override string Description => "Deals " + Damage + " damage to a single target.";
         public override int Cooldown { get; protected set; } = 3;
 
         public override int Range => 5;

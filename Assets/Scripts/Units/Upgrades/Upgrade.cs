@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using WSP.Units.Upgrades.UpgradeEffects;
 
 namespace WSP.Units.Upgrades
 {
@@ -9,14 +8,6 @@ namespace WSP.Units.Upgrades
         public virtual string Name => GetType().Name;
         public abstract string Description { get; }
 
-        protected IUpgradeEffect[] UpgradeTypes { get; set; }
-
-        public void Apply(IUnit target)
-        {
-            for (var i = 0; i < UpgradeTypes.Length; i++)
-            {
-                UpgradeTypes[i].Apply(target);
-            }
-        }
+        public abstract void Apply(IUnit target);
     }
 }

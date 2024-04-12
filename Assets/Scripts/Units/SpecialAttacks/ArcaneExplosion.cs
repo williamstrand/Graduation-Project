@@ -8,23 +8,25 @@ namespace WSP.Units.SpecialAttacks
     public class ArcaneExplosion : SpecialAttack
     {
         const int Radius = 3;
-        const int Damage = 10;
+        const int BaseDamage = 10;
+        const float MagicPowerDamageScaling = 1.5f;
+        float Damage => BaseDamage + MagicPowerDamageScaling * Stats.MagicPower;
 
         static VfxObject VFX => VfxLoader.LoadAsset("Arcane Blast VFX");
 
         public override TargetingType TargetingType { get; } = new AuraTargeting(Radius);
         public override string Name => "Arcane Explosion";
-        public override string Description { get; } = "Deals " + Damage + " damage to all enemies in a " + Mathf.FloorToInt((float)Radius / 2) + " tile radius.";
+        public override string Description => "Deals " + Damage + " damage to all enemies in a " + Mathf.FloorToInt((float)Radius / 2) + " tile radius.";
         public override int Cooldown { get; protected set; } = 4;
 
         protected override bool ExecuteAction(IUnit origin, Vector2Int target)
         {
             ActionStarted = true;
-            GameManager.ExecuteCoroutine(ArcaneExplosionCouroutine(origin.GridPosition));
+            GameManager.ExecuteCoroutine(ArcaneExplosionCoroutine(origin.GridPosition));
             return true;
         }
 
-        IEnumerator ArcaneExplosionCouroutine(Vector2Int target)
+        IEnumerator ArcaneExplosionCoroutine(Vector2Int target)
         {
             var targets = TargetingType.GetTargets(target, target);
 

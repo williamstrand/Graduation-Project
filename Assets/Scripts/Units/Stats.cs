@@ -7,6 +7,7 @@ namespace WSP.Units
     {
         public float Health;
         public float Attack;
+        public float MagicPower;
         public float PhysicalDefense;
         public float MagicDefense;
         public int AttackRange;
@@ -22,52 +23,52 @@ namespace WSP.Units
 
         public Stats() { }
 
-        public static Stats operator +(Stats a, Stats b)
-        {
-            return new Stats
-            {
-                Health = a.Health + b.Health,
-                Attack = a.Attack + b.Attack,
-                PhysicalDefense = a.PhysicalDefense + b.PhysicalDefense,
-                MagicDefense = a.MagicDefense + b.MagicDefense,
-                AttackRange = a.AttackRange + b.AttackRange
-            };
-        }
-
-        public static Stats operator -(Stats a, Stats b)
-        {
-            return new Stats
-            {
-                Health = a.Health - b.Health,
-                Attack = a.Attack - b.Attack,
-                PhysicalDefense = a.PhysicalDefense - b.PhysicalDefense,
-                MagicDefense = a.MagicDefense - b.MagicDefense,
-                AttackRange = a.AttackRange - b.AttackRange
-            };
-        }
-
-        public static Stats operator *(Stats a, Stats b)
-        {
-            return new Stats
-            {
-                Health = a.Health * b.Health,
-                Attack = a.Attack * b.Attack,
-                PhysicalDefense = a.PhysicalDefense * b.PhysicalDefense,
-                MagicDefense = a.MagicDefense * b.MagicDefense,
-                AttackRange = a.AttackRange * b.AttackRange
-            };
-        }
-
-        public static Stats operator /(Stats a, Stats b)
-        {
-            return new Stats
-            {
-                Health = a.Health / b.Health,
-                Attack = a.Attack / b.Attack,
-                PhysicalDefense = a.PhysicalDefense / b.PhysicalDefense,
-                MagicDefense = a.MagicDefense / b.MagicDefense,
-                AttackRange = a.AttackRange / b.AttackRange
-            };
-        }
+        // public static Stats operator +(Stats a, Stats b)
+        // {
+        //     return new Stats
+        //     {
+        //         Health = a.Health + b.Health,
+        //         Attack = a.Attack + b.Attack,
+        //         PhysicalDefense = a.PhysicalDefense + b.PhysicalDefense,
+        //         MagicDefense = a.MagicDefense + b.MagicDefense,
+        //         AttackRange = a.AttackRange + b.AttackRange
+        //     };
+        // }
+        //
+        // public static Stats operator -(Stats a, Stats b)
+        // {
+        //     return new Stats
+        //     {
+        //         Health = a.Health - b.Health,
+        //         Attack = a.Attack - b.Attack,
+        //         PhysicalDefense = a.PhysicalDefense - b.PhysicalDefense,
+        //         MagicDefense = a.MagicDefense - b.MagicDefense,
+        //         AttackRange = a.AttackRange - b.AttackRange
+        //     };
+        // }
+        //
+        // public static Stats operator *(Stats a, Stats b)
+        // {
+        //     return new Stats
+        //     {
+        //         Health = a.Health * b.Health,
+        //         Attack = a.Attack * b.Attack,
+        //         PhysicalDefense = a.PhysicalDefense * b.PhysicalDefense,
+        //         MagicDefense = a.MagicDefense * b.MagicDefense,
+        //         AttackRange = a.AttackRange * b.AttackRange
+        //     };
+        // }
+        //
+        // public static Stats operator /(Stats a, Stats b)
+        // {
+        //     return new Stats
+        //     {
+        //         Health = a.Health / b.Health,
+        //         Attack = a.Attack / b.Attack,
+        //         PhysicalDefense = a.PhysicalDefense / b.PhysicalDefense,
+        //         MagicDefense = a.MagicDefense / b.MagicDefense,
+        //         AttackRange = a.AttackRange / b.AttackRange
+        //     };
+        // }
     }
 }

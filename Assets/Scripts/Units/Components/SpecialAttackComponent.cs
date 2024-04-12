@@ -32,6 +32,7 @@ namespace WSP.Units.Components
         public void SetSpecialAttack(int index, IAction specialAttack)
         {
             SpecialAttacks[Mathf.Clamp(index, 0, maxSpecialAttacks - 1)] = specialAttack;
+            specialAttack.Stats = unit.Stats;
             OnSpecialAttacksChanged?.Invoke(SpecialAttacks);
         }
 
@@ -46,7 +47,8 @@ namespace WSP.Units.Components
         {
             foreach (var specialAttack in SpecialAttacks)
             {
-                if(specialAttack == null) continue;
+                if (specialAttack == null) continue;
+
                 specialAttack.CooldownRemaining = Mathf.Max(0, specialAttack.CooldownRemaining - 1);
             }
 

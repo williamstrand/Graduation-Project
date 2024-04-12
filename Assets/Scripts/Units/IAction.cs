@@ -15,6 +15,7 @@ namespace WSP.Units
         int Cooldown { get; }
         int CooldownRemaining { get; set; }
         Sprite Icon { get; }
+        Stats Stats { get; set; }
 
         int Range { get; }
 

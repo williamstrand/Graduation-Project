@@ -19,6 +19,8 @@ namespace WSP.Units.Components
         public int Range => -1;
         public Vector2Int GridPosition { get; private set; }
 
+        public Stats Stats { get; set; }
+
         bool isMoving;
 
         void Start()

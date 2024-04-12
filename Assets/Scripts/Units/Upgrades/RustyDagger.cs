@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using WSP.Units.Upgrades.UpgradeEffects;
 
 namespace WSP.Units.Upgrades
 {
@@ -8,11 +7,9 @@ namespace WSP.Units.Upgrades
         public override Sprite Icon => null;
         public override string Description => "Increases attack damage by 10%";
 
-        public RustyDagger()
+        public override void Apply(IUnit target)
         {
-            var stats = new Stats(1);
-            stats.Attack *= 1.1f;
-            UpgradeTypes = new IUpgradeEffect[] { new MultiplicativeStatUpgrade(stats) };
+            target.Stats.Attack *= 1.1f;
         }
     }
 }

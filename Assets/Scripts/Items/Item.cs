@@ -26,6 +26,8 @@ namespace WSP.Items
         public abstract int Weight { get; }
         public Sprite Icon => IconLoader.LoadAsset(Name);
 
+        public Stats Stats { get; set; } = new(1);
+
         public virtual int Range => -1;
 
         public bool StartAction(IUnit origin, Vector2Int target)
