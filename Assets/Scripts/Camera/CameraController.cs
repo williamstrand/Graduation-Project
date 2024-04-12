@@ -9,8 +9,7 @@ namespace WSP.Camera
 
         [SerializeField] float cameraSpeed = 1;
         Vector2 targetPosition;
-
-
+        
         void Awake()
         {
             mainCamera = UnityEngine.Camera.main;
@@ -27,6 +26,12 @@ namespace WSP.Camera
         public static void SetTargetPosition(Vector2 position)
         {
             instance.targetPosition = position;
+        }
+        
+        public static void ForceSetPosition(Vector2 position)
+        {
+            instance.targetPosition = position;
+            instance.mainCamera.transform.position = new Vector3(position.x, position.y, instance.mainCamera.transform.position.z);
         }
     }
 }

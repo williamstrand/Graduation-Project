@@ -8,20 +8,21 @@ namespace WSP.Map.Pathfinding
         public const int Invalid = -1;
         public const int Empty = 0;
         public const int Wall = 1;
-        public const int Exit = 2;
 
-        int[,] gridArray;
+        Dictionary<Vector2Int, int> gridArray;
 
         public float CellSize;
-        public int Height => gridArray.GetLength(1);
-        public int Width => gridArray.GetLength(0);
+        public int Height { get; private set; }
+        public int Width { get; private set; }
         public List<Room> Rooms { get; set; } = new();
         public Room ExitRoom { get; set; }
         public Room StartRoom { get; set; }
 
         public Map(int width, int height, float cellSize)
         {
-            gridArray = new int[width, height];
+            Width = width;
+            Height = height;
+            gridArray = new Dictionary<Vector2Int, int>();
             CellSize = cellSize;
         }
 
@@ -64,15 +65,15 @@ namespace WSP.Map.Pathfinding
         /// <param name="value">the value to set the grid position to.</param>
         public void SetValue(int x, int y, int value)
         {
-            if (value is < Empty or > Exit)
+            if (value is < Empty or > Wall)
             {
                 Debug.LogError("Value out of range");
                 return;
             }
 
-            if (x >= 0 && y >= 0 && x < gridArray.GetLength(0) && y < gridArray.GetLength(1))
+            if (x >= 0 && y >= 0 && x < Width && y < Height)
             {
-                gridArray[x, y] = value;
+                gridArray[new Vector2Int(x, y)] = value;
             }
         }
 
@@ -99,9 +100,9 @@ namespace WSP.Map.Pathfinding
         /// <returns>the value.</returns>
         public int GetValue(int x, int y)
         {
-            if (x >= 0 && y >= 0 && x < gridArray.GetLength(0) && y < gridArray.GetLength(1))
+            if (x >= 0 && y >= 0 && x < Width && y < Height)
             {
-                return gridArray[x, y];
+                return gridArray[new Vector2Int(x, y)];
             }
 
             return Invalid;
@@ -143,7 +144,7 @@ namespace WSP.Map.Pathfinding
         {
             var map = new Map(Width, Height, CellSize)
             {
-                gridArray = (int[,])gridArray.Clone(),
+                gridArray = new Dictionary<Vector2Int, int>(gridArray),
                 Rooms = new List<Room>(Rooms),
                 StartRoom = StartRoom,
                 ExitRoom = ExitRoom

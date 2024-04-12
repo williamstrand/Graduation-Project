@@ -16,13 +16,9 @@ namespace WSP.Units
         public Action<IAction> OnActionFinished { get; set; }
 
         public Vector2Int GridPosition => Movement.GridPosition;
-        public int Level { get; } = 1;
         public float CurrentHealth { get; private set; }
         public GameObject GameObject => gameObject;
-        [field: SerializeField] public Stats Stats { get; set; }
-        [field: SerializeField] public Stats StatsPerLevel { get; set; } = new(1);
-        public float Xp { get; }
-        public float XpToNextLevel => 100 + Level * 50;
+        [field: SerializeField] public Stats Stats { get; private set; }
 
         public IMovementComponent Movement { get; private set; }
         public IAttackComponent Attack { get; private set; }
@@ -71,27 +67,6 @@ namespace WSP.Units
             if (killed) OnTargetKilled?.Invoke(target);
         }
 
-        void LevelUp()
-        {
-            // Level++;
-            // OnLevelUp?.Invoke(Level);
-            // Stats += StatsPerLevel;
-        }
-
-        public void AddXp(float amount)
-        {
-            // Xp += amount;
-            // if (Xp >= XpToNextLevel)
-            // {
-            //     var extraXp = Xp - XpToNextLevel;
-            //     Xp = 0;
-            //     LevelUp();
-            //     AddXp(extraXp);
-            // }
-            //
-            // OnXpGained?.Invoke(Xp, XpToNextLevel);
-        }
-
         public bool StartAction(ActionContext action)
         {
             currentAction = action.Action;
@@ -107,6 +82,8 @@ namespace WSP.Units
 
         void ActionSuccess()
         {
+            if(currentAction == null) return;
+            
             OnActionFinished?.Invoke(currentAction);
             currentAction.OnActionFinished -= ActionSuccess;
             currentAction = null;

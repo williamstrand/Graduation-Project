@@ -10,8 +10,6 @@ namespace WSP.Units.Player
 {
     public class PlayerController : UnitController, IPlayerUnitController
     {
-        public Action<int> OnUnitLevelUp { get; set; }
-        public Action<float, float> OnUnitXpGained { get; set; }
         public Action<float, float> OnUnitHealthChanged { get; set; }
         public Action OnOpenInventory { get; set; }
 
@@ -87,7 +85,7 @@ namespace WSP.Units.Player
 
             if (GameManager.CurrentLevel.IsOccupied(gridPosition))
             {
-                currentTarget.TargetUnit = GameManager.CurrentLevel.GetUnitAt(gridPosition);
+                currentTarget.TargetUnit = GameManager.CurrentLevel.GetObjectAt(gridPosition) as IUnit;
             }
         }
 
@@ -144,32 +142,17 @@ namespace WSP.Units.Player
             if (Unit != null)
             {
                 Unit.OnTargetKilled -= UnitTargetKilled;
-                Unit.OnLevelUp -= UnitLevelUp;
-                Unit.OnXpGained -= UnitXpGained;
                 Unit.OnHealthChanged -= UnitHealthChanged;
             }
 
             base.SetUnit(unit);
 
             Unit.OnTargetKilled += UnitTargetKilled;
-            Unit.OnLevelUp += UnitLevelUp;
-            Unit.OnXpGained += UnitXpGained;
             Unit.OnHealthChanged += UnitHealthChanged;
-        }
-
-        void UnitXpGained(float current, float max)
-        {
-            OnUnitXpGained?.Invoke(current, max);
-        }
-
-        void UnitLevelUp(int level)
-        {
-            OnUnitLevelUp?.Invoke(level);
         }
 
         void UnitTargetKilled(IUnit target)
         {
-            Unit.AddXp(target.Level * 15);
             currentTarget = null;
         }
 

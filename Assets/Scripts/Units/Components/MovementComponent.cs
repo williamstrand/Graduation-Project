@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using WSP.Map;
 using WSP.Map.Pathfinding;
 using WSP.Targeting.TargetingTypes;
 
@@ -21,19 +22,27 @@ namespace WSP.Units.Components
 
         public Stats Stats { get; set; }
 
+        IUnit unit;
         bool isMoving;
 
-        void Start()
+        void Awake()
         {
-            GridPosition = GameManager.CurrentLevel.Map.GetGridPosition(transform.position);
+            unit = GetComponent<IUnit>();
         }
 
         IEnumerator MoveCoroutine(Vector2Int target)
         {
-            OnActionFinished?.Invoke();
             var targetPosition = GameManager.CurrentLevel.Map.GetWorldPosition(target);
             GridPosition = target;
             isMoving = true;
+
+            if (GameManager.CurrentLevel.GetObjectAt(target) is IInteractable interactable)
+            {
+                if (!interactable.Interact(unit))
+                {
+                    OnActionFinished?.Invoke();
+                }
+            }
 
             var startPosition = transform.position;
             var timer = 0f;
@@ -46,6 +55,7 @@ namespace WSP.Units.Components
             }
 
             isMoving = false;
+            OnActionFinished?.Invoke();
         }
 
         public bool StartAction(IUnit origin, Vector2Int target)
@@ -70,11 +80,10 @@ namespace WSP.Units.Components
             return true;
         }
 
-        public void MoveTo(Vector2Int target)
+        public void SetPosition(Vector2Int position)
         {
-            GridPosition = target;
-            transform.position = GameManager.CurrentLevel.Map.GetWorldPosition(target);
+            GridPosition = position;
+            transform.position = GameManager.CurrentLevel.Map.GetWorldPosition(position);
         }
-
     }
 }

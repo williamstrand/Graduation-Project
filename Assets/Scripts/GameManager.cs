@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
+using WSP.Camera;
 using WSP.Map;
 using WSP.Map.Pathfinding;
 using WSP.Ui;
@@ -14,38 +17,43 @@ namespace WSP
         static GameManager instance;
 
         [SerializeField] GameObject square;
-        [SerializeField] GameObject exit;
+        [FormerlySerializedAs("exit")][SerializeField] Exit exitPrefab;
         Transform mapParent;
         MapGenerator mapGenerator;
 
         IPlayerUnitController playerController;
         [SerializeField] PlayerController playerPrefab;
         [SerializeField] Unit playerUnit;
-        [SerializeField] LevelUpManager levelUpManager;
         [SerializeField] UiManager uiManager;
 
         void Awake()
         {
             instance = this;
             mapParent = new GameObject("Map").transform;
-            GenerateMap();
-
-            playerController = Instantiate(playerPrefab);
-            var unit = Instantiate(playerUnit, CurrentLevel.Map.GetWorldPosition(CurrentLevel.Map.StartRoom.Center), Quaternion.identity);
-            playerController.SetUnit(unit);
-            CurrentLevel.Units.Enqueue(playerController);
-            CurrentLevel.SetPlayer(playerController);
-
-            levelUpManager.Initialize();
-            uiManager.Initialize();
         }
 
         void Start()
         {
+            Invoke(nameof(StartGame), 2);
+        }
+        
+        void StartGame()
+        {
+            GenerateLevel();
+            playerController = Instantiate(playerPrefab);
+            playerController.SetUnit(Instantiate(playerUnit));
+            CurrentLevel.Units.Enqueue(playerController);
+            CurrentLevel.Objects.Add(playerController.Unit);
+            playerController.Unit.Movement.SetPosition(CurrentLevel.Map.StartRoom.Center);
+            CurrentLevel.SetPlayer(playerController);
+            CameraController.ForceSetPosition(playerController.Unit.GridPosition);
+            
+            uiManager.Initialize();
+            
             StartTurn(playerController);
         }
 
-        void GenerateMap()
+        void GenerateLevel()
         {
             mapGenerator = new MapGenerator
             {
@@ -73,30 +81,14 @@ namespace WSP
                         case Map.Pathfinding.Map.Wall:
                             Instantiate(square, map.GetWorldPosition(x, y), Quaternion.identity, mapParent);
                             break;
-
-                        case Map.Pathfinding.Map.Exit:
-                            Instantiate(exit, map.GetWorldPosition(x, y), Quaternion.identity, mapParent);
-                            break;
                     }
             }
-
-            var startRoom = map.StartRoom;
-            var exitRoom = map.ExitRoom;
-
             CurrentLevel = new Level(map);
-
-            #if UNITY_EDITOR
-            if (Pathfinder.FindPath(map, startRoom.Center, exitRoom.Center, out var path))
-            {
-                for (var i = 1; i < path.Count; i++)
-                {
-                    Debug.DrawLine(map.GetWorldPosition(path[i - 1].Position),
-                        map.GetWorldPosition(path[i].Position),
-                        Color.green,
-                        5f);
-                }
-            }
-            #endif
+            
+            var exitPosition = map.GetWorldPosition(map.ExitRoom.GetRandomPosition());
+            var exit = Instantiate(exitPrefab, exitPosition, Quaternion.identity, mapParent);
+            exit.OnExit += GenerateLevel;
+            CurrentLevel.SpawnInteractable(exit);
         }
 
         void StartTurn(IUnitController unitController)

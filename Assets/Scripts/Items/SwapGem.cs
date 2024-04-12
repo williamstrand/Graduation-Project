@@ -28,8 +28,8 @@ namespace WSP.Items
         {
             var originPosition = origin.Movement.GridPosition;
             var targetPosition = target.Movement.GridPosition;
-            origin.Movement.MoveTo(targetPosition);
-            target.Movement.MoveTo(originPosition);
+            origin.Movement.SetPosition(targetPosition);
+            target.Movement.SetPosition(originPosition);
             yield return new WaitForSeconds(1);
 
             ActionStarted = false;

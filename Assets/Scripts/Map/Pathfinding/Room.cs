@@ -95,5 +95,10 @@ namespace WSP.Map.Pathfinding
                    room.BottomLeft.y - wallSize <= TopRight.y &&
                    room.TopRight.y + wallSize >= BottomLeft.y;
         }
+        
+        public Vector2Int GetRandomPosition()
+        {
+            return new Vector2Int(Random.Range(BottomLeft.x, TopRight.x), Random.Range(BottomLeft.y, TopRight.y));
+        }
     }
 }

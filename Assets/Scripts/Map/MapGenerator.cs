@@ -69,8 +69,6 @@ namespace WSP.Map
 
             // Generate exit
             var exitRoom = rooms[Random.Range(1, rooms.Count)];
-            var exitPosition = new Vector2Int(Random.Range(exitRoom.BottomLeft.x, exitRoom.TopRight.x), Random.Range(exitRoom.BottomLeft.y, exitRoom.TopRight.y));
-            map.SetValue(exitPosition.x, exitPosition.y, Pathfinding.Map.Exit);
             map.ExitRoom = exitRoom;
 
             // Fix if there are rooms you cant get to

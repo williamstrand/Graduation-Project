@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using WSP.Map.Pathfinding;
 using WSP.Units;
 using WSP.Units.Player;
@@ -10,6 +11,9 @@ namespace WSP.Map
         public Pathfinding.Map Map { get; }
         public UnitQueue Units { get; }
         public IPlayerUnitController Player { get; private set; }
+
+        public List<ILevelObject> Objects { get; } = new();
+        public List<IInteractable> Interactables { get; } = new();
 
         public Level(Pathfinding.Map map)
         {
@@ -46,6 +50,16 @@ namespace WSP.Map
             return false;
         }
 
+        public ILevelObject GetObjectAt(Vector2Int position)
+        {
+            for (var i = 0; i < Units.Count; i++)
+            {
+                if (Objects[i].GridPosition == position) return Objects[i];
+            }
+
+            return null;
+        }
+        
         public IUnit GetUnitAt(Vector2Int position)
         {
             for (var i = 0; i < Units.Count; i++)
@@ -54,6 +68,12 @@ namespace WSP.Map
             }
 
             return null;
+        }
+        
+        public void SpawnInteractable(IInteractable interactable)
+        {
+            Interactables.Add(interactable);
+            Objects.Add(interactable);
         }
     }
 }

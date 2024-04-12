@@ -6,6 +6,6 @@ namespace WSP.Units.Components
     {
         Vector2Int GridPosition { get; }
 
-        void MoveTo(Vector2Int target);
+        void SetPosition(Vector2Int position);
     }
 }

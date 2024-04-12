@@ -24,11 +24,11 @@ namespace WSP.Items
         protected override bool ActivateEffect(IUnit origin, Vector2Int target)
         {
             ActionStarted = true;
-            GameManager.ExecuteCoroutine(BlastCouroutine(target));
+            GameManager.ExecuteCoroutine(BlastCoroutine(target));
             return true;
         }
 
-        IEnumerator BlastCouroutine(Vector2Int target)
+        IEnumerator BlastCoroutine(Vector2Int target)
         {
             yield return new WaitForSeconds(.5f);
 

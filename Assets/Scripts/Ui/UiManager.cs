@@ -11,8 +11,6 @@ namespace WSP.Ui
         public static Canvas Canvas { get; private set; }
 
         [SerializeField] Bar healthBar;
-        [SerializeField] Bar xpBar;
-        [SerializeField] UiText levelCounter;
         [SerializeField] InventoryUi inventoryUi;
         [SerializeField] SpecialAttackUi specialAttackUi;
 
@@ -25,14 +23,8 @@ namespace WSP.Ui
 
         public void Initialize()
         {
-            PlayerController.OnUnitXpGained += UpdateXpBar;
-            xpBar.UpdateBar(PlayerController.Unit.Xp, PlayerController.Unit.XpToNextLevel);
-
             PlayerController.OnUnitHealthChanged += UpdateHealthBar;
             healthBar.UpdateBar(PlayerController.Unit.CurrentHealth, PlayerController.Unit.Stats.Health);
-
-            PlayerController.OnUnitLevelUp += UpdateLevelCounter;
-            UpdateLevelCounter(PlayerController.Unit.Level);
 
             PlayerController.OnOpenInventory += OpenInventory;
 
@@ -42,16 +34,6 @@ namespace WSP.Ui
         void UpdateHealthBar(float health, float maxHealth)
         {
             healthBar.UpdateBar(health, maxHealth);
-        }
-
-        void UpdateXpBar(float xp, float xpToNextLevel)
-        {
-            xpBar.UpdateBar(xp, xpToNextLevel);
-        }
-
-        void UpdateLevelCounter(int level)
-        {
-            levelCounter.UpdateText(level.ToString());
         }
 
         void OpenInventory()
