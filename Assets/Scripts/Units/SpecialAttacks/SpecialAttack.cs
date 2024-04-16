@@ -15,7 +15,7 @@ namespace WSP.Units.SpecialAttacks
         public virtual string Name => GetType().Name;
         public abstract string Description { get; }
 
-        public abstract int Cooldown { get; protected set; }
+        public abstract int Cooldown { get; }
         public int CooldownRemaining { get; set; }
         public Sprite Icon => IconLoader.LoadAsset(Name);
 

@@ -13,7 +13,7 @@ namespace WSP.Units.SpecialAttacks
 
         public override TargetingType TargetingType => new UnitTargeting();
         public override string Description => "Deals " + Damage + " damage to a single target.";
-        public override int Cooldown { get; protected set; } = 3;
+        public override int Cooldown { get; } = 3;
 
         public override int Range => 5;
 

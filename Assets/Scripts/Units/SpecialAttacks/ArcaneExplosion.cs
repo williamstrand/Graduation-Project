@@ -17,7 +17,7 @@ namespace WSP.Units.SpecialAttacks
         public override TargetingType TargetingType { get; } = new AuraTargeting(Radius);
         public override string Name => "Arcane Explosion";
         public override string Description => "Deals " + Damage + " damage to all enemies in a " + Mathf.FloorToInt((float)Radius / 2) + " tile radius.";
-        public override int Cooldown { get; protected set; } = 4;
+        public override int Cooldown { get; } = 4;
 
         protected override bool ExecuteAction(IUnit origin, Vector2Int target)
         {
