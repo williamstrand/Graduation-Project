@@ -16,11 +16,16 @@ namespace WSP.Map
 
         public bool Interact(IUnit unit)
         {
-            if(unit != GameManager.CurrentLevel.Player.Unit) return false;
-            
+            if (unit != GameManager.CurrentLevel.Player.Unit) return false;
+
             Debug.Log("Exit interacted with player.");
-            // OnExit?.Invoke();
+            OnExit?.Invoke();
             return true;
+        }
+
+        public void Destroy()
+        {
+            Destroy(gameObject);
         }
     }
 }

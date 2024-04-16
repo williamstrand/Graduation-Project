@@ -69,6 +69,8 @@ namespace WSP.Units
 
         public bool StartAction(ActionContext action)
         {
+            if (currentAction != null) return false;
+
             currentAction = action.Action;
             currentAction.OnActionFinished += ActionSuccess;
             var success = currentAction.StartAction(this, action.Target);
@@ -82,11 +84,16 @@ namespace WSP.Units
 
         void ActionSuccess()
         {
-            if(currentAction == null) return;
-            
+            if (currentAction == null) return;
+
             OnActionFinished?.Invoke(currentAction);
             currentAction.OnActionFinished -= ActionSuccess;
             currentAction = null;
+        }
+
+        public void Destroy()
+        {
+            Destroy(gameObject);
         }
     }
 }

@@ -12,10 +12,9 @@ namespace WSP.Units.Enemies
 
         IUnit player;
 
-        void Start()
+        void Awake()
         {
             SetUnit(Instantiate(unitPrefab, GameManager.CurrentLevel.Map.GetWorldPosition(GameManager.CurrentLevel.Map.ExitRoom.Center), Quaternion.identity));
-            GameManager.CurrentLevel.Units.Enqueue(this);
         }
 
         void Update()
@@ -23,6 +22,8 @@ namespace WSP.Units.Enemies
             if (Unit == null) return;
             if (!IsTurn) return;
             if (!CanAct) return;
+
+            ActionContext TargetAction;
 
             if (player == null)
             {
@@ -70,7 +71,7 @@ namespace WSP.Units.Enemies
             if (Unit.GameObject != null)
             {
                 Destroy(Unit.GameObject);
-                GameManager.CurrentLevel.Units.Remove(this);
+                GameManager.CurrentLevel.RemoveUnit(this);
                 Unit = null;
             }
         }

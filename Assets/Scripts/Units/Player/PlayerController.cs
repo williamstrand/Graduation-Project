@@ -16,6 +16,7 @@ namespace WSP.Units.Player
         public TargetingComponent TargetingComponent { get; private set; }
 
         ActionTarget currentTarget;
+        ActionContext targetAction;
 
         class ActionTarget
         {
@@ -66,7 +67,8 @@ namespace WSP.Units.Player
 
             if (!CanAct) return;
 
-            StartAction(TargetAction);
+            StartAction(targetAction);
+            targetAction = null;
         }
 
         void Target(Vector2 position)
@@ -77,7 +79,7 @@ namespace WSP.Units.Player
 
             if (gridPosition == Unit.GridPosition) return;
 
-            TargetAction = null;
+            targetAction = null;
             currentTarget = new ActionTarget
             {
                 TargetPosition = gridPosition
@@ -91,10 +93,11 @@ namespace WSP.Units.Player
 
         void GetAction(Vector2Int targetPosition)
         {
+            if (!IsTurn) return;
             if (TargetingComponent.InTargetSelectionMode) return;
             if (targetPosition == Unit.GridPosition) return;
 
-            if (TargetAction != null) return;
+            if (targetAction != null) return;
             if (currentTarget == null) return;
 
             if (currentTarget.TargetPosition == Unit.GridPosition)
@@ -105,7 +108,7 @@ namespace WSP.Units.Player
 
             if (currentTarget.TargetUnit == null)
             {
-                TargetAction = new ActionContext(Unit.Movement, currentTarget.TargetPosition);
+                targetAction = new ActionContext(Unit.Movement, currentTarget.TargetPosition);
                 return;
             }
 
@@ -114,18 +117,18 @@ namespace WSP.Units.Player
             var inRange = Unit.Attack.IsInRange(Unit.GridPosition, currentTarget.TargetPosition);
             if (!inRange)
             {
-                TargetAction = new ActionContext(Unit.Movement, currentTarget.TargetPosition);
+                targetAction = new ActionContext(Unit.Movement, currentTarget.TargetPosition);
                 return;
             }
 
-            TargetAction = new ActionContext(Unit.Attack, currentTarget.TargetPosition);
+            targetAction = new ActionContext(Unit.Attack, currentTarget.TargetPosition);
             currentTarget = null;
         }
 
         void Stop()
         {
             currentTarget = null;
-            TargetAction = null;
+            targetAction = null;
         }
 
         void UseSpecialAttack(int index)

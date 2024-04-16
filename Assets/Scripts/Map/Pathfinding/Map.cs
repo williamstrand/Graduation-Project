@@ -12,8 +12,8 @@ namespace WSP.Map.Pathfinding
         Dictionary<Vector2Int, int> gridArray;
 
         public float CellSize;
-        public int Height { get; private set; }
-        public int Width { get; private set; }
+        public int Height { get; }
+        public int Width { get; }
         public List<Room> Rooms { get; set; } = new();
         public Room ExitRoom { get; set; }
         public Room StartRoom { get; set; }
@@ -151,6 +151,11 @@ namespace WSP.Map.Pathfinding
             };
 
             return map;
+        }
+
+        public Room GetRandomRoom()
+        {
+            return Rooms[Random.Range(0, Rooms.Count)];
         }
     }
 }

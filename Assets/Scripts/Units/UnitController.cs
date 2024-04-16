@@ -11,7 +11,6 @@ namespace WSP.Units
         public bool IsTurn { get; set; }
 
         protected ActionContext CurrentAction;
-        protected ActionContext TargetAction;
         protected bool CanAct => CurrentAction is not { ActionStarted: true };
 
         public virtual void SetUnit(IUnit unit)
@@ -55,11 +54,15 @@ namespace WSP.Units
             if (!action.Action.IsInRange(Unit.GridPosition, action.Target)) return false;
 
             CurrentAction = action;
-            TargetAction = null;
 
             return Unit.StartAction(CurrentAction);
         }
 
         protected abstract void Kill();
+
+        public void Destroy()
+        {
+            Destroy(gameObject);
+        }
     }
 }

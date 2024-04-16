@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WSP.Camera;
 using WSP.Map;
-using WSP.Map.Pathfinding;
 using WSP.Ui;
 using WSP.Units;
+using WSP.Units.Enemies;
 using WSP.Units.Player;
 
 namespace WSP
@@ -16,13 +15,17 @@ namespace WSP
         public static Level CurrentLevel { get; private set; }
         static GameManager instance;
 
+        Action onTurnEnd;
+
         [SerializeField] GameObject square;
-        [FormerlySerializedAs("exit")][SerializeField] Exit exitPrefab;
+        [SerializeField] Exit exitPrefab;
         Transform mapParent;
         MapGenerator mapGenerator;
+        EnemySpawner enemySpawner;
 
         IPlayerUnitController playerController;
         [SerializeField] PlayerController playerPrefab;
+        [SerializeField] UnitController enemyPrefab;
         [SerializeField] Unit playerUnit;
         [SerializeField] UiManager uiManager;
 
@@ -36,20 +39,16 @@ namespace WSP
         {
             Invoke(nameof(StartGame), 2);
         }
-        
+
         void StartGame()
         {
-            GenerateLevel();
             playerController = Instantiate(playerPrefab);
             playerController.SetUnit(Instantiate(playerUnit));
-            CurrentLevel.Units.Enqueue(playerController);
-            CurrentLevel.Objects.Add(playerController.Unit);
-            playerController.Unit.Movement.SetPosition(CurrentLevel.Map.StartRoom.Center);
-            CurrentLevel.SetPlayer(playerController);
-            CameraController.ForceSetPosition(playerController.Unit.GridPosition);
+            
+            GenerateLevel();
             
             uiManager.Initialize();
-            
+
             StartTurn(playerController);
         }
 
@@ -67,6 +66,7 @@ namespace WSP
                 CellSize = 1f
             };
 
+
             foreach (Transform tile in mapParent) Destroy(tile.gameObject);
 
             var map = mapGenerator.GenerateMap();
@@ -83,12 +83,23 @@ namespace WSP
                             break;
                     }
             }
+
+            CurrentLevel?.Clean();
             CurrentLevel = new Level(map);
-            
+
+            onTurnEnd = null;
+
+            enemySpawner = new EnemySpawner(3, 5, enemyPrefab, CurrentLevel);
+            onTurnEnd += enemySpawner.SpawnEnemies;
+
             var exitPosition = map.GetWorldPosition(map.ExitRoom.GetRandomPosition());
             var exit = Instantiate(exitPrefab, exitPosition, Quaternion.identity, mapParent);
-            exit.OnExit += GenerateLevel;
-            CurrentLevel.SpawnInteractable(exit);
+            exit.OnExit += ExitLevel;
+            CurrentLevel.AddInteractable(exit);
+
+            playerController.Unit.Movement.SetPosition(CurrentLevel.Map.StartRoom.Center);
+            CurrentLevel.SetPlayer(playerController);
+            CameraController.ForceSetPosition(playerController.Unit.GridPosition);
         }
 
         void StartTurn(IUnitController unitController)
@@ -96,16 +107,28 @@ namespace WSP
             unitController.IsTurn = true;
             unitController.TurnStart();
             unitController.OnTurnEnd += EndCurrentTurn;
+
+            if (unitController == playerController)
+            {
+                onTurnEnd?.Invoke();
+            }
         }
 
         void EndCurrentTurn()
         {
+            if (CurrentLevel.Units.Count == 0) return;
+
             CurrentLevel.Units.Peek().IsTurn = false;
             CurrentLevel.Units.Peek().OnTurnEnd -= EndCurrentTurn;
 
             CurrentLevel.Units.Enqueue(CurrentLevel.Units.Dequeue());
 
             StartTurn(CurrentLevel.Units.Peek());
+        }
+
+        void ExitLevel()
+        {
+            GenerateLevel();
         }
 
         public static Coroutine ExecuteCoroutine(IEnumerator routine)

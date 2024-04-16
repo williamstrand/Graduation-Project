@@ -24,6 +24,7 @@ namespace WSP.Map
         public void SetPlayer(IPlayerUnitController player)
         {
             Player = player;
+            AddUnit(Player);
         }
 
         public bool FindPath(Vector2Int start, Vector2Int target, out Path path)
@@ -59,7 +60,7 @@ namespace WSP.Map
 
             return null;
         }
-        
+
         public IUnit GetUnitAt(Vector2Int position)
         {
             for (var i = 0; i < Units.Count; i++)
@@ -69,11 +70,44 @@ namespace WSP.Map
 
             return null;
         }
-        
-        public void SpawnInteractable(IInteractable interactable)
+
+        public void AddUnit(IUnitController unitController)
+        {
+            Units.Enqueue(unitController);
+            Objects.Add(unitController.Unit);
+        }
+
+        public void RemoveUnit(IUnitController unitController)
+        {
+            Units.Remove(unitController);
+            Objects.Remove(unitController.Unit);
+        }
+
+        public void AddInteractable(IInteractable interactable)
         {
             Interactables.Add(interactable);
             Objects.Add(interactable);
+        }
+
+        public void Clean()
+        {
+            for (var i = 0; i < Objects.Count; i++)
+            {
+                if (Objects[i] == Player.Unit) continue;
+
+                Objects[i].Destroy();
+            }
+
+            for (var i = 0; i < Units.Count; i++)
+            {
+                if (Units[i] == Player) continue;
+
+                Units[i].Destroy();
+            }
+
+            Objects.Clear();
+            Interactables.Clear();
+            Units.Clear();
         }
     }
 }
