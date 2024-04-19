@@ -23,8 +23,8 @@ namespace WSP.Units
         public IInventoryComponent Inventory { get; private set; }
         public ISpecialAttackComponent SpecialAttack { get; private set; }
 
-        public IAction CurrentAction { get; private set; }
-        public bool ActionInProgress => CurrentAction?.ActionInProgress ?? false;
+        IAction currentAction;
+        public bool ActionInProgress => currentAction?.ActionInProgress ?? false;
 
         protected void Awake()
         {
@@ -69,25 +69,24 @@ namespace WSP.Units
         public bool StartAction(ActionContext action)
         {
             if (!action.Action.IsInRange(GridPosition, action.Target)) return false;
-            if (action.Action.ActionInProgress) return false;
-            if (CurrentAction is { ActionInProgress: true }) return false;
+            if (ActionInProgress) return false;
 
-            CurrentAction = action.Action;
-            CurrentAction.OnTurnOver += ActionSuccess;
-            var success = CurrentAction.StartAction(this, action.Target);
+            currentAction = action.Action;
+            currentAction.OnTurnOver += ActionSuccess;
+            var success = currentAction.StartAction(this, action.Target);
 
             if (success) return true;
 
-            CurrentAction.OnTurnOver = null;
+            currentAction.OnTurnOver -= ActionSuccess;
             return false;
         }
 
         void ActionSuccess()
         {
-            if (CurrentAction == null) return;
+            if (currentAction == null) return;
 
-            OnActionFinished?.Invoke(CurrentAction);
-            CurrentAction.OnTurnOver -= ActionSuccess;
+            OnActionFinished?.Invoke(currentAction);
+            currentAction.OnTurnOver -= ActionSuccess;
         }
 
         public void Destroy()

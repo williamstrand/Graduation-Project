@@ -15,8 +15,6 @@ namespace WSP.Units
         float CurrentHealth { get; }
         GameObject GameObject { get; }
         Stats Stats { get; }
-
-        IAction CurrentAction { get; }
         bool ActionInProgress { get; }
 
         IMovementComponent Movement { get; }

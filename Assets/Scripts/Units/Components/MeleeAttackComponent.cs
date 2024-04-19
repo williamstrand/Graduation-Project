@@ -50,10 +50,12 @@ namespace WSP.Units.Components
         {
             float timer = 0;
             var originalPosition = sprite.position;
+            var targetPosition = GameManager.CurrentLevel.Map.GetWorldPosition(target.GridPosition);
+
             while (timer < 1)
             {
                 timer += Time.deltaTime * attackSpeed * 2;
-                sprite.position = Vector3.Lerp(originalPosition, GameManager.CurrentLevel.Map.GetWorldPosition(target.GridPosition), timer / 2);
+                sprite.position = Vector3.Lerp(originalPosition, targetPosition, timer / 2);
                 yield return null;
             }
 
@@ -61,11 +63,12 @@ namespace WSP.Units.Components
             OnAttackHit?.Invoke(target, targetKilled);
 
             timer = 0;
+            targetPosition = originalPosition;
             originalPosition = sprite.position;
             while (timer < 1)
             {
                 timer += Time.deltaTime * attackSpeed * 2;
-                sprite.position = Vector3.Lerp(originalPosition, transform.position, timer);
+                sprite.position = Vector3.Lerp(originalPosition, targetPosition, timer);
                 yield return null;
             }
 
