@@ -20,11 +20,16 @@ namespace WSP.Units.Components
 
         public Stats Stats { get; set; }
 
-        IUnit unit;
-
-        void Awake()
+        public bool StartAction(IUnit origin, Vector2Int target)
         {
-            unit = GetComponent<IUnit>();
+            if (target == GridPosition) return false;
+            if (GameManager.CurrentLevel.Map.GetValue(target) == Map.Pathfinding.Map.Wall) return false;
+            if (!GameManager.CurrentLevel.FindPath(GridPosition, target, out var path)) return false;
+            if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;
+
+            ActionInProgress = false;
+            StartCoroutine(MoveCoroutine(path[1]));
+            return true;
         }
 
         IEnumerator MoveCoroutine(Vector2Int target)
@@ -33,14 +38,6 @@ namespace WSP.Units.Components
             GridPosition = target;
             ActionInProgress = true;
             OnTurnOver?.Invoke();
-
-            // if (GameManager.CurrentLevel.GetObjectAt(target) is IInteractable interactable)
-            // {
-            //     if (!interactable.Interact(unit))
-            //     {
-            //         OnActionFinished?.Invoke();
-            //     }
-            // }
 
             var startPosition = transform.position;
             var timer = 0f;
@@ -53,18 +50,6 @@ namespace WSP.Units.Components
             }
 
             ActionInProgress = false;
-        }
-
-        public bool StartAction(IUnit origin, Vector2Int target)
-        {
-            if (target == GridPosition) return false;
-            if (GameManager.CurrentLevel.Map.GetValue(target) == Map.Pathfinding.Map.Wall) return false;
-            if (!GameManager.CurrentLevel.FindPath(GridPosition, target, out var path)) return false;
-            if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;
-
-            ActionInProgress = false;
-            StartCoroutine(MoveCoroutine(path[1]));
-            return true;
         }
 
         public bool IsInRange(Vector2Int origin, Vector2Int target)
