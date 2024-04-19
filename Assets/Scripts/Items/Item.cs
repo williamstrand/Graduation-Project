@@ -14,9 +14,9 @@ namespace WSP.Items
 
         protected static AssetLoader<VfxObject> VfxLoader { get; } = new(Constants.VfxBundle);
 
-        public Action OnActionFinished { get; set; }
+        public Action OnTurnOver { get; set; }
 
-        public bool ActionStarted { get; protected set; }
+        public bool ActionInProgress { get; protected set; }
         public abstract TargetingType TargetingType { get; }
 
         public virtual string Name => GetType().Name;
@@ -32,9 +32,9 @@ namespace WSP.Items
 
         public bool StartAction(IUnit origin, Vector2Int target)
         {
-            if (ActionStarted) return false;
+            if (ActionInProgress) return false;
 
-            ActionStarted = true;
+            ActionInProgress = true;
             if (!ActivateEffect(origin, target)) return false;
 
             origin.Inventory.RemoveItem(this);

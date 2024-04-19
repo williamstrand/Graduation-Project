@@ -6,7 +6,6 @@ namespace WSP.Units
     {
         public IAction Action { get; }
         public Vector2Int Target { get; }
-        public bool ActionStarted => Action?.ActionStarted ?? false;
 
         public ActionContext(IAction action, Vector2Int target)
         {

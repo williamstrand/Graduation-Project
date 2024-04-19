@@ -51,6 +51,20 @@ namespace WSP.Map
             return false;
         }
 
+        public bool IsOccupied(Vector2Int position, out IUnit unit)
+        {
+            for (var i = 0; i < Units.Count; i++)
+            {
+                if (Units[i].Unit.GridPosition != position) continue;
+
+                unit = Units[i].Unit;
+                return true;
+            }
+
+            unit = null;
+            return false;
+        }
+
         public ILevelObject GetObjectAt(Vector2Int position)
         {
             for (var i = 0; i < Units.Count; i++)

@@ -21,7 +21,7 @@ namespace WSP.Units.SpecialAttacks
 
         protected override bool ExecuteAction(IUnit origin, Vector2Int target)
         {
-            ActionStarted = true;
+            ActionInProgress = true;
             GameManager.ExecuteCoroutine(ArcaneExplosionCoroutine(origin.GridPosition));
             return true;
         }
@@ -46,8 +46,8 @@ namespace WSP.Units.SpecialAttacks
 
             yield return new WaitForSeconds(1);
 
-            ActionStarted = false;
-            OnActionFinished?.Invoke();
+            ActionInProgress = false;
+            OnTurnOver?.Invoke();
         }
 
         void DamageUnit(IUnit unit)

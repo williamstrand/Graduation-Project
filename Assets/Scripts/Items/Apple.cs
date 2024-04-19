@@ -15,8 +15,8 @@ namespace WSP.Items
         protected override bool ActivateEffect(IUnit origin, Vector2Int target)
         {
             origin.Heal(HealAmount);
-            ActionStarted = false;
-            OnActionFinished?.Invoke();
+            ActionInProgress = false;
+            OnTurnOver?.Invoke();
             return true;
         }
     }

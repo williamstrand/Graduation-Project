@@ -62,12 +62,11 @@ namespace WSP.Units.Player
             GetAction(gridPosition);
 
             if (!IsTurn) return;
+            if (Unit.ActionInProgress) return;
 
             CameraController.SetTargetPosition(Unit.GridPosition);
 
-            if (!CanAct) return;
-
-            StartAction(targetAction);
+            if (!StartAction(targetAction)) currentTarget = null;
             targetAction = null;
         }
 
@@ -85,10 +84,9 @@ namespace WSP.Units.Player
                 TargetPosition = gridPosition
             };
 
-            if (GameManager.CurrentLevel.IsOccupied(gridPosition))
-            {
-                currentTarget.TargetUnit = GameManager.CurrentLevel.GetObjectAt(gridPosition) as IUnit;
-            }
+            GameManager.CurrentLevel.IsOccupied(gridPosition, out currentTarget.TargetUnit);
+
+            GetAction(gridPosition);
         }
 
         void GetAction(Vector2Int targetPosition)

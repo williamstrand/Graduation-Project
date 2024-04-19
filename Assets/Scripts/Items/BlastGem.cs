@@ -23,7 +23,7 @@ namespace WSP.Items
 
         protected override bool ActivateEffect(IUnit origin, Vector2Int target)
         {
-            ActionStarted = true;
+            ActionInProgress = true;
             GameManager.ExecuteCoroutine(BlastCoroutine(target));
             return true;
         }
@@ -51,8 +51,8 @@ namespace WSP.Items
 
             yield return new WaitForSeconds(1);
 
-            ActionStarted = false;
-            OnActionFinished?.Invoke();
+            ActionInProgress = false;
+            OnTurnOver?.Invoke();
         }
 
         void DamageUnit(IUnit unit)

@@ -12,6 +12,8 @@ namespace WSP.Units.Enemies
 
         int spawnTimer;
 
+        int spawnedEnemies;
+
         public EnemySpawner(int frequency, int maxEnemies, UnitController unitController, Level level)
         {
             this.frequency = frequency;
@@ -28,12 +30,14 @@ namespace WSP.Units.Enemies
                 return;
             }
 
-            if (level.Units.Count >= maxEnemies) return;
+            if (spawnedEnemies >= maxEnemies) return;
 
+            spawnedEnemies++;
             spawnTimer = frequency;
             var enemy = Object.Instantiate(unitController);
             level.AddUnit(enemy);
             enemy.Unit.Movement.SetPosition(level.Map.GetRandomRoom().GetRandomPosition());
+            enemy.Unit.OnDeath += () => { spawnedEnemies--; };
         }
     }
 }

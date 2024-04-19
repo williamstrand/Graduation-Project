@@ -10,9 +10,6 @@ namespace WSP.Units
         public IUnit Unit { get; protected set; }
         public bool IsTurn { get; set; }
 
-        protected ActionContext CurrentAction;
-        protected bool CanAct => CurrentAction is not { ActionStarted: true };
-
         public virtual void SetUnit(IUnit unit)
         {
             if (Unit != null)
@@ -41,21 +38,14 @@ namespace WSP.Units
             if (!gameObject) return;
             if (!IsTurn) return;
 
-            CurrentAction = null;
-
             OnTurnEnd?.Invoke();
         }
 
         public bool StartAction(ActionContext action)
         {
-            if (!IsTurn) return false;
             if (action == null) return false;
-            if (!CanAct) return false;
-            if (!action.Action.IsInRange(Unit.GridPosition, action.Target)) return false;
 
-            CurrentAction = action;
-
-            return Unit.StartAction(CurrentAction);
+            return IsTurn && Unit.StartAction(action);
         }
 
         protected abstract void Kill();

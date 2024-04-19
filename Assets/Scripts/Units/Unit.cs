@@ -10,8 +10,6 @@ namespace WSP.Units
     {
         public Action OnDeath { get; set; }
         public Action<IUnit> OnTargetKilled { get; set; }
-        public Action<int> OnLevelUp { get; set; }
-        public Action<float, float> OnXpGained { get; set; }
         public Action<float, float> OnHealthChanged { get; set; }
         public Action<IAction> OnActionFinished { get; set; }
 
@@ -25,7 +23,8 @@ namespace WSP.Units
         public IInventoryComponent Inventory { get; private set; }
         public ISpecialAttackComponent SpecialAttack { get; private set; }
 
-        IAction currentAction;
+        public IAction CurrentAction { get; private set; }
+        public bool ActionInProgress => CurrentAction?.ActionInProgress ?? false;
 
         protected void Awake()
         {
@@ -69,26 +68,26 @@ namespace WSP.Units
 
         public bool StartAction(ActionContext action)
         {
-            if (currentAction != null) return false;
+            if (!action.Action.IsInRange(GridPosition, action.Target)) return false;
+            if (action.Action.ActionInProgress) return false;
+            if (CurrentAction is { ActionInProgress: true }) return false;
 
-            currentAction = action.Action;
-            currentAction.OnActionFinished += ActionSuccess;
-            var success = currentAction.StartAction(this, action.Target);
+            CurrentAction = action.Action;
+            CurrentAction.OnTurnOver += ActionSuccess;
+            var success = CurrentAction.StartAction(this, action.Target);
 
             if (success) return true;
 
-            currentAction.OnActionFinished -= ActionSuccess;
-            currentAction = null;
+            CurrentAction.OnTurnOver = null;
             return false;
         }
 
         void ActionSuccess()
         {
-            if (currentAction == null) return;
+            if (CurrentAction == null) return;
 
-            OnActionFinished?.Invoke(currentAction);
-            currentAction.OnActionFinished -= ActionSuccess;
-            currentAction = null;
+            OnActionFinished?.Invoke(CurrentAction);
+            CurrentAction.OnTurnOver -= ActionSuccess;
         }
 
         public void Destroy()

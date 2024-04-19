@@ -8,8 +8,8 @@ namespace WSP.Units.Components
 {
     public class MeleeAttackComponent : MonoBehaviour, IAttackComponent
     {
-        public Action OnActionFinished { get; set; }
-        public bool ActionStarted { get; private set; }
+        public Action OnTurnOver { get; set; }
+        public bool ActionInProgress { get; private set; }
         public TargetingType TargetingType => new UnitTargeting();
         public string Name => "Melee Attack";
         public string Description => "Deals damage to a single target.";
@@ -31,7 +31,7 @@ namespace WSP.Units.Components
             if (targetUnit == null) return false;
             if (attacker.Stats.AttackRange < Pathfinder.Distance(attacker.GridPosition, targetUnit.GridPosition)) return false;
 
-            ActionStarted = true;
+            ActionInProgress = true;
             StartCoroutine(AttackCoroutine(attacker, targetUnit));
             return true;
         }
@@ -53,7 +53,7 @@ namespace WSP.Units.Components
             while (timer < 1)
             {
                 timer += Time.deltaTime * attackSpeed * 2;
-                sprite.position = Vector3.Lerp(originalPosition, target.GameObject.transform.position, timer / 2);
+                sprite.position = Vector3.Lerp(originalPosition, GameManager.CurrentLevel.Map.GetWorldPosition(target.GridPosition), timer / 2);
                 yield return null;
             }
 
@@ -69,8 +69,8 @@ namespace WSP.Units.Components
                 yield return null;
             }
 
-            OnActionFinished?.Invoke();
-            ActionStarted = false;
+            OnTurnOver?.Invoke();
+            ActionInProgress = false;
         }
     }
 }

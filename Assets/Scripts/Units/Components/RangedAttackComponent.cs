@@ -8,10 +8,10 @@ namespace WSP.Units.Components
 {
     public class RangedAttackComponent : MonoBehaviour, IAttackComponent
     {
-        public Action OnActionFinished { get; set; }
+        public Action OnTurnOver { get; set; }
         public Action<IUnit, bool> OnAttackHit { get; set; }
 
-        public bool ActionStarted { get; private set; }
+        public bool ActionInProgress { get; private set; }
         public TargetingType TargetingType => new UnitTargeting();
         public string Name => "Ranged Attack";
         public string Description => "Deals damage to a single target.";
@@ -32,10 +32,11 @@ namespace WSP.Units.Components
             if (targetUnit == null) return false;
             if (targetUnit.GameObject == null) return false;
 
+
             var inRange = Pathfinder.Distance(attacker.GridPosition, targetUnit.GridPosition) <= attacker.Stats.AttackRange;
             if (!inRange) return false;
 
-            ActionStarted = true;
+            ActionInProgress = true;
             StartCoroutine(AttackCoroutine(attacker, targetUnit));
             return true;
         }
@@ -64,8 +65,8 @@ namespace WSP.Units.Components
             var targetKilled = target.Damage(Mathf.RoundToInt(attacker.Stats.Attack));
             OnAttackHit?.Invoke(target, targetKilled);
 
-            OnActionFinished?.Invoke();
-            ActionStarted = false;
+            OnTurnOver?.Invoke();
+            ActionInProgress = false;
         }
 
         public void SetRange(int range)

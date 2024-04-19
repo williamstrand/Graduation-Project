@@ -24,7 +24,7 @@ namespace WSP.Units.SpecialAttacks
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
             if (targetUnit == null) return false;
 
-            ActionStarted = true;
+            ActionInProgress = true;
             GameManager.ExecuteCoroutine(FireballCoroutine(target));
             return true;
         }
@@ -45,8 +45,8 @@ namespace WSP.Units.SpecialAttacks
 
             yield return new WaitForSeconds(.5f);
 
-            ActionStarted = false;
-            OnActionFinished?.Invoke();
+            ActionInProgress = false;
+            OnTurnOver?.Invoke();
         }
     }
 }

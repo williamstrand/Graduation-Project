@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using WSP.Camera;
 using WSP.Map;
@@ -23,6 +24,8 @@ namespace WSP
         MapGenerator mapGenerator;
         EnemySpawner enemySpawner;
 
+        [SerializeField] TextMeshProUGUI turnText;
+
         IPlayerUnitController playerController;
         [SerializeField] PlayerController playerPrefab;
         [SerializeField] UnitController enemyPrefab;
@@ -44,9 +47,9 @@ namespace WSP
         {
             playerController = Instantiate(playerPrefab);
             playerController.SetUnit(Instantiate(playerUnit));
-            
+
             GenerateLevel();
-            
+
             uiManager.Initialize();
 
             StartTurn(playerController);
@@ -104,6 +107,8 @@ namespace WSP
 
         void StartTurn(IUnitController unitController)
         {
+            turnText.text = unitController == playerController ? "Player Turn" : "Enemy Turn";
+
             unitController.IsTurn = true;
             unitController.TurnStart();
             unitController.OnTurnEnd += EndCurrentTurn;

@@ -16,6 +16,9 @@ namespace WSP.Units
         GameObject GameObject { get; }
         Stats Stats { get; }
 
+        IAction CurrentAction { get; }
+        bool ActionInProgress { get; }
+
         IMovementComponent Movement { get; }
         IAttackComponent Attack { get; }
         IInventoryComponent Inventory { get; }

@@ -9,42 +9,49 @@ namespace WSP.Units.Enemies
 
         [SerializeField] Unit unitPrefab;
 
-
+        Vector2Int targetPosition;
         IUnit player;
 
         void Awake()
         {
-            SetUnit(Instantiate(unitPrefab, GameManager.CurrentLevel.Map.GetWorldPosition(GameManager.CurrentLevel.Map.ExitRoom.Center), Quaternion.identity));
+            SetUnit(Instantiate(unitPrefab));
         }
 
         void Update()
         {
             if (Unit == null) return;
             if (!IsTurn) return;
-            if (!CanAct) return;
+            if (Unit.ActionInProgress) return;
 
-            ActionContext TargetAction;
+            ActionContext targetAction;
+            if (targetPosition == Vector2Int.zero)
+            {
+                targetPosition = GameManager.CurrentLevel.Map.Rooms[Random.Range(0, GameManager.CurrentLevel.Map.Rooms.Count)].GetRandomPosition();
+            }
 
             if (player == null)
             {
                 if (Pathfinder.Distance(Unit.GridPosition, GameManager.CurrentLevel.Player.Unit.GridPosition) < VisionRange)
                 {
                     player = GameManager.CurrentLevel.Player.Unit;
-                    TargetAction = GetAction(GameManager.CurrentLevel.Player.Unit.GridPosition);
+                    targetAction = GetAction(GameManager.CurrentLevel.Player.Unit.GridPosition);
                 }
                 else
                 {
-                    var randomDirection = new Vector2Int(Random.Range(-1, 2), Random.Range(-1, 2));
-                    TargetAction = GetAction(Unit.GridPosition + randomDirection);
+                    if (targetPosition == Unit.GridPosition)
+                    {
+                        targetPosition = GameManager.CurrentLevel.Map.Rooms[Random.Range(0, GameManager.CurrentLevel.Map.Rooms.Count)].GetRandomPosition();
+                    }
+
+                    targetAction = GetAction(targetPosition);
                 }
             }
             else
             {
-                TargetAction = GetAction(GameManager.CurrentLevel.Player.Unit.GridPosition);
+                targetAction = GetAction(GameManager.CurrentLevel.Player.Unit.GridPosition);
             }
 
-            var actionContext = TargetAction;
-            if (!StartAction(actionContext))
+            if (!StartAction(targetAction))
             {
                 EndTurn();
             }
@@ -52,7 +59,6 @@ namespace WSP.Units.Enemies
 
         ActionContext GetAction(Vector2Int gridPosition)
         {
-
             if (player == null)
             {
                 return new ActionContext(Unit.Movement, gridPosition);

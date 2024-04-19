@@ -9,8 +9,8 @@ namespace WSP.Units.SpecialAttacks
 {
     public abstract class SpecialAttack : IAction
     {
-        public Action OnActionFinished { get; set; }
-        public bool ActionStarted { get; protected set; }
+        public Action OnTurnOver { get; set; }
+        public bool ActionInProgress { get; protected set; }
         public abstract TargetingType TargetingType { get; }
         public virtual string Name => GetType().Name;
         public abstract string Description { get; }

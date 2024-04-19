@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using WSP.Map;
-using WSP.Map.Pathfinding;
 using WSP.Targeting.TargetingTypes;
 
 namespace WSP.Units.Components
 {
     public class MovementComponent : MonoBehaviour, IMovementComponent
     {
-        public Action OnActionFinished { get; set; }
-        public bool ActionStarted => false;
+        public Action OnTurnOver { get; set; }
+        public bool ActionInProgress { get; private set; }
         public TargetingType TargetingType => new PositionTargeting();
         public string Name => "Move";
         public string Description => "Move to a target position.";
@@ -23,7 +21,6 @@ namespace WSP.Units.Components
         public Stats Stats { get; set; }
 
         IUnit unit;
-        bool isMoving;
 
         void Awake()
         {
@@ -34,15 +31,16 @@ namespace WSP.Units.Components
         {
             var targetPosition = GameManager.CurrentLevel.Map.GetWorldPosition(target);
             GridPosition = target;
-            isMoving = true;
+            ActionInProgress = true;
+            OnTurnOver?.Invoke();
 
-            if (GameManager.CurrentLevel.GetObjectAt(target) is IInteractable interactable)
-            {
-                if (!interactable.Interact(unit))
-                {
-                    OnActionFinished?.Invoke();
-                }
-            }
+            // if (GameManager.CurrentLevel.GetObjectAt(target) is IInteractable interactable)
+            // {
+            //     if (!interactable.Interact(unit))
+            //     {
+            //         OnActionFinished?.Invoke();
+            //     }
+            // }
 
             var startPosition = transform.position;
             var timer = 0f;
@@ -54,23 +52,17 @@ namespace WSP.Units.Components
                 yield return null;
             }
 
-            isMoving = false;
-            OnActionFinished?.Invoke();
+            ActionInProgress = false;
         }
 
         public bool StartAction(IUnit origin, Vector2Int target)
         {
-            if (isMoving) return false;
             if (target == GridPosition) return false;
             if (GameManager.CurrentLevel.Map.GetValue(target) == Map.Pathfinding.Map.Wall) return false;
-
-            if (!GameManager.CurrentLevel.FindPath(GridPosition, target, out var path))
-            {
-                if (!Pathfinder.FindPath(GameManager.CurrentLevel.Map, GridPosition, target, out path)) return false;
-            }
-
+            if (!GameManager.CurrentLevel.FindPath(GridPosition, target, out var path)) return false;
             if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;
 
+            ActionInProgress = false;
             StartCoroutine(MoveCoroutine(path[1]));
             return true;
         }

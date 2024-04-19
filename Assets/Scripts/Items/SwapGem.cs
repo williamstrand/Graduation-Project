@@ -20,7 +20,7 @@ namespace WSP.Items
             if (targetUnit == null) return false;
 
             GameManager.ExecuteCoroutine(SwapCoroutine(origin, targetUnit));
-            ActionStarted = true;
+            ActionInProgress = true;
             return true;
         }
 
@@ -32,8 +32,8 @@ namespace WSP.Items
             target.Movement.SetPosition(originPosition);
             yield return new WaitForSeconds(1);
 
-            ActionStarted = false;
-            OnActionFinished?.Invoke();
+            ActionInProgress = false;
+            OnTurnOver?.Invoke();
         }
     }
 }

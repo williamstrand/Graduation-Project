@@ -6,8 +6,8 @@ namespace WSP.Units
 {
     public interface IAction
     {
-        Action OnActionFinished { get; set; }
-        bool ActionStarted { get; }
+        Action OnTurnOver { get; set; }
+        bool ActionInProgress { get; }
         TargetingType TargetingType { get; }
 
         string Name { get; }
