@@ -10,9 +10,9 @@ namespace WSP.Ui
         [SerializeField] LevelUpRewardButton upgradeButtonPrefab;
         [SerializeField] Transform upgradeButtonParent;
 
-        IPlayerUnitController playerController;
+        PlayerController playerController;
 
-        public void SetPlayer(IPlayerUnitController player)
+        public void SetPlayer(PlayerController player)
         {
             playerController = player;
         }

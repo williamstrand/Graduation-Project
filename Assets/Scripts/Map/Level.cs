@@ -10,7 +10,7 @@ namespace WSP.Map
     {
         public Pathfinding.Map Map { get; }
         public UnitQueue Units { get; }
-        public IPlayerUnitController Player { get; private set; }
+        public PlayerController Player { get; private set; }
 
         public List<ILevelObject> Objects { get; } = new();
         public List<IInteractable> Interactables { get; } = new();
@@ -21,7 +21,7 @@ namespace WSP.Map
             Units = new UnitQueue();
         }
 
-        public void SetPlayer(IPlayerUnitController player)
+        public void SetPlayer(PlayerController player)
         {
             Player = player;
             AddUnit(Player);
@@ -114,7 +114,7 @@ namespace WSP.Map
 
             for (var i = 0; i < Units.Count; i++)
             {
-                if (Units[i] == Player) continue;
+                if (ReferenceEquals(Units[i], Player)) continue;
 
                 Units[i].Destroy();
             }

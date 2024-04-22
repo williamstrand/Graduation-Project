@@ -14,7 +14,7 @@ namespace WSP.Ui
         [SerializeField] InventoryUi inventoryUi;
         [SerializeField] SpecialAttackUi specialAttackUi;
 
-        static IPlayerUnitController PlayerController => GameManager.CurrentLevel.Player;
+        static PlayerController PlayerController => GameManager.CurrentLevel.Player;
 
         void Awake()
         {

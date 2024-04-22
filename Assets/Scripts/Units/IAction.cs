@@ -8,12 +8,12 @@ namespace WSP.Units
     {
         Action OnTurnOver { get; set; }
         bool ActionInProgress { get; }
-        TargetingType TargetingType { get; }
 
         string Name { get; }
         string Description { get; }
         int Cooldown { get; }
         int CooldownRemaining { get; set; }
+        TargetingType TargetingType { get; }
         Sprite Icon { get; }
         Stats Stats { get; set; }
 

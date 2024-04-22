@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace WSP.Units.Components
 {
-    public class SpecialAttackComponent : MonoBehaviour, ISpecialAttackComponent
+    public class SpecialAttackComponent : MonoBehaviour
     {
         public Action<IAction[]> OnSpecialAttacksChanged { get; set; }
         public IAction[] SpecialAttacks { get; private set; }
@@ -38,7 +38,7 @@ namespace WSP.Units.Components
 
         void PlayerActionFinished(IAction action)
         {
-            if (action is IMovementComponent) return;
+            if (action is MovementComponent) return;
 
             UpdateCooldowns();
         }

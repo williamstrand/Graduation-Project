@@ -16,9 +16,9 @@ namespace WSP.Ui.Inventory
         [SerializeField] Button useButton;
 
         Item currentItem;
-        IPlayerUnitController currentPlayer;
+        PlayerController currentPlayer;
 
-        public void SetItemInfo(Item item, IPlayerUnitController player)
+        public void SetItemInfo(Item item, PlayerController player)
         {
             currentItem = item;
             currentPlayer = player;

@@ -79,6 +79,7 @@ namespace WSP.Units.Enemies
                 Destroy(Unit.GameObject);
                 GameManager.CurrentLevel.RemoveUnit(this);
                 Unit = null;
+                Destroy(gameObject);
             }
         }
     }

@@ -26,7 +26,7 @@ namespace WSP
 
         [SerializeField] TextMeshProUGUI turnText;
 
-        IPlayerUnitController playerController;
+        PlayerController playerController;
         [SerializeField] PlayerController playerPrefab;
         [SerializeField] UnitController enemyPrefab;
         [SerializeField] Unit playerUnit;
@@ -107,13 +107,13 @@ namespace WSP
 
         void StartTurn(IUnitController unitController)
         {
-            turnText.text = unitController == playerController ? "Player Turn" : "Enemy Turn";
+            turnText.text = ReferenceEquals(unitController, playerController) ? "Player Turn" : "Enemy Turn";
 
             unitController.IsTurn = true;
             unitController.TurnStart();
             unitController.OnTurnEnd += EndCurrentTurn;
 
-            if (unitController == playerController)
+            if (ReferenceEquals(unitController, playerController))
             {
                 onTurnEnd?.Invoke();
             }

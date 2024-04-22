@@ -4,8 +4,8 @@ using WSP.Units.Components;
 
 namespace WSP.Units
 {
-    [RequireComponent(typeof(IMovementComponent), typeof(IAttackComponent))]
-    [RequireComponent(typeof(IInventoryComponent), typeof(ISpecialAttackComponent))]
+    [RequireComponent(typeof(MovementComponent), typeof(AttackComponent))]
+    [RequireComponent(typeof(InventoryComponent), typeof(SpecialAttackComponent))]
     public class Unit : MonoBehaviour, IUnit
     {
         public Action OnDeath { get; set; }
@@ -18,25 +18,25 @@ namespace WSP.Units
         public GameObject GameObject => gameObject;
         [field: SerializeField] public Stats Stats { get; private set; }
 
-        public IMovementComponent Movement { get; private set; }
-        public IAttackComponent Attack { get; private set; }
-        public IInventoryComponent Inventory { get; private set; }
-        public ISpecialAttackComponent SpecialAttack { get; private set; }
+        public MovementComponent Movement { get; private set; }
+        public AttackComponent Attack { get; private set; }
+        public InventoryComponent Inventory { get; private set; }
+        public SpecialAttackComponent SpecialAttack { get; private set; }
 
         IAction currentAction;
         public bool ActionInProgress => currentAction?.ActionInProgress ?? false;
 
         protected void Awake()
         {
-            Movement = GetComponent<IMovementComponent>();
-            Attack = GetComponent<IAttackComponent>();
-            Inventory = GetComponent<IInventoryComponent>();
-            SpecialAttack = GetComponent<ISpecialAttackComponent>();
+            Movement = GetComponent<MovementComponent>();
+            Attack = GetComponent<AttackComponent>();
+            Inventory = GetComponent<InventoryComponent>();
+            SpecialAttack = GetComponent<SpecialAttackComponent>();
 
             CurrentHealth = Mathf.RoundToInt(Stats.Health);
-            Attack.OnAttackHit += TargetHit;
 
-            Attack.SetRange(Stats.AttackRange);
+            Attack.Stats = Stats;
+            Movement.Stats = Stats;
         }
 
         public bool Damage(float damage)
@@ -59,11 +59,6 @@ namespace WSP.Units
         void Kill()
         {
             OnDeath?.Invoke();
-        }
-
-        void TargetHit(IUnit target, bool killed)
-        {
-            if (killed) OnTargetKilled?.Invoke(target);
         }
 
         public bool StartAction(ActionContext action)

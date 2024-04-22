@@ -12,7 +12,7 @@ namespace WSP.Ui.Inventory
         [SerializeField] InventoryItemInfo itemInfo;
 
         public bool IsOpen { get; private set; }
-        static IPlayerUnitController PlayerController => GameManager.CurrentLevel.Player;
+        static PlayerController PlayerController => GameManager.CurrentLevel.Player;
         Item currentOpenedItem;
 
         void Awake()

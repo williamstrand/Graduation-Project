@@ -17,10 +17,10 @@ namespace WSP.Units
         Stats Stats { get; }
         bool ActionInProgress { get; }
 
-        IMovementComponent Movement { get; }
-        IAttackComponent Attack { get; }
-        IInventoryComponent Inventory { get; }
-        ISpecialAttackComponent SpecialAttack { get; }
+        MovementComponent Movement { get; }
+        AttackComponent Attack { get; }
+        InventoryComponent Inventory { get; }
+        SpecialAttackComponent SpecialAttack { get; }
 
         bool Damage(float damage);
         void Heal(float heal);

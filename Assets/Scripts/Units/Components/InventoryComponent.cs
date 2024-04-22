@@ -6,7 +6,7 @@ using WSP.Items;
 
 namespace WSP.Units.Components
 {
-    public class InventoryComponent : MonoBehaviour, IInventoryComponent
+    public class InventoryComponent : MonoBehaviour
     {
         [field: SerializeField] public int Size { get; private set; }
         public int Amount => inventory.Count;

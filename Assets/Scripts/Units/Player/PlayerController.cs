@@ -8,7 +8,7 @@ using WSP.Units.Upgrades;
 
 namespace WSP.Units.Player
 {
-    public class PlayerController : UnitController, IPlayerUnitController
+    public class PlayerController : UnitController
     {
         public Action<float, float> OnUnitHealthChanged { get; set; }
         public Action OnOpenInventory { get; set; }
@@ -111,7 +111,6 @@ namespace WSP.Units.Player
             }
 
             currentTarget.TargetPosition = currentTarget.TargetUnit.GridPosition;
-            Unit.Attack.SetRange(Unit.Stats.AttackRange);
             var inRange = Unit.Attack.IsInRange(Unit.GridPosition, currentTarget.TargetPosition);
             if (!inRange)
             {

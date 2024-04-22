@@ -13,7 +13,7 @@ namespace WSP.Targeting
         Vector2Int currentOrigin;
 
         public IAction CurrentAction { get; private set; }
-        IPlayerUnitController playerController;
+        PlayerController playerController;
         public bool InTargetSelectionMode { get; private set; }
 
         bool shouldDrawPath = true;
@@ -32,7 +32,7 @@ namespace WSP.Targeting
         void Awake()
         {
             lineRenderer = GetComponent<LineRenderer>();
-            playerController = GetComponent<IPlayerUnitController>();
+            playerController = GetComponent<PlayerController>();
         }
 
         void Start()
