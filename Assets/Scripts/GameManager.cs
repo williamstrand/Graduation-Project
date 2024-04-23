@@ -31,6 +31,7 @@ namespace WSP
         [SerializeField] UnitController enemyPrefab;
         [SerializeField] Unit playerUnit;
         [SerializeField] UiManager uiManager;
+        [SerializeField] FogOfWar fogOfWar;
 
         void Awake()
         {
@@ -73,12 +74,17 @@ namespace WSP
             foreach (Transform tile in mapParent) Destroy(tile.gameObject);
 
             var map = mapGenerator.GenerateMap();
+
+            CurrentLevel?.Clean();
+            CurrentLevel = new Level(map);
+
             for (var x = 0; x < map.Width; x++)
             {
                 for (var y = 0; y < map.Height; y++)
                     switch (map.GetValue(x, y))
                     {
                         case Map.Pathfinding.Map.Empty:
+                            fogOfWar.Set(new Vector2Int(x, y), false);
                             break;
 
                         case Map.Pathfinding.Map.Wall:
@@ -86,9 +92,6 @@ namespace WSP
                             break;
                     }
             }
-
-            CurrentLevel?.Clean();
-            CurrentLevel = new Level(map);
 
             onTurnEnd = null;
 
@@ -101,6 +104,8 @@ namespace WSP
             CurrentLevel.AddInteractable(exit);
 
             playerController.Unit.Movement.SetPosition(CurrentLevel.Map.StartRoom.Center);
+            fogOfWar.SetArea(map, CurrentLevel.Map.StartRoom.Center, 3, true);
+            playerController.Unit.OnMove += position => fogOfWar.SetArea(map, position, 3, true);
             CurrentLevel.SetPlayer(playerController);
             CameraController.ForceSetPosition(playerController.Unit.GridPosition);
         }

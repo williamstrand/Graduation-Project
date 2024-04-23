@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace WSP.Map.Pathfinding
 {
@@ -127,7 +129,40 @@ namespace WSP.Map.Pathfinding
                     var checkX = gridPosition.x + x;
                     var checkY = gridPosition.y + y;
                     var vector = new Vector2Int(checkX, checkY);
-                    if (ignore.Contains(vector)) continue;
+                    if (ignore?.Contains(vector) ?? false) continue;
+
+                    if (checkX >= 0 && checkX < Width && checkY >= 0 && checkY < Height)
+                    {
+                        neighbours[i] = vector;
+                        i++;
+                    }
+                }
+            }
+
+            return neighbours;
+        }
+
+        /// <summary>
+        ///     Gets a list of the vertical and horizontal neighbours of a grid position.
+        /// </summary>
+        /// <param name="gridPosition">the grid position.</param>
+        /// <param name="ignore">list of positions to ignore.</param>
+        /// <returns>a list of neighbours.</returns>
+        public Vector2Int[] GetNeighboursVH(Vector2Int gridPosition, ICollection<Vector2Int> ignore)
+        {
+            var neighbours = new Vector2Int[8];
+            var i = 0;
+            for (var x = -1; x <= 1; x++)
+            {
+                for (var y = -1; y <= 1; y++)
+                {
+                    if (x == 0 && y == 0) continue;
+                    if (Math.Abs(x) == Math.Abs(y)) continue;
+
+                    var checkX = gridPosition.x + x;
+                    var checkY = gridPosition.y + y;
+                    var vector = new Vector2Int(checkX, checkY);
+                    if (ignore?.Contains(vector) ?? false) continue;
 
                     if (checkX >= 0 && checkX < Width && checkY >= 0 && checkY < Height)
                     {

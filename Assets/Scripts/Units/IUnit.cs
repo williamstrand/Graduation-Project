@@ -11,6 +11,7 @@ namespace WSP.Units
         Action<IUnit> OnTargetKilled { get; set; }
         Action<float, float> OnHealthChanged { get; set; }
         Action<IAction> OnActionFinished { get; set; }
+        Action<Vector2Int> OnMove { get; set; }
 
         float CurrentHealth { get; }
         GameObject GameObject { get; }

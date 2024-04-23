@@ -12,6 +12,7 @@ namespace WSP.Units
         public Action<IUnit> OnTargetKilled { get; set; }
         public Action<float, float> OnHealthChanged { get; set; }
         public Action<IAction> OnActionFinished { get; set; }
+        public Action<Vector2Int> OnMove { get; set; }
 
         public Vector2Int GridPosition => Movement.GridPosition;
         public float CurrentHealth { get; private set; }
@@ -29,6 +30,7 @@ namespace WSP.Units
         protected void Awake()
         {
             Movement = GetComponent<MovementComponent>();
+            Movement.OnTurnOver += () => OnMove?.Invoke(Movement.GridPosition);
             Attack = GetComponent<AttackComponent>();
             Inventory = GetComponent<InventoryComponent>();
             SpecialAttack = GetComponent<SpecialAttackComponent>();

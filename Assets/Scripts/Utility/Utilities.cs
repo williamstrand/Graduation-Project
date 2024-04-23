@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 
 namespace Utility
 {
@@ -16,6 +17,12 @@ namespace Utility
                 .ToArray();
 
             return items;
+        }
+
+        public static Color Alpha(this Color color, float alpha)
+        {
+            color.a = alpha;
+            return color;
         }
     }
 }

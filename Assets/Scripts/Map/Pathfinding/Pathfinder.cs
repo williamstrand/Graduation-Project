@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace WSP.Map.Pathfinding
@@ -60,6 +61,39 @@ namespace WSP.Map.Pathfinding
 
             path = default;
             return false;
+        }
+
+        public static Vector2Int[] FloodFill(Map map, Vector2Int position, int range)
+        {
+            open.Clear();
+            allPositions.Clear();
+
+            open.Add(new Node(position));
+            allPositions.Add(position);
+
+            while (open.Count != 0)
+            {
+                var q = open[0];
+                open.Remove(q);
+
+                var neighbours = map.GetNeighbours(q.Position, allPositions);
+                for (var i = 0; i < neighbours.Length; i++)
+                {
+                    var value = map.GetValue(neighbours[i]);
+                    if (value == Map.Wall) continue;
+
+                    var node = new Node(neighbours[i]);
+                    node.Parent = q;
+
+                    node.GCost = q.GCost + 1;
+                    if (node.GCost > range) continue;
+
+                    open.Add(node);
+                    allPositions.Add(node.Position);
+                }
+            }
+
+            return allPositions.ToArray();
         }
 
         /// <summary>
