@@ -8,35 +8,58 @@ namespace WSP.Map
 {
     public class FogOfWar : MonoBehaviour
     {
+        readonly Color fullFog = Color.black.Alpha(1);
+        readonly Color halfFog = Color.black.Alpha(0.5f);
+
         [SerializeField] GameObject fogTilePrefab;
 
         Dictionary<Vector2Int, GameObject> fog = new();
         HashSet<Vector2Int> found = new();
 
+        Queue<GameObject> pool = new();
+
         public void Set(Vector2Int position, bool visible)
         {
-            if (GameManager.CurrentLevel.Map.GetValue(position) == Pathfinding.Map.Wall) return;
-
             GameObject fogTile;
+            Vector2 worldPosition;
 
             if (visible)
             {
-                if (!fog.TryGetValue(position, out fogTile)) return;
-
                 found.Add(position);
+                if (fog.TryGetValue(position, out fogTile))
+                {
+                    Remove(fogTile);
+                    fog.Remove(position);
+                }
 
-                Destroy(fogTile);
-                fog.Remove(position);
+                var neighbours = GameManager.CurrentLevel.Map.GetNeighbours(position, found);
+                for (var i = 0; i < neighbours.Length; i++)
+                {
+                    if (fog.TryGetValue(neighbours[i], out fogTile))
+                    {
+                        Remove(fogTile);
+                        fog.Remove(neighbours[i]);
+                    }
+
+                    worldPosition = GameManager.CurrentLevel.Map.GetWorldPosition(neighbours[i]);
+                    fogTile = GetFromPool();
+                    fogTile.transform.position = worldPosition;
+                    fogTile.GetComponent<SpriteRenderer>().color = halfFog;
+                    fogTile.hideFlags = HideFlags.HideInHierarchy;
+                    fog.Add(neighbours[i], fogTile);
+                    found.Add(neighbours[i]);
+                }
 
                 return;
             }
 
             if (fog.ContainsKey(position)) return;
 
-            var worldPosition = GameManager.CurrentLevel.Map.GetWorldPosition(position);
+            worldPosition = GameManager.CurrentLevel.Map.GetWorldPosition(position);
 
-            fogTile = Instantiate(fogTilePrefab, new Vector3(worldPosition.x, worldPosition.y, 0), Quaternion.identity, transform);
-            fogTile.GetComponent<SpriteRenderer>().color = Color.black.Alpha(found.Contains(position) ? 0.5f : 1);
+            fogTile = GetFromPool();
+            fogTile.transform.position = worldPosition;
+            fogTile.GetComponent<SpriteRenderer>().color = found.Contains(position) ? halfFog : fullFog;
             fogTile.hideFlags = HideFlags.HideInHierarchy;
             fog.Add(position, fogTile);
         }
@@ -54,10 +77,23 @@ namespace WSP.Map
 
             for (var i = 0; i < fill.Length; i++)
             {
-                if (GameManager.CurrentLevel.Map.GetValue(fill[i]) == Pathfinding.Map.Wall) continue;
-
                 Set(fill[i], visible);
             }
+        }
+
+        GameObject GetFromPool()
+        {
+            if (pool.Count <= 0) return Instantiate(fogTilePrefab, transform);
+
+            var fogTile = pool.Dequeue();
+            fogTile.SetActive(true);
+            return fogTile;
+        }
+
+        void Remove(GameObject fogTile)
+        {
+            fogTile.SetActive(false);
+            pool.Enqueue(fogTile);
         }
     }
 }

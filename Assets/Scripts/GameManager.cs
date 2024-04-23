@@ -81,16 +81,19 @@ namespace WSP
             for (var x = 0; x < map.Width; x++)
             {
                 for (var y = 0; y < map.Height; y++)
+                {
                     switch (map.GetValue(x, y))
                     {
                         case Map.Pathfinding.Map.Empty:
-                            fogOfWar.Set(new Vector2Int(x, y), false);
                             break;
 
                         case Map.Pathfinding.Map.Wall:
                             Instantiate(square, map.GetWorldPosition(x, y), Quaternion.identity, mapParent);
                             break;
                     }
+
+                    fogOfWar.Set(new Vector2Int(x, y), false);
+                }
             }
 
             onTurnEnd = null;
