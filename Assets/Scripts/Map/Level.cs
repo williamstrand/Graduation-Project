@@ -11,6 +11,7 @@ namespace WSP.Map
         public Pathfinding.Map Map { get; }
         public UnitQueue Units { get; }
         public PlayerController Player { get; private set; }
+        public FogOfWar FogOfWar { get; set; }
 
         public List<ILevelObject> Objects { get; } = new();
         public List<IInteractable> Interactables { get; } = new();
@@ -35,7 +36,7 @@ namespace WSP.Map
                 if (Units[i].Unit.GridPosition == start) continue;
                 if (Units[i].Unit.GridPosition == target) continue;
 
-                tempMap.SetValue(Units[i].Unit.GridPosition, Pathfinding.Map.Wall);
+                if (Units[i].Unit.IsVisible) tempMap.SetValue(Units[i].Unit.GridPosition, Pathfinding.Map.Wall);
             }
 
             return Pathfinder.FindPath(tempMap, start, target, out path);
@@ -122,6 +123,16 @@ namespace WSP.Map
             Objects.Clear();
             Interactables.Clear();
             Units.Clear();
+        }
+
+        public bool IsHidden(Vector2Int position)
+        {
+            return FogOfWar.IsHidden(position);
+        }
+
+        public bool IsFound(Vector2Int position)
+        {
+            return FogOfWar.IsFound(position);
         }
     }
 }

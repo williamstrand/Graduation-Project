@@ -24,12 +24,21 @@ namespace WSP.Units.Components
 
         [SerializeField] float moveSpeed = 5f;
 
-        public bool StartAction(IUnit origin, Vector2Int target)
+        public bool StartAction(IUnit origin, Vector2Int target, bool visible)
         {
             if (target == GridPosition) return false;
             if (GameManager.CurrentLevel.Map.GetValue(target) == Map.Pathfinding.Map.Wall) return false;
             if (!GameManager.CurrentLevel.FindPath(GridPosition, target, out var path)) return false;
             if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;
+
+            if (!visible)
+            {
+                GridPosition = path[1].Position;
+                transform.position = GameManager.CurrentLevel.Map.GetWorldPosition(GridPosition);
+                ActionInProgress = false;
+                OnTurnOver?.Invoke();
+                return true;
+            }
 
             StartCoroutine(MoveCoroutine(path[1]));
             return true;

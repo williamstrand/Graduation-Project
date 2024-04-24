@@ -9,6 +9,14 @@ namespace WSP.Map
         public Action OnExit { get; set; }
         public Vector2Int GridPosition { get; private set; }
 
+        SpriteRenderer spriteRenderer;
+        public bool IsVisible { get; private set; } = true;
+
+        void Awake()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
         void Start()
         {
             GridPosition = GameManager.CurrentLevel.Map.GetGridPosition(transform.position);
@@ -21,6 +29,12 @@ namespace WSP.Map
             Debug.Log("Exit interacted with player.");
             OnExit?.Invoke();
             return true;
+        }
+
+        public void SetVisibility(bool visible)
+        {
+            spriteRenderer.enabled = visible;
+            IsVisible = visible;
         }
 
         public void Destroy()

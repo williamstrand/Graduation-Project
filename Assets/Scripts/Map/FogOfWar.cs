@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Utility;
@@ -8,48 +9,44 @@ namespace WSP.Map
 {
     public class FogOfWar : MonoBehaviour
     {
-        readonly Color fullFog = Color.black.Alpha(1);
-        readonly Color halfFog = Color.black.Alpha(0.5f);
+        public Action OnFogChange { get; set; }
+
+        [SerializeField] Color fogColor = Color.black;
+
+        Color FullFog => fogColor.Alpha(1);
+        Color HalfFog => fogColor.Alpha(0.5f);
 
         [SerializeField] GameObject fogTilePrefab;
 
-        Dictionary<Vector2Int, GameObject> fog = new();
+        Dictionary<Vector2Int, SpriteRenderer> fog = new();
         HashSet<Vector2Int> found = new();
 
-        Queue<GameObject> pool = new();
+        Queue<SpriteRenderer> pool = new();
 
         public void Set(Vector2Int position, bool visible)
         {
-            GameObject fogTile;
+            SpriteRenderer fogTile;
             Vector2 worldPosition;
 
             if (visible)
             {
                 found.Add(position);
-                if (fog.TryGetValue(position, out fogTile))
-                {
-                    Remove(fogTile);
-                    fog.Remove(position);
-                }
+                Remove(position);
 
                 var neighbours = GameManager.CurrentLevel.Map.GetNeighbours(position, found);
                 for (var i = 0; i < neighbours.Length; i++)
                 {
-                    if (fog.TryGetValue(neighbours[i], out fogTile))
-                    {
-                        Remove(fogTile);
-                        fog.Remove(neighbours[i]);
-                    }
+                    Remove(neighbours[i]);
 
                     worldPosition = GameManager.CurrentLevel.Map.GetWorldPosition(neighbours[i]);
                     fogTile = GetFromPool();
                     fogTile.transform.position = worldPosition;
-                    fogTile.GetComponent<SpriteRenderer>().color = halfFog;
-                    fogTile.hideFlags = HideFlags.HideInHierarchy;
+                    fogTile.color = HalfFog;
                     fog.Add(neighbours[i], fogTile);
                     found.Add(neighbours[i]);
                 }
 
+                OnFogChange?.Invoke();
                 return;
             }
 
@@ -59,9 +56,9 @@ namespace WSP.Map
 
             fogTile = GetFromPool();
             fogTile.transform.position = worldPosition;
-            fogTile.GetComponent<SpriteRenderer>().color = found.Contains(position) ? halfFog : fullFog;
-            fogTile.hideFlags = HideFlags.HideInHierarchy;
+            fogTile.color = found.Contains(position) ? HalfFog : FullFog;
             fog.Add(position, fogTile);
+            OnFogChange?.Invoke();
         }
 
         public void SetArea(Pathfinding.Map map, Vector2Int position, int radius, bool visible)
@@ -81,19 +78,38 @@ namespace WSP.Map
             }
         }
 
-        GameObject GetFromPool()
+        SpriteRenderer GetFromPool()
         {
-            if (pool.Count <= 0) return Instantiate(fogTilePrefab, transform);
+            SpriteRenderer fogTile;
+            if (pool.Count <= 0)
+            {
+                fogTile = Instantiate(fogTilePrefab, transform).GetComponent<SpriteRenderer>();
+                fogTile.gameObject.hideFlags = HideFlags.HideInHierarchy;
+                return fogTile;
+            }
 
-            var fogTile = pool.Dequeue();
-            fogTile.SetActive(true);
+            fogTile = pool.Dequeue();
+            fogTile.gameObject.SetActive(true);
             return fogTile;
         }
 
-        void Remove(GameObject fogTile)
+        void Remove(Vector2Int position)
         {
-            fogTile.SetActive(false);
+            if (!fog.TryGetValue(position, out var fogTile)) return;
+
+            fog.Remove(position);
+            fogTile.gameObject.SetActive(false);
             pool.Enqueue(fogTile);
+        }
+
+        public bool IsHidden(Vector2Int position)
+        {
+            return fog.ContainsKey(position);
+        }
+
+        public bool IsFound(Vector2Int position)
+        {
+            return found.Contains(position);
         }
     }
 }

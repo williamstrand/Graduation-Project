@@ -20,7 +20,7 @@ namespace WSP.Units.Components
         public int Range => Stats.AttackRange;
         public Stats Stats { get; set; }
 
-        public abstract bool StartAction(IUnit origin, Vector2Int target);
+        public abstract bool StartAction(IUnit origin, Vector2Int target, bool visible);
 
         public bool IsInRange(Vector2Int origin, Vector2Int target)
         {

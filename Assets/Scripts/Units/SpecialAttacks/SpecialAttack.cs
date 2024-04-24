@@ -26,7 +26,7 @@ namespace WSP.Units.SpecialAttacks
         protected static AssetLoader<VfxObject> VfxLoader { get; } = new(Constants.VfxBundle);
         static AssetLoader<Sprite> IconLoader { get; } = new(Constants.IconBundle, Constants.EmptyIcon);
 
-        public virtual bool StartAction(IUnit origin, Vector2Int target)
+        public virtual bool StartAction(IUnit origin, Vector2Int target, bool visible)
         {
             if (CooldownRemaining > 0) return false;
 

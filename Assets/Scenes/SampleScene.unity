@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6688031e6299451a857805df5c0b6054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fogColor: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
   fogTilePrefab: {fileID: 2759434900771052268, guid: 0361a9a24f267a348b4bc24b5f1151bb, type: 3}
 --- !u!1 &619394800
 GameObject:

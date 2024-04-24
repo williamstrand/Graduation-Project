@@ -77,6 +77,7 @@ namespace WSP.Units.Player
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(position);
 
             if (gridPosition == Unit.GridPosition) return;
+            if (GameManager.CurrentLevel.IsHidden(gridPosition) && !GameManager.CurrentLevel.IsFound(gridPosition)) return;
 
             targetAction = null;
             currentTarget = new ActionTarget
@@ -84,7 +85,8 @@ namespace WSP.Units.Player
                 TargetPosition = gridPosition
             };
 
-            GameManager.CurrentLevel.IsOccupied(gridPosition, out currentTarget.TargetUnit);
+            GameManager.CurrentLevel.IsOccupied(gridPosition, out var target);
+            if (target.IsVisible) currentTarget.TargetUnit = target;
 
             GetAction(gridPosition);
         }

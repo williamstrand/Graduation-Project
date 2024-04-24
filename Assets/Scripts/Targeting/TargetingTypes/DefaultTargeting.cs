@@ -3,22 +3,13 @@ using UnityEngine;
 
 namespace WSP.Targeting.TargetingTypes
 {
-    public class DefaultTargeting : TargetingType
+    public class PositionTargeting : TargetingType
     {
-        public override void StartTarget(TargetingComponent targetingComponent)
-        {
-            base.StartTarget(targetingComponent);
-
-            TargetingComponent.ShowPath();
-            TargetingComponent.Reticle.Enable(true);
-        }
-
         public override void Target(Vector2Int origin, Vector2Int target)
         {
-            if (TargetingComponent.Reticle.Type == TargetingReticle.ReticleTargetType.None)
+            if (ShouldHide(origin, target))
             {
-                TargetingComponent.Reticle.Enable(false);
-                TargetingComponent.HidePath();
+                StopTarget();
                 return;
             }
 

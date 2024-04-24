@@ -41,7 +41,8 @@ namespace WSP
 
         void Start()
         {
-            Invoke(nameof(StartGame), 2);
+            fogOfWar.OnFogChange += UpdateVisibility;
+            StartGame();
         }
 
         void StartGame()
@@ -52,6 +53,8 @@ namespace WSP
             GenerateLevel();
 
             uiManager.Initialize();
+
+            UpdateVisibility();
 
             StartTurn(playerController);
         }
@@ -105,16 +108,19 @@ namespace WSP
             var exit = Instantiate(exitPrefab, exitPosition, Quaternion.identity, mapParent);
             exit.OnExit += ExitLevel;
             CurrentLevel.AddInteractable(exit);
+            CurrentLevel.FogOfWar = fogOfWar;
 
             playerController.Unit.Movement.SetPosition(CurrentLevel.Map.StartRoom.Center);
-            fogOfWar.SetArea(map, CurrentLevel.Map.StartRoom.Center, 3, true);
-            playerController.Unit.OnMove += position => fogOfWar.SetArea(map, position, 3, true);
+            fogOfWar.SetArea(map, CurrentLevel.Map.StartRoom.Center, 4, true);
+            playerController.OnTurnStart += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, 4, true);
+            playerController.OnTurnEnd += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, 4, true);
             CurrentLevel.SetPlayer(playerController);
             CameraController.ForceSetPosition(playerController.Unit.GridPosition);
         }
 
         void StartTurn(IUnitController unitController)
         {
+            UpdateVisibility();
             turnText.text = ReferenceEquals(unitController, playerController) ? "Player Turn" : "Enemy Turn";
 
             unitController.IsTurn = true;
@@ -142,6 +148,16 @@ namespace WSP
         void ExitLevel()
         {
             GenerateLevel();
+        }
+
+        void UpdateVisibility()
+        {
+            for (var i = 0; i < CurrentLevel.Objects.Count; i++)
+            {
+                var levelObject = CurrentLevel.Objects[i];
+                var isVisible = !fogOfWar.IsHidden(levelObject.GridPosition);
+                levelObject.SetVisibility(isVisible);
+            }
         }
 
         public static Coroutine ExecuteCoroutine(IEnumerator routine)

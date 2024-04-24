@@ -13,22 +13,16 @@ namespace WSP.Targeting.TargetingTypes
             Height = height;
         }
 
-        public override void StartTarget(TargetingComponent targetingComponent)
-        {
-            base.StartTarget(targetingComponent);
-            TargetingComponent.Reticle.SetSize(new Vector2(Width * GameManager.CurrentLevel.Map.CellSize, Height * GameManager.CurrentLevel.Map.CellSize));
-            TargetingComponent.Reticle.Enable(true);
-        }
-
         public override void Target(Vector2Int origin, Vector2Int target)
         {
-            if (!TargetingComponent.CurrentAction.IsInRange(origin, target))
+            if (ShouldHide(origin, target))
             {
-                TargetingComponent.Reticle.Enable(false);
+                StopTarget();
                 return;
             }
 
             TargetingComponent.Reticle.Enable(true);
+            TargetingComponent.Reticle.SetSize(new Vector2(Width * GameManager.CurrentLevel.Map.CellSize, Height * GameManager.CurrentLevel.Map.CellSize));
             TargetingComponent.Reticle.SetPosition(target);
         }
 

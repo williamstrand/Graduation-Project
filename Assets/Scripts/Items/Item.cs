@@ -30,7 +30,7 @@ namespace WSP.Items
 
         public virtual int Range => -1;
 
-        public bool StartAction(IUnit origin, Vector2Int target)
+        public bool StartAction(IUnit origin, Vector2Int target, bool visible)
         {
             if (ActionInProgress) return false;
 

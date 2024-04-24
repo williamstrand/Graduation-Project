@@ -27,8 +27,12 @@ namespace WSP.Units
         IAction currentAction;
         public bool ActionInProgress => currentAction?.ActionInProgress ?? false;
 
+        SpriteRenderer spriteRenderer;
+        public bool IsVisible { get; private set; } = true;
+
         protected void Awake()
         {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             Movement = GetComponent<MovementComponent>();
             Movement.OnTurnOver += () => OnMove?.Invoke(Movement.GridPosition);
             Attack = GetComponent<AttackComponent>();
@@ -70,7 +74,7 @@ namespace WSP.Units
 
             currentAction = action.Action;
             currentAction.OnTurnOver += ActionSuccess;
-            var success = currentAction.StartAction(this, action.Target);
+            var success = currentAction.StartAction(this, action.Target, IsVisible);
 
             if (success) return true;
 
@@ -84,6 +88,12 @@ namespace WSP.Units
 
             OnActionFinished?.Invoke(currentAction);
             currentAction.OnTurnOver -= ActionSuccess;
+        }
+
+        public void SetVisibility(bool visible)
+        {
+            spriteRenderer.enabled = visible;
+            IsVisible = visible;
         }
 
         public void Destroy()

@@ -21,7 +21,7 @@ namespace WSP.Targeting
         [field: SerializeField] public TargetingReticle Reticle { get; private set; }
         LineRenderer lineRenderer;
 
-        TargetingType DefaultTargetingType { get; } = new DefaultTargeting();
+        TargetingType DefaultTargetingType { get; } = new PositionTargeting();
         TargetingType currentTargetingType;
 
         [field: Header("Colors")]

@@ -12,7 +12,7 @@ namespace WSP.Units.Components
         [SerializeField] Transform sprite;
         [SerializeField] float attackSpeed = 1;
 
-        public override bool StartAction(IUnit attacker, Vector2Int target)
+        public override bool StartAction(IUnit attacker, Vector2Int target, bool visible)
         {
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
             if (targetUnit == null) return false;

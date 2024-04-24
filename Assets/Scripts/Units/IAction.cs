@@ -19,7 +19,7 @@ namespace WSP.Units
 
         int Range { get; }
 
-        bool StartAction(IUnit origin, Vector2Int target);
+        bool StartAction(IUnit origin, Vector2Int target, bool visible);
         bool IsInRange(Vector2Int origin, Vector2Int target);
     }
 }

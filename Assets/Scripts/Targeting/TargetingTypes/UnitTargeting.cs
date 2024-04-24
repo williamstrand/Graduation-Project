@@ -6,6 +6,12 @@ namespace WSP.Targeting.TargetingTypes
     {
         public override void Target(Vector2Int origin, Vector2Int target)
         {
+            if (ShouldHide(origin, target))
+            {
+                StopTarget();
+                return;
+            }
+
             if (TargetingComponent.Reticle.Type == TargetingReticle.ReticleTargetType.Enemy)
             {
                 TargetingComponent.Reticle.SetPosition(target);
@@ -14,10 +20,14 @@ namespace WSP.Targeting.TargetingTypes
                 return;
             }
 
-            TargetingComponent.Reticle.Enable(false);
+            StopTarget();
         }
 
-        public override void StopTarget() { }
+        public override void StopTarget()
+        {
+            TargetingComponent.Reticle.Enable(false);
+            TargetingComponent.Reticle.SetColor(TargetingComponent.NormalColor);
+        }
 
         public override Vector2Int[] GetTargets(Vector2Int origin, Vector2Int target)
         {
