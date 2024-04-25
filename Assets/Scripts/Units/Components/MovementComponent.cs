@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using WSP.Map;
 using WSP.Targeting.TargetingTypes;
 
 namespace WSP.Units.Components
@@ -31,25 +32,38 @@ namespace WSP.Units.Components
             if (!GameManager.CurrentLevel.FindPath(GridPosition, target, out var path)) return false;
             if (GameManager.CurrentLevel.IsOccupied(path[1].Position)) return false;
 
+            IInteractable interact = null;
+
+            if (GameManager.CurrentLevel.GetObjectAt(target) is IInteractable interactable)
+            {
+                if (interactable.CanInteract(origin))
+                {
+                    interact = interactable;
+                }
+            }
+
+            GridPosition = path[1].Position;
+
             if (!visible)
             {
-                GridPosition = path[1].Position;
                 transform.position = GameManager.CurrentLevel.Map.GetWorldPosition(GridPosition);
                 ActionInProgress = false;
                 OnTurnOver?.Invoke();
                 return true;
             }
 
-            StartCoroutine(MoveCoroutine(path[1]));
+            StartCoroutine(MoveCoroutine(path[1], interact));
             return true;
         }
 
-        IEnumerator MoveCoroutine(Vector2Int target)
+        IEnumerator MoveCoroutine(Vector2Int target, IInteractable interact)
         {
             var targetPosition = GameManager.CurrentLevel.Map.GetWorldPosition(target);
-            GridPosition = target;
             ActionInProgress = true;
-            OnTurnOver?.Invoke();
+            if (interact == null)
+            {
+                OnTurnOver?.Invoke();
+            }
 
             var startPosition = transform.position;
             var timer = 0f;
@@ -59,6 +73,12 @@ namespace WSP.Units.Components
                 timer += Time.deltaTime * moveSpeed;
                 transform.position = Vector2.Lerp(startPosition, targetPosition, timer);
                 yield return null;
+            }
+
+            if (interact != null)
+            {
+                interact.Interact(GameManager.CurrentLevel.Player.Unit);
+                OnTurnOver?.Invoke();
             }
 
             ActionInProgress = false;

@@ -106,7 +106,7 @@ namespace WSP
 
             var exitPosition = map.GetWorldPosition(map.ExitRoom.GetRandomPosition());
             var exit = Instantiate(exitPrefab, exitPosition, Quaternion.identity, mapParent);
-            exit.OnExit += ExitLevel;
+            exit.OnInteract += ExitLevel;
             CurrentLevel.AddInteractable(exit);
             CurrentLevel.FogOfWar = fogOfWar;
 

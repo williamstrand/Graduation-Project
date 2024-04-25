@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 974716931
+CRC: 4146919286
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 72ebabe42f75f82d7437da4e05aa9c1c
+    Hash: 0b78862967a72d10c41dcd315d4f37c5
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 637be48a0fe27287a94c147655f42632
+    Hash: 8bc0122c99aba33c3bff2809a313de26
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 72ebabe42f75f82d7437da4e05aa9c1c
+    Hash: 0b78862967a72d10c41dcd315d4f37c5
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -22,14 +22,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
-- Class: 74
-  Script: {instanceID: 0}
-- Class: 91
-  Script: {instanceID: 0}
-- Class: 95
-  Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 8cd4ecd7965a42e99d5b20e2897e5009, type: 3}
+  Script: {fileID: 11500000, guid: bdc9e105f8b54ca19253afa62e4bc223, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 212
@@ -38,6 +32,5 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Prefabs/VFX/Arcane Blast VFX.prefab
-- Assets/Prefabs/VFX/Blast VFX.prefab
+- Assets/Prefabs/Level/Item Drop.prefab
 Dependencies: []

@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using Utility;
+using WSP.Items;
+using WSP.Map;
 using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Enemies
@@ -15,6 +18,7 @@ namespace WSP.Units.Enemies
         void Awake()
         {
             SetUnit(Instantiate(unitPrefab));
+            Unit.Inventory.AddItem(new Apple());
         }
 
         void Update()
@@ -74,13 +78,29 @@ namespace WSP.Units.Enemies
 
         protected override void Kill()
         {
-            if (Unit.GameObject != null)
+            if (Unit.GameObject == null) return;
+
+            if (GameManager.CurrentLevel.GetObjectAt(Unit.GridPosition) is not IInteractable)
             {
-                Destroy(Unit.GameObject);
-                GameManager.CurrentLevel.RemoveUnit(this);
-                Unit = null;
-                Destroy(gameObject);
+                var inventory = Unit.Inventory;
+                var amount = inventory.Amount;
+                var randomItem = inventory[Random.Range(0, amount)];
+
+                var itemDropPrefab = new AssetLoader<ItemDrop>("level").LoadAsset("Item Drop");
+
+                if (randomItem == null) return;
+
+                var itemDrop = Instantiate(itemDropPrefab, GameManager.CurrentLevel.Map.GetWorldPosition(Unit.GridPosition), Quaternion.identity);
+                itemDrop.SetItem(randomItem);
+                itemDrop.GridPosition = Unit.GridPosition;
+
+                GameManager.CurrentLevel.AddInteractable(itemDrop);
             }
+
+            Destroy(Unit.GameObject);
+            GameManager.CurrentLevel.RemoveUnit(this);
+            Unit = null;
+            Destroy(gameObject);
         }
     }
 }

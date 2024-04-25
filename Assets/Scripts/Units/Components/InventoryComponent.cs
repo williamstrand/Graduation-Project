@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Utility;
 using WSP.Items;
 
 namespace WSP.Units.Components
@@ -12,15 +11,6 @@ namespace WSP.Units.Components
         public int Amount => inventory.Count;
 
         List<Item> inventory = new();
-
-        void Awake()
-        {
-            var allItems = Utilities.GetAllOfType<Item>();
-            AddItem(allItems[0]);
-            AddItem(allItems[1]);
-            AddItem(allItems[2]);
-            AddItem(allItems[3]);
-        }
 
         public Item this[int index] => GetItem(index);
 

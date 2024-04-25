@@ -6,7 +6,8 @@ namespace WSP.Map
 {
     public class Exit : MonoBehaviour, IInteractable
     {
-        public Action OnExit { get; set; }
+        public Action OnInteract { get; set; }
+
         public Vector2Int GridPosition { get; private set; }
 
         SpriteRenderer spriteRenderer;
@@ -22,12 +23,17 @@ namespace WSP.Map
             GridPosition = GameManager.CurrentLevel.Map.GetGridPosition(transform.position);
         }
 
+        public bool CanInteract(IUnit unit)
+        {
+            return unit == GameManager.CurrentLevel.Player.Unit;
+        }
+
         public bool Interact(IUnit unit)
         {
-            if (unit != GameManager.CurrentLevel.Player.Unit) return false;
+            if (!CanInteract(unit)) return false;
 
             Debug.Log("Exit interacted with player.");
-            OnExit?.Invoke();
+            OnInteract?.Invoke();
             return true;
         }
 

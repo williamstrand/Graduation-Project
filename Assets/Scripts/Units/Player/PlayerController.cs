@@ -2,6 +2,7 @@
 using UnityEngine;
 using WSP.Camera;
 using WSP.Input;
+using WSP.Items;
 using WSP.Targeting;
 using WSP.Units.SpecialAttacks;
 using WSP.Units.Upgrades;
@@ -33,6 +34,7 @@ namespace WSP.Units.Player
         {
             Unit.SpecialAttack.SetSpecialAttack(0, new Fireball());
             Unit.SpecialAttack.SetSpecialAttack(1, new ArcaneExplosion());
+            Unit.Inventory.AddItem(new BlastGem());
         }
 
         void OnEnable()
@@ -85,8 +87,10 @@ namespace WSP.Units.Player
                 TargetPosition = gridPosition
             };
 
-            GameManager.CurrentLevel.IsOccupied(gridPosition, out var target);
-            if (target.IsVisible) currentTarget.TargetUnit = target;
+            if (GameManager.CurrentLevel.IsOccupied(gridPosition, out var target))
+            {
+                if (target.IsVisible) currentTarget.TargetUnit = target;
+            }
 
             GetAction(gridPosition);
         }

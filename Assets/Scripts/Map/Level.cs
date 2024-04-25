@@ -68,7 +68,7 @@ namespace WSP.Map
 
         public ILevelObject GetObjectAt(Vector2Int position)
         {
-            for (var i = 0; i < Units.Count; i++)
+            for (var i = 0; i < Objects.Count; i++)
             {
                 if (Objects[i].GridPosition == position) return Objects[i];
             }
@@ -102,6 +102,12 @@ namespace WSP.Map
         {
             Interactables.Add(interactable);
             Objects.Add(interactable);
+        }
+
+        public void RemoveInteractable(IInteractable interactable)
+        {
+            Interactables.Remove(interactable);
+            Objects.Remove(interactable);
         }
 
         public void Clean()
