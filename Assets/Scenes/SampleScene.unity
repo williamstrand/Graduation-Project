@@ -435,6 +435,10 @@ PrefabInstance:
       value: Game Manager
       objectReference: {fileID: 0}
     - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
+      propertyPath: ground
+      value: 
+      objectReference: {fileID: 2075662690932540189, guid: 2642fc017ca4b284d87dce5d72dd781d, type: 3}
+    - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
       propertyPath: fogOfWar
       value: 
       objectReference: {fileID: 421111429}
@@ -502,6 +506,22 @@ PrefabInstance:
     - target: {fileID: 4365826267323285192, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568577745994545101, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568577745994545101, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.11372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568577745994545101, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.11372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568577745994545101, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.11372549
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
