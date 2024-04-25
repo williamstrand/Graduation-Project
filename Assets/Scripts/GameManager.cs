@@ -19,6 +19,7 @@ namespace WSP
         Action onTurnEnd;
 
         [SerializeField] GameObject square;
+        [SerializeField] GameObject ground;
         [SerializeField] Exit exitPrefab;
         Transform mapParent;
         MapGenerator mapGenerator;
@@ -88,6 +89,7 @@ namespace WSP
                     switch (map.GetValue(x, y))
                     {
                         case Map.Pathfinding.Map.Empty:
+                            Instantiate(ground, map.GetWorldPosition(x, y), Quaternion.identity, mapParent);
                             break;
 
                         case Map.Pathfinding.Map.Wall:

@@ -93,7 +93,6 @@ namespace WSP.Units.Enemies
                 if (amount > 0)
                 {
                     var randomIndex = Random.Range(0, amount);
-                    Debug.Log(randomIndex);
                     var randomItem = inventory[randomIndex];
 
                     var itemDropPrefab = new AssetLoader<ItemDrop>("level").LoadAsset("Item Drop");
