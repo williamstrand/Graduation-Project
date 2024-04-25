@@ -8,6 +8,7 @@ namespace WSP.Units.Enemies
 {
     public class EnemyController : UnitController
     {
+        const float ItemChance = .1f;
         const int VisionRange = 7;
 
         [SerializeField] Unit unitPrefab;
@@ -18,7 +19,12 @@ namespace WSP.Units.Enemies
         void Awake()
         {
             SetUnit(Instantiate(unitPrefab));
-            Unit.Inventory.AddItem(new Apple());
+
+            if (Random.value <= ItemChance)
+            {
+                var randomItem = ItemDatabase.AllDroppableItems[Random.Range(0, Unit.Inventory.Amount)];
+                Unit.Inventory.AddItem(randomItem);
+            }
         }
 
         void Update()
