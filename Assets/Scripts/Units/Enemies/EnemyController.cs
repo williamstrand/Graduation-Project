@@ -90,17 +90,22 @@ namespace WSP.Units.Enemies
             {
                 var inventory = Unit.Inventory;
                 var amount = inventory.Amount;
-                var randomItem = inventory[Random.Range(0, amount)];
+                if (amount > 0)
+                {
+                    var randomIndex = Random.Range(0, amount);
+                    Debug.Log(randomIndex);
+                    var randomItem = inventory[randomIndex];
 
-                var itemDropPrefab = new AssetLoader<ItemDrop>("level").LoadAsset("Item Drop");
+                    var itemDropPrefab = new AssetLoader<ItemDrop>("level").LoadAsset("Item Drop");
 
-                if (randomItem == null) return;
+                    if (randomItem == null) return;
 
-                var itemDrop = Instantiate(itemDropPrefab, GameManager.CurrentLevel.Map.GetWorldPosition(Unit.GridPosition), Quaternion.identity);
-                itemDrop.SetItem(randomItem);
-                itemDrop.GridPosition = Unit.GridPosition;
+                    var itemDrop = Instantiate(itemDropPrefab, GameManager.CurrentLevel.Map.GetWorldPosition(Unit.GridPosition), Quaternion.identity);
+                    itemDrop.SetItem(randomItem);
+                    itemDrop.GridPosition = Unit.GridPosition;
 
-                GameManager.CurrentLevel.AddInteractable(itemDrop);
+                    GameManager.CurrentLevel.AddInteractable(itemDrop);
+                }
             }
 
             Destroy(Unit.GameObject);

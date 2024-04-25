@@ -34,7 +34,7 @@ namespace WSP.Units.Components
 
             IInteractable interact = null;
 
-            if (GameManager.CurrentLevel.GetObjectAt(target) is IInteractable interactable)
+            if (GameManager.CurrentLevel.GetObjectAt(path[1]) is IInteractable interactable)
             {
                 if (interactable.CanInteract(origin))
                 {
