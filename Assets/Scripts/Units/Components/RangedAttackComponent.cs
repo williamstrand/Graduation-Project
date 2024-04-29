@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using Utility;
 using WSP.Map.Pathfinding;
 
 namespace WSP.Units.Components
@@ -9,7 +10,8 @@ namespace WSP.Units.Components
         public override string Name => "Ranged Attack";
         public override string Description => "Deals damage to a single target.";
 
-        [SerializeField] Projectile projectilePrefab;
+        static AssetLoader<Projectile> projectileLoader;
+
         [SerializeField] float attackSpeed = 1;
         [SerializeField] float projectileSpeed = 5;
 
@@ -36,7 +38,9 @@ namespace WSP.Units.Components
                 yield return null;
             }
 
-            var projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            projectileLoader ??= new AssetLoader<Projectile>(Constants.VfxBundle, "Default Projectile");
+            var prefab = projectileLoader.LoadAsset("Default Projectile");
+            var projectile = Instantiate(prefab, transform.position, Quaternion.identity);
             projectile.OnProjectileHit += () => { OnProjectileHit(attacker, target); };
             projectile.Fire(GameManager.CurrentLevel.Map.GetWorldPosition(target.GridPosition), projectileSpeed);
         }

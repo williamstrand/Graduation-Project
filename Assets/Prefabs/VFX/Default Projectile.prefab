@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7272905034444005586}
   - component: {fileID: 7436274476320897763}
   m_Layer: 0
-  m_Name: Ranger Projectile
+  m_Name: Default Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

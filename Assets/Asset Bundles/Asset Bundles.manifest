@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3472892314
+CRC: 3566226395
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -7,7 +7,8 @@ AssetBundleManifest:
       Dependencies: {}
     Info_1:
       Name: vfx
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: icons
     Info_2:
       Name: level
       Dependencies: {}

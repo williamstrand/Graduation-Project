@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 974716931
+CRC: 1480027215
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 72ebabe42f75f82d7437da4e05aa9c1c
+    Hash: af4937b7287ea7e5a3a0bc253d5560be
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 637be48a0fe27287a94c147655f42632
+    Hash: 427ceeafb5714231f464c88b5a822fe3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 72ebabe42f75f82d7437da4e05aa9c1c
+    Hash: af4937b7287ea7e5a3a0bc253d5560be
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -29,6 +29,8 @@ ClassTypes:
 - Class: 95
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 5f368adf18134ec2981ae0b2429651f7, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 8cd4ecd7965a42e99d5b20e2897e5009, type: 3}
 - Class: 115
   Script: {instanceID: 0}
@@ -38,6 +40,9 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/Prefabs/VFX/Default Projectile.prefab
+- Assets/Prefabs/VFX/Fireball Projectile.prefab
 - Assets/Prefabs/VFX/Arcane Blast VFX.prefab
 - Assets/Prefabs/VFX/Blast VFX.prefab
-Dependencies: []
+Dependencies:
+- P:/Unity/Projects/Graduation Project/Assets/Asset Bundles/icons

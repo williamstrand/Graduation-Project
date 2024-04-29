@@ -8,7 +8,5 @@ namespace Utility
         public const string IconBundle = "icons";
         public const string VfxBundle = "vfx";
         public const string LevelBundle = "level";
-
-
     }
 }
