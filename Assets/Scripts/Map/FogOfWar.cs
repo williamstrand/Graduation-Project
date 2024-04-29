@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Utility;
 using WSP.Map.Pathfinding;
@@ -38,6 +37,8 @@ namespace WSP.Map
                 {
                     Remove(neighbours[i]);
 
+                    if (GameManager.CurrentLevel.Map.GetValue(neighbours[i]) == Pathfinding.Map.Wall) continue;
+
                     worldPosition = GameManager.CurrentLevel.Map.GetWorldPosition(neighbours[i]);
                     fogTile = GetFromPool();
                     fogTile.transform.position = worldPosition;
@@ -63,13 +64,6 @@ namespace WSP.Map
 
         public void SetArea(Pathfinding.Map map, Vector2Int position, int radius, bool visible)
         {
-            var keys = found.ToList();
-
-            for (var i = 0; i < keys.Count; i++)
-            {
-                Set(keys[i], false);
-            }
-
             var fill = Pathfinder.FloodFill(map, position, radius);
 
             for (var i = 0; i < fill.Length; i++)

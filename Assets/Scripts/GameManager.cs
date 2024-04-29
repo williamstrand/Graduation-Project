@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Tilemaps;
 using WSP.Camera;
 using WSP.Map;
 using WSP.Ui;
@@ -19,7 +20,7 @@ namespace WSP
 
         Action onTurnEnd;
 
-        [SerializeField] GameObject square;
+        [SerializeField] TileBase wall;
         [SerializeField] GameObject ground;
         [SerializeField] Exit exitPrefab;
         Transform mapParent;
@@ -35,6 +36,8 @@ namespace WSP
         Unit playerUnit;
         [SerializeField] UiManager uiManager;
         [SerializeField] FogOfWar fogOfWar;
+
+        [SerializeField] Tilemap tilemap;
 
         void Awake()
         {
@@ -95,7 +98,8 @@ namespace WSP
                             break;
 
                         case Map.Pathfinding.Map.Wall:
-                            Instantiate(square, map.GetWorldPosition(x, y), Quaternion.identity, mapParent);
+                            tilemap.SetTile(new Vector3Int(x, y), wall);
+                            Instantiate(ground, map.GetWorldPosition(x, y), Quaternion.identity, mapParent);
                             break;
                     }
 
