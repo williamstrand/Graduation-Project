@@ -114,7 +114,7 @@ namespace WSP.Map
         {
             for (var i = 0; i < Objects.Count; i++)
             {
-                if (Objects[i] == Player.Unit) continue;
+                if (ReferenceEquals(Objects[i], Player.Unit)) continue;
 
                 Objects[i].Destroy();
             }
