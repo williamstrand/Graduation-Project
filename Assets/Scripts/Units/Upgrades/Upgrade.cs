@@ -8,6 +8,6 @@ namespace WSP.Units.Upgrades
         public virtual string Name => GetType().Name;
         public abstract string Description { get; }
 
-        public abstract void Apply(IUnit target);
+        public abstract void Apply(Unit target);
     }
 }

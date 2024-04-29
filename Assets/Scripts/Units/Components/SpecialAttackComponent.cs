@@ -11,11 +11,11 @@ namespace WSP.Units.Components
 
         [SerializeField] int maxSpecialAttacks = 4;
 
-        IUnit unit;
+        Unit unit;
 
         void Awake()
         {
-            unit = GetComponent<IUnit>();
+            unit = GetComponent<Unit>();
             SpecialAttacks = new IAction[maxSpecialAttacks];
         }
 

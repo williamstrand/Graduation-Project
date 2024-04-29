@@ -26,7 +26,7 @@ namespace WSP.Units.SpecialAttacks
         protected static AssetLoader<VfxObject> VfxLoader { get; } = new(Constants.VfxBundle);
         static AssetLoader<Sprite> IconLoader { get; } = new(Constants.IconBundle, Constants.EmptyIcon);
 
-        public virtual bool StartAction(IUnit origin, Vector2Int target, bool visible)
+        public virtual bool StartAction(Unit origin, Vector2Int target, bool visible)
         {
             if (CooldownRemaining > 0) return false;
 
@@ -36,7 +36,7 @@ namespace WSP.Units.SpecialAttacks
             return success;
         }
 
-        protected abstract bool ExecuteAction(IUnit origin, Vector2Int target);
+        protected abstract bool ExecuteAction(Unit origin, Vector2Int target);
 
         public bool IsInRange(Vector2Int origin, Vector2Int target)
         {

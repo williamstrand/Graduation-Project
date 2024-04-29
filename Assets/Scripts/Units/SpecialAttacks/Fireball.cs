@@ -19,7 +19,7 @@ namespace WSP.Units.SpecialAttacks
 
         VfxObject FireballVFX => VfxLoader.LoadAsset("Blast VFX");
 
-        protected override bool ExecuteAction(IUnit origin, Vector2Int target)
+        protected override bool ExecuteAction(Unit origin, Vector2Int target)
         {
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
             if (targetUnit == null) return false;

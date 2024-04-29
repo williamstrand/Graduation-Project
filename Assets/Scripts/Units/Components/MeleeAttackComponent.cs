@@ -12,7 +12,7 @@ namespace WSP.Units.Components
         [SerializeField] Transform sprite;
         [SerializeField] float attackSpeed = 1;
 
-        public override bool StartAction(IUnit attacker, Vector2Int target, bool visible)
+        public override bool StartAction(Unit attacker, Vector2Int target, bool visible)
         {
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
             if (targetUnit == null) return false;
@@ -23,7 +23,7 @@ namespace WSP.Units.Components
             return true;
         }
 
-        IEnumerator AttackCoroutine(IUnit attacker, IUnit target)
+        IEnumerator AttackCoroutine(Unit attacker, Unit target)
         {
             float timer = 0;
             var originalPosition = sprite.position;

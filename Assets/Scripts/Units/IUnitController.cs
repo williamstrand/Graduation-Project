@@ -6,11 +6,11 @@ namespace WSP.Units
     {
         Action OnTurnStart { get; set; }
         Action OnTurnEnd { get; set; }
-        IUnit Unit { get; }
+        Unit Unit { get; }
         bool IsTurn { get; set; }
 
         void TurnStart();
-        void SetUnit(IUnit unit);
+        void SetUnit(Unit unit);
         bool StartAction(ActionContext action);
         void Destroy();
     }

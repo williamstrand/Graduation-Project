@@ -19,7 +19,7 @@ namespace WSP.Units.SpecialAttacks
         public override string Description => "Deals " + Damage + " damage to all enemies in a " + Mathf.FloorToInt((float)Radius / 2) + " tile radius.";
         public override int Cooldown { get; } = 4;
 
-        protected override bool ExecuteAction(IUnit origin, Vector2Int target)
+        protected override bool ExecuteAction(Unit origin, Vector2Int target)
         {
             ActionInProgress = true;
             GameManager.ExecuteCoroutine(ArcaneExplosionCoroutine(origin.GridPosition));
@@ -50,7 +50,7 @@ namespace WSP.Units.SpecialAttacks
             OnTurnOver?.Invoke();
         }
 
-        void DamageUnit(IUnit unit)
+        void DamageUnit(Unit unit)
         {
             unit.Damage(Damage);
         }

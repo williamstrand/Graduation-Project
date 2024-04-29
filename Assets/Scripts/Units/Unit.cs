@@ -1,15 +1,16 @@
 ﻿using System;
 using UnityEngine;
+using WSP.Map;
 using WSP.Units.Components;
 
 namespace WSP.Units
 {
     [RequireComponent(typeof(MovementComponent), typeof(AttackComponent))]
     [RequireComponent(typeof(InventoryComponent), typeof(SpecialAttackComponent))]
-    public class Unit : MonoBehaviour, IUnit
+    public class Unit : MonoBehaviour, ILevelObject
     {
         public Action OnDeath { get; set; }
-        public Action<IUnit> OnTargetKilled { get; set; }
+        public Action<Unit> OnTargetKilled { get; set; }
         public Action<float, float> OnHealthChanged { get; set; }
         public Action<IAction> OnActionFinished { get; set; }
         public Action<Vector2Int> OnMove { get; set; }

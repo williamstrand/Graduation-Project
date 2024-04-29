@@ -8,6 +8,6 @@ namespace WSP.Units.Upgrades
         string Name { get; }
         string Description { get; }
 
-        void Apply(IUnit target);
+        void Apply(Unit target);
     }
 }

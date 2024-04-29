@@ -12,7 +12,7 @@ namespace WSP.Items
         public override int Weight => 75;
         public override TargetingType TargetingType => new SelfTargeting();
 
-        protected override bool ActivateEffect(IUnit origin, Vector2Int target)
+        protected override bool ActivateEffect(Unit origin, Vector2Int target)
         {
             origin.Heal(HealAmount);
             ActionInProgress = false;

@@ -13,7 +13,7 @@ namespace WSP.Units.Components
         [SerializeField] float attackSpeed = 1;
         [SerializeField] float projectileSpeed = 5;
 
-        public override bool StartAction(IUnit attacker, Vector2Int target, bool visible)
+        public override bool StartAction(Unit attacker, Vector2Int target, bool visible)
         {
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
             if (targetUnit == null) return false;
@@ -27,7 +27,7 @@ namespace WSP.Units.Components
             return true;
         }
 
-        IEnumerator AttackCoroutine(IUnit attacker, IUnit target)
+        IEnumerator AttackCoroutine(Unit attacker, Unit target)
         {
             var timer = 0f;
             while (timer < 1)
@@ -41,7 +41,7 @@ namespace WSP.Units.Components
             projectile.Fire(GameManager.CurrentLevel.Map.GetWorldPosition(target.GridPosition), projectileSpeed);
         }
 
-        void OnProjectileHit(IUnit attacker, IUnit target)
+        void OnProjectileHit(Unit attacker, Unit target)
         {
             var targetKilled = target.Damage(Mathf.RoundToInt(attacker.Stats.Attack));
 

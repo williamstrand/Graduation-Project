@@ -34,12 +34,12 @@ namespace WSP.Items
             Destroy(gameObject);
         }
 
-        public bool CanInteract(IUnit unit)
+        public bool CanInteract(Unit unit)
         {
             return true;
         }
 
-        public bool Interact(IUnit unit)
+        public bool Interact(Unit unit)
         {
             if (!unit.Inventory.AddItem(item)) return false;
 

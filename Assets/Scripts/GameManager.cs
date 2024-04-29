@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WSP.Camera;
 using WSP.Map;
 using WSP.Ui;
@@ -30,7 +31,8 @@ namespace WSP
         PlayerController playerController;
         [SerializeField] PlayerController playerPrefab;
         [SerializeField] UnitController enemyPrefab;
-        [SerializeField] Unit playerUnit;
+        [FormerlySerializedAs("playerUnitt")][SerializeField]
+        Unit playerUnit;
         [SerializeField] UiManager uiManager;
         [SerializeField] FogOfWar fogOfWar;
 

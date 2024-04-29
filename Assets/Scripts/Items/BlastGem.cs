@@ -21,7 +21,7 @@ namespace WSP.Items
 
         public override int Range => 4;
 
-        protected override bool ActivateEffect(IUnit origin, Vector2Int target)
+        protected override bool ActivateEffect(Unit origin, Vector2Int target)
         {
             ActionInProgress = true;
             GameManager.ExecuteCoroutine(BlastCoroutine(target));
@@ -55,7 +55,7 @@ namespace WSP.Items
             OnTurnOver?.Invoke();
         }
 
-        void DamageUnit(IUnit unit)
+        void DamageUnit(Unit unit)
         {
             unit.Damage(Damage);
         }

@@ -21,7 +21,7 @@ namespace WSP.Units.Player
 
         class ActionTarget
         {
-            public IUnit TargetUnit;
+            public Unit TargetUnit;
             public Vector2Int TargetPosition;
         }
 
@@ -141,7 +141,7 @@ namespace WSP.Units.Player
             TargetingComponent.StartActionTargeting(Unit.SpecialAttack[index]);
         }
 
-        public override void SetUnit(IUnit unit)
+        public override void SetUnit(Unit unit)
         {
             if (unit == null) return;
 
@@ -157,7 +157,7 @@ namespace WSP.Units.Player
             Unit.OnHealthChanged += UnitHealthChanged;
         }
 
-        void UnitTargetKilled(IUnit target)
+        void UnitTargetKilled(Unit target)
         {
             currentTarget = null;
         }

@@ -7,7 +7,7 @@ namespace WSP.Map
     {
         public Action OnInteract { get; set; }
 
-        bool CanInteract(IUnit unit);
-        bool Interact(IUnit unit);
+        bool CanInteract(Unit unit);
+        bool Interact(Unit unit);
     }
 }

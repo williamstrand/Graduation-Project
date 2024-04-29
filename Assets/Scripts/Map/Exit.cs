@@ -23,12 +23,12 @@ namespace WSP.Map
             GridPosition = GameManager.CurrentLevel.Map.GetGridPosition(transform.position);
         }
 
-        public bool CanInteract(IUnit unit)
+        public bool CanInteract(Unit unit)
         {
             return unit == GameManager.CurrentLevel.Player.Unit;
         }
 
-        public bool Interact(IUnit unit)
+        public bool Interact(Unit unit)
         {
             if (!CanInteract(unit)) return false;
 

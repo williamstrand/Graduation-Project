@@ -25,7 +25,7 @@ namespace WSP.Units.Components
 
         [SerializeField] float moveSpeed = 5f;
 
-        public bool StartAction(IUnit origin, Vector2Int target, bool visible)
+        public bool StartAction(Unit origin, Vector2Int target, bool visible)
         {
             if (target == GridPosition) return false;
             if (GameManager.CurrentLevel.Map.GetValue(target) == Map.Pathfinding.Map.Wall) return false;

@@ -30,7 +30,7 @@ namespace WSP.Items
 
         public virtual int Range => -1;
 
-        public bool StartAction(IUnit origin, Vector2Int target, bool visible)
+        public bool StartAction(Unit origin, Vector2Int target, bool visible)
         {
             if (ActionInProgress) return false;
 
@@ -46,6 +46,6 @@ namespace WSP.Items
             return Range <= 0 || Pathfinder.Distance(origin, target) <= Range;
         }
 
-        protected abstract bool ActivateEffect(IUnit origin, Vector2Int target);
+        protected abstract bool ActivateEffect(Unit origin, Vector2Int target);
     }
 }

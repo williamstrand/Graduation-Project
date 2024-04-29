@@ -52,7 +52,7 @@ namespace WSP.Map
             return false;
         }
 
-        public bool IsOccupied(Vector2Int position, out IUnit unit)
+        public bool IsOccupied(Vector2Int position, out Unit unit)
         {
             for (var i = 0; i < Units.Count; i++)
             {
@@ -76,7 +76,7 @@ namespace WSP.Map
             return null;
         }
 
-        public IUnit GetUnitAt(Vector2Int position)
+        public Unit GetUnitAt(Vector2Int position)
         {
             for (var i = 0; i < Units.Count; i++)
             {

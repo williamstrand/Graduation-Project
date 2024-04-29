@@ -7,10 +7,10 @@ namespace WSP.Units
     {
         public Action OnTurnStart { get; set; }
         public Action OnTurnEnd { get; set; }
-        public IUnit Unit { get; protected set; }
+        public Unit Unit { get; protected set; }
         public bool IsTurn { get; set; }
 
-        public virtual void SetUnit(IUnit unit)
+        public virtual void SetUnit(Unit unit)
         {
             if (Unit != null)
             {

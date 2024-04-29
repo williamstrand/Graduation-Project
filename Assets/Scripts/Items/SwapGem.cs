@@ -14,7 +14,7 @@ namespace WSP.Items
 
         public override int Range => 5;
 
-        protected override bool ActivateEffect(IUnit origin, Vector2Int target)
+        protected override bool ActivateEffect(Unit origin, Vector2Int target)
         {
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
             if (targetUnit == null) return false;
@@ -24,7 +24,7 @@ namespace WSP.Items
             return true;
         }
 
-        IEnumerator SwapCoroutine(IUnit origin, IUnit target)
+        IEnumerator SwapCoroutine(Unit origin, Unit target)
         {
             var originPosition = origin.Movement.GridPosition;
             var targetPosition = target.Movement.GridPosition;
