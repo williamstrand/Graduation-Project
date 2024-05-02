@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2890767404
+CRC: 963344018
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bc8cde503466547348176bbfdfc91eb2
+    Hash: 4ec9e9d944a3043368008bc8a6582364
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: bc8cde503466547348176bbfdfc91eb2
+    Hash: 4ec9e9d944a3043368008bc8a6582364
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -24,4 +24,5 @@ Assets:
 - Assets/Sprites/Icons/Fireball.png
 - Assets/Sprites/Icons/Swap Gem.png
 - Assets/Sprites/Icons/Blast Gem.png
+- Assets/Sprites/Icons/Arcane Explosion.png
 Dependencies: []
