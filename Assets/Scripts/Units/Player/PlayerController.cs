@@ -35,6 +35,7 @@ namespace WSP.Units.Player
             Unit.SpecialAttack.SetSpecialAttack(0, new Fireball());
             Unit.SpecialAttack.SetSpecialAttack(1, new ArcaneExplosion());
             Unit.SpecialAttack.SetSpecialAttack(2, new Whirlwind());
+            Unit.SpecialAttack.SetSpecialAttack(3, new IceSpike());
             Unit.Inventory.AddItem(new BlastGem());
         }
 

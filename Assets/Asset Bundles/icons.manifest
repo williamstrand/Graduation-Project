@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3840965516
+CRC: 3851472910
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6b9d526c409a039d2a7c8e0dd968475f
+    Hash: b41d80363d103695a7856c777e9e8c69
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6b9d526c409a039d2a7c8e0dd968475f
+    Hash: b41d80363d103695a7856c777e9e8c69
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -22,6 +22,7 @@ Assets:
 - Assets/Sprites/Icons/Empty Icon.png
 - Assets/Sprites/Icons/Items/Golden Apple.png
 - Assets/Sprites/Icons/Special Attacks/Fireball.png
+- Assets/Sprites/Icons/Special Attacks/Ice Spike.png
 - Assets/Sprites/Icons/Items/Swap Gem.png
 - Assets/Sprites/Icons/Items/Blast Gem.png
 - Assets/Sprites/Icons/Special Attacks/Whirlwind.png

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 95489436
+CRC: 3954873915
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4325840e2c715b6fa45f593f529967f8
+    Hash: 9ce0a13e9171248c88c2b5960db9a324
   TypeTreeHash:
     serializedVersion: 2
     Hash: 427ceeafb5714231f464c88b5a822fe3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 4325840e2c715b6fa45f593f529967f8
+    Hash: 9ce0a13e9171248c88c2b5960db9a324
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -44,6 +44,7 @@ Assets:
 - Assets/Prefabs/VFX/Default Projectile.prefab
 - Assets/Prefabs/VFX/Fireball Projectile.prefab
 - Assets/Prefabs/VFX/Arcane Blast VFX.prefab
+- Assets/Prefabs/VFX/Ice Spike VFX.prefab
 - Assets/Prefabs/VFX/Blast VFX.prefab
 Dependencies:
 - P:/Unity/Projects/Graduation Project/Assets/Asset Bundles/icons
