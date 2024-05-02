@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 963344018
+CRC: 3840965516
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4ec9e9d944a3043368008bc8a6582364
+    Hash: 6b9d526c409a039d2a7c8e0dd968475f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 4ec9e9d944a3043368008bc8a6582364
+    Hash: 6b9d526c409a039d2a7c8e0dd968475f
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -18,11 +18,12 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Sprites/Icons/Apple.png
+- Assets/Sprites/Icons/Items/Apple.png
 - Assets/Sprites/Icons/Empty Icon.png
-- Assets/Sprites/Icons/Golden Apple.png
-- Assets/Sprites/Icons/Fireball.png
-- Assets/Sprites/Icons/Swap Gem.png
-- Assets/Sprites/Icons/Blast Gem.png
-- Assets/Sprites/Icons/Arcane Explosion.png
+- Assets/Sprites/Icons/Items/Golden Apple.png
+- Assets/Sprites/Icons/Special Attacks/Fireball.png
+- Assets/Sprites/Icons/Items/Swap Gem.png
+- Assets/Sprites/Icons/Items/Blast Gem.png
+- Assets/Sprites/Icons/Special Attacks/Whirlwind.png
+- Assets/Sprites/Icons/Special Attacks/Arcane Explosion.png
 Dependencies: []

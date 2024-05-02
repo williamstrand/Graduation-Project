@@ -3,7 +3,7 @@
 namespace WSP.Targeting.TargetingTypes
 {
     /// <summary>
-    /// Hits every cell in a square area around the caster.
+    ///     Hits every cell in a square area around the caster.
     /// </summary>
     public class AuraTargeting : AreaTargeting
     {
@@ -11,6 +11,8 @@ namespace WSP.Targeting.TargetingTypes
 
         public override void Target(Vector2Int origin, Vector2Int target)
         {
+            base.Target(origin, target);
+
             TargetingComponent.Reticle.SetPosition(origin);
         }
 
