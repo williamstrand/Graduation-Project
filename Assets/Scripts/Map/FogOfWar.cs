@@ -64,6 +64,12 @@ namespace WSP.Map
 
         public void SetArea(Pathfinding.Map map, Vector2Int position, int radius, bool visible)
         {
+            var foundKeys = new List<Vector2Int>(found);
+            for (var i = 0; i < foundKeys.Count; i++)
+            {
+                Set(foundKeys[i], false);
+            }
+
             var fill = Pathfinder.FloodFill(map, position, radius);
 
             for (var i = 0; i < fill.Length; i++)
