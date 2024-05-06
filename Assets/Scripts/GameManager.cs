@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using WSP.Camera;
 using WSP.Map;
@@ -16,7 +14,6 @@ namespace WSP
     public class GameManager : MonoBehaviour
     {
         public static Level CurrentLevel { get; private set; }
-        static GameManager instance;
 
         Action onTurnEnd;
 
@@ -32,8 +29,7 @@ namespace WSP
         PlayerController playerController;
         [SerializeField] PlayerController playerPrefab;
         [SerializeField] UnitController enemyPrefab;
-        [FormerlySerializedAs("playerUnitt")][SerializeField]
-        Unit playerUnit;
+        [SerializeField] Unit playerUnit;
         [SerializeField] UiManager uiManager;
         [SerializeField] FogOfWar fogOfWar;
 
@@ -41,7 +37,6 @@ namespace WSP
 
         void Awake()
         {
-            instance = this;
             mapParent = new GameObject("Map").transform;
         }
 
@@ -166,11 +161,6 @@ namespace WSP
                 var isVisible = !fogOfWar.IsHidden(levelObject.GridPosition);
                 levelObject.SetVisibility(isVisible);
             }
-        }
-
-        public static Coroutine ExecuteCoroutine(IEnumerator routine)
-        {
-            return instance.StartCoroutine(routine);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace WSP.Units.SpecialAttacks
         protected override bool ExecuteAction(Unit origin, Vector2Int target)
         {
             ActionInProgress = true;
-            GameManager.ExecuteCoroutine(IceSpikeCoroutine(origin.GridPosition, target));
+            origin.StartCoroutine(IceSpikeCoroutine(origin.GridPosition, target));
             return true;
         }
 

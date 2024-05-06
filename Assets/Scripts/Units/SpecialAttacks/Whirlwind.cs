@@ -22,7 +22,7 @@ namespace WSP.Units.SpecialAttacks
         protected override bool ExecuteAction(Unit origin, Vector2Int target)
         {
             ActionInProgress = true;
-            GameManager.ExecuteCoroutine(WhirlwindCoroutine(origin.GridPosition));
+            origin.StartCoroutine(WhirlwindCoroutine(origin.GridPosition));
             return true;
         }
 

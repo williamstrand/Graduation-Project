@@ -28,7 +28,7 @@ namespace WSP.Units.SpecialAttacks
             if (targetUnit == null) return false;
 
             ActionInProgress = true;
-            GameManager.ExecuteCoroutine(FireballCoroutine(origin.GridPosition, target));
+            origin.StartCoroutine(FireballCoroutine(origin.GridPosition, target));
             return true;
         }
 

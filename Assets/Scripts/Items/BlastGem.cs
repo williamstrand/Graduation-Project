@@ -24,7 +24,7 @@ namespace WSP.Items
         protected override bool ActivateEffect(Unit origin, Vector2Int target)
         {
             ActionInProgress = true;
-            GameManager.ExecuteCoroutine(BlastCoroutine(target));
+            origin.StartCoroutine(BlastCoroutine(target));
             return true;
         }
 

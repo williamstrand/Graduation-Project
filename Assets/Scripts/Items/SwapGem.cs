@@ -19,7 +19,7 @@ namespace WSP.Items
             var targetUnit = GameManager.CurrentLevel.GetUnitAt(target);
             if (targetUnit == null) return false;
 
-            GameManager.ExecuteCoroutine(SwapCoroutine(origin, targetUnit));
+            origin.StartCoroutine(SwapCoroutine(origin, targetUnit));
             ActionInProgress = true;
             return true;
         }

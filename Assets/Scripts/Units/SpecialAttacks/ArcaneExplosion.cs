@@ -22,7 +22,7 @@ namespace WSP.Units.SpecialAttacks
         protected override bool ExecuteAction(Unit origin, Vector2Int target)
         {
             ActionInProgress = true;
-            GameManager.ExecuteCoroutine(ArcaneExplosionCoroutine(origin.GridPosition));
+            origin.StartCoroutine(ArcaneExplosionCoroutine(origin.GridPosition));
             return true;
         }
 
