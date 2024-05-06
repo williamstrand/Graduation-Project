@@ -12,7 +12,7 @@ namespace WSP.Units
         public Action OnDeath { get; set; }
         public Action<Unit> OnTargetKilled { get; set; }
         public Action<float, float> OnHealthChanged { get; set; }
-        public Action<IAction> OnActionFinished { get; set; }
+        public Action<IAction, Unit> OnActionFinished { get; set; }
         public Action<Vector2Int> OnMove { get; set; }
 
         public Vector2Int GridPosition => Movement.GridPosition;
@@ -87,7 +87,7 @@ namespace WSP.Units
         {
             if (currentAction == null) return;
 
-            OnActionFinished?.Invoke(currentAction);
+            OnActionFinished?.Invoke(currentAction, this);
             currentAction.OnTurnOver -= ActionSuccess;
         }
 

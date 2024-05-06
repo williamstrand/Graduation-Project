@@ -51,13 +51,6 @@ namespace WSP.Targeting
 
         public void StartActionTargeting(IAction action)
         {
-            if (action.TargetingType is SelfTargeting)
-            {
-                var actionContext = new ActionContext(action, Vector2Int.zero);
-                playerController.StartAction(actionContext);
-                return;
-            }
-
             CurrentAction = action;
 
             InputHandler.OnTarget += ExecuteAction;

@@ -36,7 +36,7 @@ namespace WSP.Units.Components
             OnSpecialAttacksChanged?.Invoke(SpecialAttacks);
         }
 
-        void PlayerActionFinished(IAction action)
+        void PlayerActionFinished(IAction action, Unit _)
         {
             if (action is MovementComponent) return;
 

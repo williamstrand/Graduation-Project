@@ -28,7 +28,7 @@ namespace WSP.Units
             OnTurnStart?.Invoke();
         }
 
-        void ActionFinished(IAction action)
+        void ActionFinished(IAction action, Unit unit)
         {
             EndTurn();
         }

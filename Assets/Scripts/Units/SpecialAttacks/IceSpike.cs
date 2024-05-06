@@ -1,12 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using WSP.Targeting.TargetingTypes;
 using WSP.VFX;
+using Object = UnityEngine.Object;
 
 namespace WSP.Units.SpecialAttacks
 {
     public class IceSpike : SpecialAttack
     {
+        public override string Name => "Ice Spike";
         public override TargetingType TargetingType { get; } = new LineTargeting(10);
         public override string Description => "Deals " + Damage + " damage to the first enemy in a line.";
         public override int Cooldown { get; } = 5;
@@ -29,10 +32,9 @@ namespace WSP.Units.SpecialAttacks
             var targets = TargetingType.GetTargets(origin, target);
             var length = targets.Length;
             var diff = target - origin;
-            var direction = new Vector2Int(diff.x == 0 ? 0 : diff.x / Mathf.Abs(diff.x), diff.y == 0 ? 0 : diff.y / Mathf.Abs(diff.y));
+            var direction = new Vector2Int(Math.Sign(diff.x), Math.Sign(diff.y));
             var iceSpike = Object.Instantiate(iceSpikePrefab, (Vector2)origin, Quaternion.identity);
             iceSpike.transform.right = (Vector2)direction;
-
 
             for (var i = 0; i < length - 1; i++)
             {
