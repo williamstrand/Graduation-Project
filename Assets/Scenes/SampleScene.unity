@@ -707,6 +707,10 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 977064018}
+    - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
+      propertyPath: exitMenuPrefab
+      value: 
+      objectReference: {fileID: 189389120334642312, guid: 3754dbae0a5521f4489f2a51664c49c6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

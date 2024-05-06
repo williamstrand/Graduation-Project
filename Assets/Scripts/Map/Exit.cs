@@ -32,7 +32,6 @@ namespace WSP.Map
         {
             if (!CanInteract(unit)) return false;
 
-            Debug.Log("Exit interacted with player.");
             OnInteract?.Invoke();
             return true;
         }

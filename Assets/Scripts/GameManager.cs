@@ -3,8 +3,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using WSP.Camera;
+using WSP.Input;
 using WSP.Map;
 using WSP.Ui;
+using WSP.Ui.Exit;
 using WSP.Units;
 using WSP.Units.Enemies;
 using WSP.Units.Player;
@@ -34,6 +36,8 @@ namespace WSP
         [SerializeField] FogOfWar fogOfWar;
 
         [SerializeField] Tilemap tilemap;
+
+        [SerializeField] ExitMenu exitMenuPrefab;
 
         void Awake()
         {
@@ -81,6 +85,8 @@ namespace WSP
 
             CurrentLevel?.Clean();
             CurrentLevel = new Level(map);
+            tilemap.ClearAllTiles();
+            fogOfWar.Clear();
 
             for (var x = 0; x < map.Width; x++)
             {
@@ -115,10 +121,16 @@ namespace WSP
 
             playerController.Unit.Movement.SetPosition(CurrentLevel.Map.StartRoom.Center);
             fogOfWar.SetArea(map, CurrentLevel.Map.StartRoom.Center, 4, true);
+            playerController.OnTurnStart = null;
+            playerController.OnTurnEnd = null;
             playerController.OnTurnStart += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, 4, true);
             playerController.OnTurnEnd += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, 4, true);
             CurrentLevel.SetPlayer(playerController);
             CameraController.ForceSetPosition(playerController.Unit.GridPosition);
+
+            StartTurn(playerController);
+
+            InputHandler.SetGameControlsEnabled(true);
         }
 
         void StartTurn(IUnitController unitController)
@@ -150,7 +162,10 @@ namespace WSP
 
         void ExitLevel()
         {
-            GenerateLevel();
+            InputHandler.SetGameControlsEnabled(false);
+            var exitMenu = Instantiate(exitMenuPrefab, UiManager.Canvas.transform);
+            exitMenu.OnExit += GenerateLevel;
+            exitMenu.Open();
         }
 
         void UpdateVisibility()

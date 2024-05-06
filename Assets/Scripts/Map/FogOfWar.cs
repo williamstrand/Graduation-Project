@@ -90,6 +90,7 @@ namespace WSP.Map
 
             fogTile = pool.Dequeue();
             fogTile.gameObject.SetActive(true);
+            fogTile.color = FullFog;
             return fogTile;
         }
 
@@ -110,6 +111,19 @@ namespace WSP.Map
         public bool IsFound(Vector2Int position)
         {
             return found.Contains(position);
+        }
+
+        public void Clear()
+        {
+            while (fog.Count > 0)
+            {
+                var keys = new List<Vector2Int>(fog.Keys);
+                Remove(keys[0]);
+            }
+
+            fog.Clear();
+            found.Clear();
+            OnFogChange = null;
         }
     }
 }
