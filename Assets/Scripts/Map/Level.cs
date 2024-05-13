@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using WSP.Map.Pathfinding;
 using WSP.Units;
@@ -8,6 +9,8 @@ namespace WSP.Map
 {
     public class Level
     {
+        public Action OnExit { get; set; }
+
         public Pathfinding.Map Map { get; }
         public UnitQueue Units { get; }
         public PlayerController Player { get; private set; }
@@ -26,6 +29,11 @@ namespace WSP.Map
         {
             Player = player;
             AddUnit(Player);
+        }
+
+        public void ExitLevel()
+        {
+            OnExit?.Invoke();
         }
 
         public bool FindPath(Vector2Int start, Vector2Int target, out Path path)

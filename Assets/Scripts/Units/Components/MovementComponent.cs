@@ -78,11 +78,23 @@ namespace WSP.Units.Components
             if (interact != null)
             {
                 interact.Interact(GameManager.CurrentLevel.Player.Unit);
-                OnTurnOver?.Invoke();
+                interact.OnInteract += OnInteract;
+            }
+            else
+            {
+                ActionInProgress = false;
             }
 
-            ActionInProgress = false;
+            yield break;
+
+            void OnInteract()
+            {
+                ActionInProgress = false;
+                interact.OnInteract -= OnInteract;
+                OnTurnOver?.Invoke();
+            }
         }
+
 
         public bool IsInRange(Vector2Int origin, Vector2Int target)
         {

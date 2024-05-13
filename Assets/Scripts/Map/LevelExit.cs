@@ -1,10 +1,13 @@
 using System;
 using UnityEngine;
+using WSP.Input;
+using WSP.Ui;
+using WSP.Ui.Exit;
 using WSP.Units;
 
 namespace WSP.Map
 {
-    public class Exit : MonoBehaviour, IInteractable
+    public class LevelExit : MonoBehaviour, IInteractable
     {
         public Action OnInteract { get; set; }
 
@@ -12,6 +15,8 @@ namespace WSP.Map
 
         SpriteRenderer spriteRenderer;
         public bool IsVisible { get; private set; } = true;
+
+        [SerializeField] ExitMenu exitMenuPrefab;
 
         void Awake()
         {
@@ -32,8 +37,17 @@ namespace WSP.Map
         {
             if (!CanInteract(unit)) return false;
 
-            OnInteract?.Invoke();
+            InputHandler.SetGameControlsEnabled(false);
+            var exitMenu = Instantiate(exitMenuPrefab, UiManager.Canvas.transform);
+            exitMenu.OnExit += Exit;
+            exitMenu.Open();
             return true;
+        }
+
+        void Exit()
+        {
+            OnInteract?.Invoke();
+            GameManager.CurrentLevel.ExitLevel();
         }
 
         public void SetVisibility(bool visible)

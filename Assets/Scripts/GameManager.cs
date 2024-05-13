@@ -6,7 +6,6 @@ using WSP.Camera;
 using WSP.Input;
 using WSP.Map;
 using WSP.Ui;
-using WSP.Ui.Exit;
 using WSP.Units;
 using WSP.Units.Enemies;
 using WSP.Units.Player;
@@ -21,7 +20,7 @@ namespace WSP
 
         [SerializeField] TileBase wall;
         [SerializeField] GameObject ground;
-        [SerializeField] Exit exitPrefab;
+        [SerializeField] LevelExit levelExitPrefab;
         Transform mapParent;
         MapGenerator mapGenerator;
         EnemySpawner enemySpawner;
@@ -36,8 +35,6 @@ namespace WSP
         [SerializeField] FogOfWar fogOfWar;
 
         [SerializeField] Tilemap tilemap;
-
-        [SerializeField] ExitMenu exitMenuPrefab;
 
         void Awake()
         {
@@ -85,6 +82,7 @@ namespace WSP
 
             CurrentLevel?.Clean();
             CurrentLevel = new Level(map);
+            CurrentLevel.OnExit += GenerateLevel;
             tilemap.ClearAllTiles();
             fogOfWar.Clear();
 
@@ -114,17 +112,17 @@ namespace WSP
             onTurnEnd += enemySpawner.SpawnEnemies;
 
             var exitPosition = map.GetWorldPosition(map.ExitRoom.GetRandomPosition());
-            var exit = Instantiate(exitPrefab, exitPosition, Quaternion.identity, mapParent);
-            exit.OnInteract += ExitLevel;
+            var exit = Instantiate(levelExitPrefab, exitPosition, Quaternion.identity, mapParent);
             CurrentLevel.AddInteractable(exit);
             CurrentLevel.FogOfWar = fogOfWar;
 
             playerController.Unit.Movement.SetPosition(CurrentLevel.Map.StartRoom.Center);
-            fogOfWar.SetArea(map, CurrentLevel.Map.StartRoom.Center, 4, true);
             playerController.OnTurnStart = null;
             playerController.OnTurnEnd = null;
-            playerController.OnTurnStart += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, 4, true);
-            playerController.OnTurnEnd += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, 4, true);
+            
+            const int playerVisibility = 4;
+            playerController.OnTurnStart += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, playerVisibility, true);
+            playerController.OnTurnEnd += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, playerVisibility, true);
             CurrentLevel.SetPlayer(playerController);
             CameraController.ForceSetPosition(playerController.Unit.GridPosition);
 
@@ -158,14 +156,6 @@ namespace WSP
             CurrentLevel.Units.Enqueue(CurrentLevel.Units.Dequeue());
 
             StartTurn(CurrentLevel.Units.Peek());
-        }
-
-        void ExitLevel()
-        {
-            InputHandler.SetGameControlsEnabled(false);
-            var exitMenu = Instantiate(exitMenuPrefab, UiManager.Canvas.transform);
-            exitMenu.OnExit += GenerateLevel;
-            exitMenu.Open();
         }
 
         void UpdateVisibility()

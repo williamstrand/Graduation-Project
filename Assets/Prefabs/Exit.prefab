@@ -97,3 +97,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c5b6070b82841dbbea2b7f1cde120ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitMenuPrefab: {fileID: 189389120334642312, guid: 3754dbae0a5521f4489f2a51664c49c6, type: 3}
