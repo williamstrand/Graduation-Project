@@ -6,15 +6,15 @@ namespace WSP.Targeting.TargetingTypes
     {
         public override void Target(Vector2Int origin, Vector2Int target)
         {
-            TargetingComponent.Reticle.SetPosition(origin);
-            TargetingComponent.Reticle.SetColor(TargetingComponent.FriendlyColor);
-            TargetingComponent.Reticle.Enable(true);
-        }
+            base.Target(origin, target);
 
-        public override void StopTarget()
-        {
-            TargetingComponent.Reticle.SetColor(TargetingComponent.NormalColor);
-            TargetingComponent.Reticle.Enable(false);
+            if (!HasChanged) return;
+
+            ReturnAllReticles();
+
+            var reticle = GetReticle();
+            reticle.SetPosition(origin);
+            reticle.SetType(TargetingReticle.ReticleTargetType.Friendly);
         }
 
         public override Vector2Int[] GetTargets(Vector2Int origin, Vector2Int target)

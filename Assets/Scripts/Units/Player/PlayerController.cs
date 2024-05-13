@@ -39,7 +39,7 @@ namespace WSP.Units.Player
             Unit.SpecialAttack.SetSpecialAttack(1, new SludgeBomb());
             Unit.SpecialAttack.SetSpecialAttack(2, new Whirlwind());
             Unit.SpecialAttack.SetSpecialAttack(3, new IceSpike());
-            Unit.Inventory.AddItem(new BlastGem());
+            Unit.Inventory.AddItem(new Apple());
         }
 
         void OnEnable()

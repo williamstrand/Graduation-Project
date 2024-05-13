@@ -14,32 +14,25 @@ namespace WSP.Targeting.TargetingTypes
 
         public override void Target(Vector2Int origin, Vector2Int target)
         {
-            TargetingComponent.Reticle.Enable(true);
+            base.Target(origin, target);
+
+            if (!HasChanged) return;
+
+            ReturnAllReticles();
+
+            if (ShouldHide(origin, target))
+            {
+                StopTarget();
+                return;
+            }
+
             var targets = GetTargets(origin, target);
-            var length = targets.Length;
-            var diff = target - origin;
-            var direction = new Vector2Int(diff.x == 0 ? 0 : diff.x / Mathf.Abs(diff.x), diff.y == 0 ? 0 : diff.y / Mathf.Abs(diff.y));
 
-            var size = direction * new Vector2Int(length, length);
-
-            if (size.x == 0)
+            for (var i = 1; i < targets.Length; i++)
             {
-                size.x = 1;
+                var reticle = GetReticle();
+                reticle.SetPosition(targets[i]);
             }
-
-            if (size.y == 0)
-            {
-                size.y = 1;
-            }
-
-            TargetingComponent.Reticle.SetSize(size);
-            TargetingComponent.Reticle.SetPosition(targets[length / 2]);
-        }
-
-        public override void StopTarget()
-        {
-            TargetingComponent.Reticle.SetSize(new Vector2(1, 1));
-            TargetingComponent.Reticle.Enable(false);
         }
 
         public override Vector2Int[] GetTargets(Vector2Int origin, Vector2Int target)

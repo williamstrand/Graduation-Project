@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4146919286
+CRC: 2408267375
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0b78862967a72d10c41dcd315d4f37c5
+    Hash: 7ff672571bb4785f9f846dfd1140c0db
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8bc0122c99aba33c3bff2809a313de26
+    Hash: b75b95ec47f875bc164e181341b0332a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 0b78862967a72d10c41dcd315d4f37c5
+    Hash: 7ff672571bb4785f9f846dfd1140c0db
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,6 +23,8 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: b3492e1dca1d47f082e85e4ff3e2fac9, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: bdc9e105f8b54ca19253afa62e4bc223, type: 3}
 - Class: 115
   Script: {instanceID: 0}
@@ -33,4 +35,5 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Prefabs/Level/Item Drop.prefab
+- Assets/Prefabs/Level/Target Reticle.prefab
 Dependencies: []

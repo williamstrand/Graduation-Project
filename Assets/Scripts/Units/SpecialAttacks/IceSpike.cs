@@ -22,6 +22,8 @@ namespace WSP.Units.SpecialAttacks
 
         protected override bool ExecuteAction(Unit origin, Vector2Int target)
         {
+            if (origin.GridPosition == target) return false;
+
             ActionInProgress = true;
             origin.StartCoroutine(IceSpikeCoroutine(origin.GridPosition, target));
             return true;

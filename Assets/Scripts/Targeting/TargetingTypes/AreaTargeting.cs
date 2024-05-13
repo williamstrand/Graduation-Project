@@ -15,21 +15,15 @@ namespace WSP.Targeting.TargetingTypes
 
         public override void Target(Vector2Int origin, Vector2Int target)
         {
-            if (ShouldHide(origin, target))
-            {
-                StopTarget();
-                return;
-            }
+            base.Target(origin, target);
 
-            TargetingComponent.Reticle.Enable(true);
-            TargetingComponent.Reticle.SetSize(new Vector2(Width * GameManager.CurrentLevel.Map.CellSize, Height * GameManager.CurrentLevel.Map.CellSize));
-            TargetingComponent.Reticle.SetPosition(target);
-        }
+            if (!HasChanged) return;
 
-        public override void StopTarget()
-        {
-            TargetingComponent.Reticle.SetSize(new Vector2(1, 1));
-            TargetingComponent.Reticle.Enable(false);
+            ReturnAllReticles();
+
+            var reticle = GetReticle();
+            reticle.SetSize(new Vector2(Width * GameManager.CurrentLevel.Map.CellSize, Height * GameManager.CurrentLevel.Map.CellSize));
+            reticle.SetPosition(target);
         }
 
         public override Vector2Int[] GetTargets(Vector2Int origin, Vector2Int target)
@@ -45,6 +39,11 @@ namespace WSP.Targeting.TargetingTypes
             }
 
             return targets;
+        }
+
+        protected override bool ShouldHide(Vector2Int origin, Vector2Int target)
+        {
+            return false;
         }
     }
 }

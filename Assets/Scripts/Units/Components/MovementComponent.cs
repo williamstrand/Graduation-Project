@@ -77,8 +77,8 @@ namespace WSP.Units.Components
 
             if (interact != null)
             {
-                interact.Interact(GameManager.CurrentLevel.Player.Unit);
                 interact.OnInteract += OnInteract;
+                interact.Interact(GameManager.CurrentLevel.Player.Unit);
             }
             else
             {

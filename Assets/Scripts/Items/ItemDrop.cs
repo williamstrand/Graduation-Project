@@ -41,9 +41,10 @@ namespace WSP.Items
 
         public bool Interact(Unit unit)
         {
+            OnInteract?.Invoke();
+
             if (!unit.Inventory.AddItem(item)) return false;
 
-            OnInteract?.Invoke();
             Destroy();
             return true;
         }

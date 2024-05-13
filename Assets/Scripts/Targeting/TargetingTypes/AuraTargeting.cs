@@ -13,13 +13,13 @@ namespace WSP.Targeting.TargetingTypes
         {
             base.Target(origin, target);
 
-            TargetingComponent.Reticle.SetPosition(origin);
-        }
+            if (!HasChanged) return;
 
-        public override void StopTarget()
-        {
-            TargetingComponent.Reticle.SetSize(new Vector2(1, 1));
-            TargetingComponent.Reticle.Enable(false);
+            ReturnAllReticles();
+
+            var reticle = GetReticle();
+            reticle.SetSize(new Vector2(Width * GameManager.CurrentLevel.Map.CellSize, Height * GameManager.CurrentLevel.Map.CellSize));
+            reticle.SetPosition(origin);
         }
 
         public override Vector2Int[] GetTargets(Vector2Int origin, Vector2Int target)
