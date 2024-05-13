@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using WSP.Camera;
 using WSP.Input;
 using WSP.Items;
@@ -24,6 +25,8 @@ namespace WSP.Units.Player
             public Unit TargetUnit;
             public Vector2Int TargetPosition;
         }
+
+        bool isHoveringUi;
 
         void Awake()
         {
@@ -62,6 +65,8 @@ namespace WSP.Units.Player
 
         void Update()
         {
+            isHoveringUi = EventSystem.current.IsPointerOverGameObject();
+
             var gridPosition = TargetingComponent.CurrentTarget;
             GetAction(gridPosition);
 
@@ -76,6 +81,7 @@ namespace WSP.Units.Player
 
         void Target(Vector2 position)
         {
+            if (isHoveringUi) return;
             if (TargetingComponent.InTargetSelectionMode) return;
 
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(position);
@@ -99,6 +105,7 @@ namespace WSP.Units.Player
 
         void GetAction(Vector2Int targetPosition)
         {
+            if (isHoveringUi) return;
             if (!IsTurn) return;
             if (TargetingComponent.InTargetSelectionMode) return;
             if (targetPosition == Unit.GridPosition) return;

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using WSP.Input;
 
 namespace WSP.Ui.Exit
 {
@@ -10,6 +9,7 @@ namespace WSP.Ui.Exit
         [SerializeField] UnityEngine.UI.Button noButton;
 
         public Action OnExit { get; set; }
+        public Action OnCancel { get; set; }
 
         public void Open()
         {
@@ -26,9 +26,8 @@ namespace WSP.Ui.Exit
 
         void No()
         {
+            OnCancel?.Invoke();
             Destroy(gameObject);
-
-            InputHandler.SetGameControlsEnabled(true);
         }
     }
 }

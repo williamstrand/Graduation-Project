@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using WSP.Camera;
-using WSP.Input;
 using WSP.Map;
 using WSP.Ui;
 using WSP.Units;
@@ -119,7 +118,7 @@ namespace WSP
             playerController.Unit.Movement.SetPosition(CurrentLevel.Map.StartRoom.Center);
             playerController.OnTurnStart = null;
             playerController.OnTurnEnd = null;
-            
+
             const int playerVisibility = 4;
             playerController.OnTurnStart += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, playerVisibility, true);
             playerController.OnTurnEnd += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, playerVisibility, true);
@@ -127,13 +126,10 @@ namespace WSP
             CameraController.ForceSetPosition(playerController.Unit.GridPosition);
 
             StartTurn(playerController);
-
-            InputHandler.SetGameControlsEnabled(true);
         }
 
         void StartTurn(IUnitController unitController)
         {
-            UpdateVisibility();
             turnText.text = ReferenceEquals(unitController, playerController) ? "Player Turn" : "Enemy Turn";
 
             unitController.IsTurn = true;
@@ -144,6 +140,8 @@ namespace WSP
             {
                 onTurnEnd?.Invoke();
             }
+
+            UpdateVisibility();
         }
 
         void EndCurrentTurn()

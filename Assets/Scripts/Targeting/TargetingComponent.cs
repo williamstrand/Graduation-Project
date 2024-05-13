@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using WSP.Input;
 using WSP.Targeting.TargetingTypes;
 using WSP.Units;
@@ -29,6 +30,8 @@ namespace WSP.Targeting
         [field: SerializeField] public Color FriendlyColor { get; private set; } = Color.green;
         [field: SerializeField] public Color EnemyColor { get; private set; } = Color.red;
 
+        bool isHoveringUi;
+
         void Awake()
         {
             lineRenderer = GetComponent<LineRenderer>();
@@ -42,6 +45,8 @@ namespace WSP.Targeting
 
         void Update()
         {
+            isHoveringUi = EventSystem.current.IsPointerOverGameObject();
+
             var mousePosition = InputHandler.MousePosition;
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(mousePosition);
             Target(gridPosition);
@@ -72,6 +77,8 @@ namespace WSP.Targeting
 
         void Target(Vector2Int target)
         {
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
             var type = GetReticleTargetType(playerController.Unit.GridPosition, target);
             if (currentOrigin == playerController.Unit.GridPosition && CurrentTarget == target && Reticle.Type == type) return;
 
@@ -94,6 +101,7 @@ namespace WSP.Targeting
 
         void ExecuteAction(Vector2 position)
         {
+            if (isHoveringUi) return;
             if (!InTargetSelectionMode) return;
 
             var gridPosition = GameManager.CurrentLevel.Map.GetGridPosition(position);
@@ -159,8 +167,13 @@ namespace WSP.Targeting
             shouldDrawPath = true;
         }
 
-        TargetingReticle.ReticleTargetType GetReticleTargetType(Vector2Int origin, Vector2Int position)
+        static TargetingReticle.ReticleTargetType GetReticleTargetType(Vector2Int origin, Vector2Int position)
         {
+            if (GameManager.CurrentLevel.FogOfWar.IsHidden(position))
+            {
+                return TargetingReticle.ReticleTargetType.None;
+            }
+
             if (GameManager.CurrentLevel.IsOccupied(position))
             {
                 var isOrigin = origin == position;

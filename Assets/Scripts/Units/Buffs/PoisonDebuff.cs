@@ -32,7 +32,6 @@ namespace WSP.Units.Buffs
 
         protected override void Tick(IAction action, Unit unit)
         {
-            Debug.Log(unit.name);
             unit.Damage(damage);
             base.Tick(action, unit);
         }

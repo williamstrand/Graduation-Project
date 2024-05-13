@@ -43,6 +43,7 @@ namespace WSP.Items
         {
             if (!unit.Inventory.AddItem(item)) return false;
 
+            OnInteract?.Invoke();
             Destroy();
             return true;
         }

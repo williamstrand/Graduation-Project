@@ -47,7 +47,7 @@ namespace WSP.Map
                 if (Units[i].Unit.IsVisible) tempMap.SetValue(Units[i].Unit.GridPosition, Pathfinding.Map.Wall);
             }
 
-            return Pathfinder.FindPath(tempMap, start, target, out path);
+            return Pathfinder.FindPath(tempMap, start, target, out path) || Pathfinder.FindPath(Map, start, target, out path);
         }
 
         public bool IsOccupied(Vector2Int position)

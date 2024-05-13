@@ -41,29 +41,5 @@ namespace WSP.Input
             controls.Game.Special4.performed += _ => OnSpecialAttack?.Invoke(3);
             return controls;
         }
-
-        public static void SetGameControlsEnabled(bool enabled)
-        {
-            if (enabled)
-            {
-                Controls.Game.Enable();
-            }
-            else
-            {
-                Controls.Game.Disable();
-            }
-        }
-
-        public static void SetMenuControlsEnabled(bool enabled)
-        {
-            if (enabled)
-            {
-                Controls.Menu.Enable();
-            }
-            else
-            {
-                Controls.Menu.Disable();
-            }
-        }
     }
 }

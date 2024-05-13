@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using WSP.Input;
 using WSP.Items;
 using WSP.Units.Player;
 
@@ -29,8 +28,6 @@ namespace WSP.Ui.Inventory
             IsOpen = true;
             gameObject.SetActive(true);
 
-            InputHandler.SetGameControlsEnabled(false);
-
             CreateItemSlots();
 
             if (PlayerController.Unit.Inventory.Amount > 0)
@@ -47,7 +44,6 @@ namespace WSP.Ui.Inventory
         {
             if (!IsOpen) return;
 
-            InputHandler.SetGameControlsEnabled(true);
             foreach (Transform child in content)
             {
                 Destroy(child.gameObject);

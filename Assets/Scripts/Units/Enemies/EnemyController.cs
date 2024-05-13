@@ -88,6 +88,7 @@ namespace WSP.Units.Enemies
 
         protected override void Kill()
         {
+            if (Unit == null) return;
             if (Unit.GameObject == null) return;
 
             if (GameManager.CurrentLevel.GetObjectAt(Unit.GridPosition) is not IInteractable)
