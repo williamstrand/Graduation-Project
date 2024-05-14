@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using WSP.Camera;
@@ -77,7 +78,7 @@ namespace WSP
 
             CurrentLevel?.Clean();
             CurrentLevel = new Level(map);
-            CurrentLevel.OnExit += GenerateLevel;
+            CurrentLevel.OnExit += ExitLevel;
             tilemap.ClearAllTiles();
             fogOfWar.Clear();
 
@@ -103,7 +104,7 @@ namespace WSP
 
             onTurnEnd = null;
 
-            enemySpawner = new EnemySpawner(3, 5, enemyPrefab, CurrentLevel);
+            enemySpawner = new EnemySpawner(99, 5, enemyPrefab, CurrentLevel);
             onTurnEnd += enemySpawner.SpawnEnemies;
 
             var exitPosition = map.GetWorldPosition(map.ExitRoom.GetRandomPosition());
@@ -120,8 +121,35 @@ namespace WSP
             playerController.OnTurnEnd += () => fogOfWar.SetArea(map, playerController.Unit.GridPosition, playerVisibility, true);
             CurrentLevel.SetPlayer(playerController);
             CameraController.ForceSetPosition(playerController.Unit.GridPosition);
+        }
+
+        void ExitLevel()
+        {
+            GenerateLevel();
+            StartCoroutine(ExitLevelCoroutine());
+        }
+
+        IEnumerator ExitLevelCoroutine()
+        {
+            var open = true;
+
+            uiManager.OpenRewardScreen();
+            uiManager.OnRewardSelected += GetReward;
+            while (open)
+            {
+                yield return null;
+            }
 
             StartTurn(playerController);
+
+            yield break;
+
+            void GetReward(IReward reward)
+            {
+                uiManager.OnRewardSelected -= GetReward;
+                open = false;
+                reward.Apply(playerController.Unit);
+            }
         }
 
         void StartTurn(IUnitController unitController)

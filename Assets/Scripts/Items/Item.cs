@@ -8,7 +8,7 @@ using WSP.VFX;
 
 namespace WSP.Items
 {
-    public abstract class Item : IAction
+    public abstract class Item : IAction, IReward
     {
         static AssetLoader<Sprite> IconLoader { get; } = new(Constants.IconBundle, Constants.EmptyIcon);
 
@@ -47,5 +47,10 @@ namespace WSP.Items
         }
 
         protected abstract bool ActivateEffect(Unit origin, Vector2Int target);
+
+        public void Apply(Unit target)
+        {
+            target.Inventory.AddItem(this);
+        }
     }
 }

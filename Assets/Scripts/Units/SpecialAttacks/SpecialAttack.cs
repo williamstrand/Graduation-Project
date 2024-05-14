@@ -7,7 +7,7 @@ using WSP.VFX;
 
 namespace WSP.Units.SpecialAttacks
 {
-    public abstract class SpecialAttack : IAction
+    public abstract class SpecialAttack : IAction, IReward
     {
         public Action OnTurnOver { get; set; }
         public bool ActionInProgress { get; protected set; }
@@ -41,6 +41,11 @@ namespace WSP.Units.SpecialAttacks
         public bool IsInRange(Vector2Int origin, Vector2Int target)
         {
             return Range <= 0 || Pathfinder.Distance(origin, target) <= Range;
+        }
+
+        public void Apply(Unit target)
+        {
+            target.SpecialAttack.AddSpecialAttack(this);
         }
     }
 }

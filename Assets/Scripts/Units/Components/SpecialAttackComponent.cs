@@ -36,6 +36,18 @@ namespace WSP.Units.Components
             OnSpecialAttacksChanged?.Invoke(SpecialAttacks);
         }
 
+        public void AddSpecialAttack(IAction specialAttack)
+        {
+            for (var i = 0; i < maxSpecialAttacks; i++)
+            {
+                if (SpecialAttacks[i] == null)
+                {
+                    SetSpecialAttack(i, specialAttack);
+                    return;
+                }
+            }
+        }
+
         void PlayerActionFinished(IAction action, Unit _)
         {
             if (action is MovementComponent) return;

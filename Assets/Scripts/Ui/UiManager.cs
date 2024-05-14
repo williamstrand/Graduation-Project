@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using WSP.Ui.Inventory;
 using WSP.Units;
 using WSP.Units.Player;
@@ -10,9 +11,16 @@ namespace WSP.Ui
     {
         public static Canvas Canvas { get; private set; }
 
+        public Action<IReward> OnRewardSelected
+        {
+            get => rewardMenu.OnRewardSelected;
+            set => rewardMenu.OnRewardSelected = value;
+        }
+
         [SerializeField] Bar healthBar;
         [SerializeField] InventoryUi inventoryUi;
         [SerializeField] SpecialAttackUi specialAttackUi;
+        [SerializeField] RewardMenu.RewardMenu rewardMenu;
 
         static PlayerController PlayerController => GameManager.CurrentLevel.Player;
 
@@ -51,6 +59,19 @@ namespace WSP.Ui
         void UpdateSpecialAttackUi(IAction[] specialAttacks)
         {
             specialAttackUi.UpdateUi(specialAttacks);
+        }
+
+        public void OpenRewardScreen()
+        {
+            rewardMenu.Open();
+
+            rewardMenu.OnRewardSelected += RewardSelected;
+            return;
+
+            void RewardSelected(IReward reward)
+            {
+                rewardMenu.Close();
+            }
         }
     }
 }
