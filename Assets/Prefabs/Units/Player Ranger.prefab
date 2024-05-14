@@ -13,6 +13,14 @@ PrefabInstance:
       value: Player Ranger
       objectReference: {fileID: 0}
     - target: {fileID: 8501405415805171946, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+      propertyPath: <Name>k__BackingField
+      value: Ranger
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501405415805171946, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+      propertyPath: <Description>k__BackingField
+      value: Ranged Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501405415805171946, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
       propertyPath: <Stats>k__BackingField.AttackRange
       value: 3
       objectReference: {fileID: 0}
@@ -82,6 +90,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcc151d6c68b4fecbe59bcdd3297af38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 7436274476320897763, guid: 2a38e420a389e1745812784e5ecc255c, type: 3}
   attackSpeed: 4
   projectileSpeed: 15

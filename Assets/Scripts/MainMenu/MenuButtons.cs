@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace WSP.MainMenu
 {
@@ -7,6 +6,7 @@ namespace WSP.MainMenu
     {
         [SerializeField] GameObject main;
         [SerializeField] GameObject controls;
+        [SerializeField] GameObject characterSelect;
 
         GameObject currentMenu;
 
@@ -22,9 +22,9 @@ namespace WSP.MainMenu
             currentMenu.SetActive(true);
         }
 
-        public void StartGame()
+        public void OpenCharacterSelect()
         {
-            SceneManager.LoadScene(1);
+            SetMenu(characterSelect);
         }
 
         public void ExitGame()
@@ -36,7 +36,7 @@ namespace WSP.MainMenu
         {
             SetMenu(controls);
         }
-        
+
         public void OpenMain()
         {
             SetMenu(main);

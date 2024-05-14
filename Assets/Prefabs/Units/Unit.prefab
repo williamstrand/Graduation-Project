@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d34c914960c4c4c83762b01673e7617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
 --- !u!114 &8501405415805171946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,15 +149,13 @@ MonoBehaviour:
   <Stats>k__BackingField:
     Health: 50
     Attack: 10
+    MagicPower: 0
     PhysicalDefense: 0
     MagicDefense: 0
     AttackRange: 1
-  <StatsPerLevel>k__BackingField:
-    Health: 1
-    Attack: 1
-    PhysicalDefense: 1
-    MagicDefense: 1
-    AttackRange: 1
+  <Name>k__BackingField: 
+  <Description>k__BackingField: 
+  spriteRenderer: {fileID: 8914356361943245772}
 --- !u!114 &-6264792778512200803
 MonoBehaviour:
   m_ObjectHideFlags: 0

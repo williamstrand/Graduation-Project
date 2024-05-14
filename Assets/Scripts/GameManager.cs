@@ -29,7 +29,6 @@ namespace WSP
         PlayerController playerController;
         [SerializeField] PlayerController playerPrefab;
         [SerializeField] UnitController enemyPrefab;
-        [SerializeField] Unit playerUnit;
         [SerializeField] UiManager uiManager;
         [SerializeField] FogOfWar fogOfWar;
 
@@ -49,6 +48,9 @@ namespace WSP
         void StartGame()
         {
             playerController = Instantiate(playerPrefab);
+            var character = ScriptableObject.CreateInstance<Character>();
+            JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("Character"), character);
+            var playerUnit = character.Unit;
             playerController.SetUnit(Instantiate(playerUnit));
 
             GenerateLevel();

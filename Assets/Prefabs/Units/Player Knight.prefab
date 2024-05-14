@@ -13,6 +13,14 @@ PrefabInstance:
       value: Player Knight
       objectReference: {fileID: 0}
     - target: {fileID: 8501405415805171946, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+      propertyPath: <Name>k__BackingField
+      value: Knight
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501405415805171946, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+      propertyPath: <Description>k__BackingField
+      value: Melee Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501405415805171946, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
       propertyPath: <StatsPerLevel>k__BackingField.Attack
       value: 2
       objectReference: {fileID: 0}
