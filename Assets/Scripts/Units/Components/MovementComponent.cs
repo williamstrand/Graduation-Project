@@ -42,6 +42,8 @@ namespace WSP.Units.Components
                 }
             }
 
+            origin.Heal(1);
+
             GridPosition = path[1].Position;
 
             if (!visible)

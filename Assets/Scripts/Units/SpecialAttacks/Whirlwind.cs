@@ -44,13 +44,19 @@ namespace WSP.Units.SpecialAttacks
                     }
                 }
 
+                vfx.OnFinished += EndAction;
                 vfx.OnFinished += () => Object.Destroy(vfx.gameObject);
 
                 yield return new WaitForSeconds(.25f);
             }
 
-            ActionInProgress = false;
-            OnTurnOver?.Invoke();
+            yield break;
+
+            void EndAction()
+            {
+                ActionInProgress = false;
+                OnTurnOver?.Invoke();
+            }
         }
 
         void DamageUnit(Unit unit)

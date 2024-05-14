@@ -20,6 +20,8 @@ namespace WSP.Units.Enemies
             this.maxEnemies = maxEnemies;
             this.unitController = unitController;
             this.level = level;
+
+            spawnTimer = frequency / 2;
         }
 
         public void SpawnEnemies()

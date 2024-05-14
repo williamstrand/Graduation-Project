@@ -104,7 +104,7 @@ namespace WSP
 
             onTurnEnd = null;
 
-            enemySpawner = new EnemySpawner(99, 5, enemyPrefab, CurrentLevel);
+            enemySpawner = new EnemySpawner(10, 5, enemyPrefab, CurrentLevel);
             onTurnEnd += enemySpawner.SpawnEnemies;
 
             var exitPosition = map.GetWorldPosition(map.ExitRoom.GetRandomPosition());
