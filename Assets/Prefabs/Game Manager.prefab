@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32dd5b82e81aac42aef3ea87c328113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  square: {fileID: 2075662690932540189, guid: 68cd2bddf5916514cb5907323d7f9354, type: 3}
-  exitPrefab: {fileID: 9108426723930479854, guid: 7f0527b0b5950f94b8d8fe98db8dc8d2, type: 3}
+  wall: {fileID: 11400000, guid: bd2349b070ca450439aacb5e0bcd173d, type: 2}
+  ground: {fileID: 2075662690932540189, guid: 2642fc017ca4b284d87dce5d72dd781d, type: 3}
+  levelExitPrefab: {fileID: 9108426723930479854, guid: 7f0527b0b5950f94b8d8fe98db8dc8d2, type: 3}
   playerPrefab: {fileID: 5672032792852244121, guid: 3f8b42305f56e6c4d8339998e9651002, type: 3}
   enemyPrefab: {fileID: 4957584694318694870, guid: a7a34b9b93399d945a647b1814444a59, type: 3}
-  playerUnit: {fileID: 2042139483317752368, guid: 56753dbf370af6942963f236cdcbf6ad, type: 3}
   uiManager: {fileID: 0}
+  fogOfWar: {fileID: 0}
+  tilemap: {fileID: 0}

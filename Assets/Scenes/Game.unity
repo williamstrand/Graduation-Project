@@ -542,17 +542,6 @@ Transform:
   - {fileID: 1332349288}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1677096627 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2144724667801613485, guid: ef9192ba17a749e488fb366ddde0a93a, type: 3}
-  m_PrefabInstance: {fileID: 6235303446876733182}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1873003641
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,14 +673,6 @@ PrefabInstance:
       value: Game Manager
       objectReference: {fileID: 0}
     - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
-      propertyPath: wall
-      value: 
-      objectReference: {fileID: 11400000, guid: bd2349b070ca450439aacb5e0bcd173d, type: 2}
-    - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
-      propertyPath: ground
-      value: 
-      objectReference: {fileID: 2075662690932540189, guid: 2642fc017ca4b284d87dce5d72dd781d, type: 3}
-    - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 1332349290}
@@ -700,21 +681,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 421111429}
     - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
-      propertyPath: turnText
-      value: 
-      objectReference: {fileID: 1677096627}
-    - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 977064018}
-    - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
-      propertyPath: exitMenuPrefab
-      value: 
-      objectReference: {fileID: 189389120334642312, guid: 3754dbae0a5521f4489f2a51664c49c6, type: 3}
-    - target: {fileID: 7420987467344942378, guid: 8417442c6180e3c468975963f76ca5ae, type: 3}
-      propertyPath: levelExitPrefab
-      value: 
-      objectReference: {fileID: 9108426723930479854, guid: 7f0527b0b5950f94b8d8fe98db8dc8d2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -771,22 +740,6 @@ PrefabInstance:
     - target: {fileID: 4365826267323285192, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4568577745994545101, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
-      propertyPath: m_BackGroundColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4568577745994545101, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.11372549
-      objectReference: {fileID: 0}
-    - target: {fileID: 4568577745994545101, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.11372549
-      objectReference: {fileID: 0}
-    - target: {fileID: 4568577745994545101, guid: 5134bc6d541501847b1e92e575e17405, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.11372549
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1006,7 +959,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7142802293383720828, guid: ef9192ba17a749e488fb366ddde0a93a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef9192ba17a749e488fb366ddde0a93a, type: 3}
