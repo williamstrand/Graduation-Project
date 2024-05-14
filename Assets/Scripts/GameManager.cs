@@ -148,7 +148,7 @@ namespace WSP
             {
                 uiManager.OnRewardSelected -= GetReward;
                 open = false;
-                reward.Apply(playerController.Unit);
+                reward?.Apply(playerController.Unit);
             }
         }
 

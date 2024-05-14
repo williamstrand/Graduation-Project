@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using WSP.Items;
 using WSP.Units.SpecialAttacks;
@@ -16,6 +17,8 @@ namespace WSP.Ui.RewardMenu
         RewardButton[] rewardButtons = new RewardButton[RewardCount];
         [SerializeField] RewardButton rewardButtonPrefab;
         [SerializeField] Transform buttonParent;
+
+        List<IReward> rewards;
 
         void Awake()
         {
@@ -38,6 +41,11 @@ namespace WSP.Ui.RewardMenu
             }
         }
 
+        public void Skip()
+        {
+            OnRewardSelected?.Invoke(null);
+        }
+
         public void Open()
         {
             gameObject.SetActive(true);
@@ -48,16 +56,21 @@ namespace WSP.Ui.RewardMenu
         {
             var type = Random.Range(0, 3);
 
-            for (var i = 0; i < RewardCount; i++)
+            rewards = new List<IReward>(type switch
             {
+                0 => SpecialAttackDatabase.AllSpecialAttacks,
+                1 => ItemDatabase.AllDroppableItems,
+                2 => UpgradeDatabase.AllUpgrades,
+                _ => Array.Empty<IReward>()
+            });
+
+            for (var i = 0; i < rewards.Count; i++)
+            {
+                if (rewards.Count == 0) break;
+
                 rewardButtons[i] = Instantiate(rewardButtonPrefab, buttonParent);
-                IReward reward = type switch
-                {
-                    0 => SpecialAttackDatabase.AllSpecialAttacks[Random.Range(0, SpecialAttackDatabase.AllSpecialAttacks.Length)],
-                    1 => ItemDatabase.AllDroppableItems[Random.Range(0, ItemDatabase.AllDroppableItems.Length)],
-                    2 => UpgradeDatabase.AllUpgrades[Random.Range(0, UpgradeDatabase.AllUpgrades.Length)],
-                    _ => null
-                };
+                var reward = rewards[Random.Range(0, rewards.Count)];
+                rewards.Remove(reward);
 
                 rewardButtons[i].OnClick = () => SelectReward(reward);
                 rewardButtons[i].SetReward(reward);

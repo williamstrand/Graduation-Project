@@ -44,7 +44,7 @@ namespace WSP.Units.SpecialAttacks
                     }
                 }
 
-                vfx.OnFinished += EndAction;
+                if (i == Spins - 1) vfx.OnFinished += EndAction;
                 vfx.OnFinished += () => Object.Destroy(vfx.gameObject);
 
                 yield return new WaitForSeconds(.25f);
