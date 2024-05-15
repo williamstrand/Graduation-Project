@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 376889022
+CRC: 2328952523
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -11,4 +11,7 @@ AssetBundleManifest:
         Dependency_0: icons
     Info_2:
       Name: level
+      Dependencies: {}
+    Info_3:
+      Name: materials
       Dependencies: {}

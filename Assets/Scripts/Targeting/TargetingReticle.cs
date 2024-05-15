@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace WSP.Targeting
 {
     public class TargetingReticle : MonoBehaviour
     {
+        public Action<TargetingReticle> OnDestroyed { get; set; }
+
         public enum ReticleTargetType
         {
             None,
@@ -55,6 +58,11 @@ namespace WSP.Targeting
         {
             SetType(ReticleTargetType.Normal);
             SetSize(Vector2.one);
+        }
+
+        void OnDestroy()
+        {
+            OnDestroyed?.Invoke(this);
         }
     }
 }

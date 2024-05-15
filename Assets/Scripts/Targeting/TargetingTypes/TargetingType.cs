@@ -8,7 +8,7 @@ namespace WSP.Targeting.TargetingTypes
     {
         protected TargetingComponent TargetingComponent;
 
-        static Queue<TargetingReticle> reticlePool = new();
+        static List<TargetingReticle> reticlePool = new();
         static List<TargetingReticle> reticles = new();
 
         static AssetLoader<TargetingReticle> reticleLoader = new("level");
@@ -54,13 +54,30 @@ namespace WSP.Targeting.TargetingTypes
 
         protected TargetingReticle GetReticle()
         {
-            reticlePool ??= new Queue<TargetingReticle>();
+            reticlePool ??= new List<TargetingReticle>();
 
-            var reticle = reticlePool.Count == 0 ? Object.Instantiate(reticleLoader.LoadAsset("Target Reticle"), TargetingComponent.transform) : reticlePool.Dequeue();
+            TargetingReticle reticle;
+            if (reticlePool.Count == 0)
+            {
+                reticle = Object.Instantiate(reticleLoader.LoadAsset("Target Reticle"), TargetingComponent.transform);
+                reticle.OnDestroyed += OnReticleDestroyed;
+            }
+            else
+            {
+                reticle = reticlePool[0];
+                reticlePool.RemoveAt(0);
+            }
+
             reticles.Add(reticle);
             reticle.Enable(true);
             reticle.Reset();
             return reticle;
+
+            void OnReticleDestroyed(TargetingReticle destroyed)
+            {
+                reticles.Remove(destroyed);
+                reticlePool.Remove(destroyed);
+            }
         }
 
         static void ReturnReticle(TargetingReticle reticle)
@@ -69,7 +86,7 @@ namespace WSP.Targeting.TargetingTypes
 
             reticles.Remove(reticle);
             reticle.Enable(false);
-            reticlePool.Enqueue(reticle);
+            reticlePool.Add(reticle);
         }
 
         protected static void ReturnAllReticles()

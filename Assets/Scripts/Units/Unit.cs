@@ -31,6 +31,8 @@ namespace WSP.Units
         [SerializeField] SpriteRenderer spriteRenderer;
         public bool IsVisible { get; private set; } = true;
 
+        HitEffect hitEffect;
+
         protected void Awake()
         {
             Movement = GetComponent<MovementComponent>();
@@ -38,6 +40,7 @@ namespace WSP.Units
             Attack = GetComponent<AttackComponent>();
             Inventory = GetComponent<InventoryComponent>();
             SpecialAttack = GetComponent<SpecialAttackComponent>();
+            hitEffect = GetComponent<HitEffect>();
 
             CurrentHealth = Mathf.RoundToInt(Stats.Health);
 
@@ -49,6 +52,7 @@ namespace WSP.Units
         {
             CurrentHealth -= damage;
             OnHealthChanged?.Invoke(CurrentHealth, Stats.Health);
+            hitEffect.Play();
 
             if (CurrentHealth > 0) return false;
 

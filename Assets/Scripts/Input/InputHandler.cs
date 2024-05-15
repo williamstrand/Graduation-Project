@@ -16,19 +16,20 @@ namespace WSP.Input
         {
             get
             {
-                mainCamera ??= UnityEngine.Camera.main;
-                var mousePosition = Controls.General.MousePosition.ReadValue<Vector2>();
+                var mousePosition = controls.General.MousePosition.ReadValue<Vector2>();
                 var worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
                 return worldPosition;
             }
         }
 
-        static Controls Controls => controls ?? Initialize();
         static Controls controls;
         static UnityEngine.Camera mainCamera;
 
-        static Controls Initialize()
+        public static Controls Initialize()
         {
+            controls?.Dispose();
+
+            mainCamera = UnityEngine.Camera.main;
             controls = new Controls();
             controls.Enable();
             controls.Game.Target.performed += _ => OnTarget?.Invoke(MousePosition);

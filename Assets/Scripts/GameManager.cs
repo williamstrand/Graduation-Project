@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using WSP.Camera;
+using WSP.Input;
 using WSP.Map;
 using WSP.Ui;
 using WSP.Units;
@@ -35,6 +36,8 @@ namespace WSP
         void Awake()
         {
             mapParent = new GameObject("Map").transform;
+            CurrentLevel = null;
+            InputHandler.Initialize();
         }
 
         void Start()

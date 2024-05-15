@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using WSP.Camera;
 using WSP.Input;
 using WSP.Items;
@@ -185,7 +186,8 @@ namespace WSP.Units.Player
 
         protected override void Kill()
         {
-            Debug.LogError("Player died");
+            Destroy(gameObject);
+            SceneManager.LoadScene(0);
         }
 
         public void AddUpgrade(IUpgrade upgrade)
