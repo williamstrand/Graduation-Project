@@ -64,7 +64,7 @@ namespace WSP.Ui.RewardMenu
                 _ => Array.Empty<IReward>()
             });
 
-            for (var i = 0; i < rewards.Count; i++)
+            for (var i = 0; i < RewardCount; i++)
             {
                 if (rewards.Count == 0) break;
 
