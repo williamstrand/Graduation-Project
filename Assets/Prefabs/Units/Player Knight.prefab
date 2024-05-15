@@ -13,6 +13,10 @@ PrefabInstance:
       value: Player Knight
       objectReference: {fileID: 0}
     - target: {fileID: 8501405415805171946, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 4685275261389642961}
+    - target: {fileID: 8501405415805171946, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
       propertyPath: <Name>k__BackingField
       value: Knight
       objectReference: {fileID: 0}
@@ -68,9 +72,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8865298538027069280, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8914356361943245772, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bce024c49c8921a41a18ad5e612cde10, type: 3}
     - target: {fileID: 8914356361943245772, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
       propertyPath: m_Color.b
-      value: 0.5560674
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8914356361943245772, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
       propertyPath: m_Color.g
@@ -78,10 +90,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914356361943245772, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
       propertyPath: m_Color.r
-      value: 0.514151
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+--- !u!212 &4685275261389642961 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8914356361943245772, guid: 96ba1af848a4ead4aa4b7e98d4ca87f3, type: 3}
+  m_PrefabInstance: {fileID: 4229820026457227037}
+  m_PrefabAsset: {fileID: 0}

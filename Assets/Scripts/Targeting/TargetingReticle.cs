@@ -15,7 +15,7 @@ namespace WSP.Targeting
         [SerializeField] SpriteRenderer spriteRenderer;
 
         [field: Header("Colors")]
-        [field: SerializeField] public Color NormalColor { get; private set; } = Color.grey;
+        [field: SerializeField] public Color NormalColor { get; private set; } = Color.white;
         [field: SerializeField] public Color FriendlyColor { get; private set; } = Color.green;
         [field: SerializeField] public Color EnemyColor { get; private set; } = Color.red;
 

@@ -28,12 +28,11 @@ namespace WSP.Units
         IAction currentAction;
         public bool ActionInProgress => currentAction?.ActionInProgress ?? false;
 
-        SpriteRenderer spriteRenderer;
+        [SerializeField] SpriteRenderer spriteRenderer;
         public bool IsVisible { get; private set; } = true;
 
         protected void Awake()
         {
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             Movement = GetComponent<MovementComponent>();
             Movement.OnTurnOver += () => OnMove?.Invoke(Movement.GridPosition);
             Attack = GetComponent<AttackComponent>();
@@ -75,9 +74,20 @@ namespace WSP.Units
 
             currentAction = action.Action;
             currentAction.OnTurnOver += ActionSuccess;
+
+            var startPosition = GridPosition;
+
             var success = currentAction.StartAction(this, action.Target, IsVisible);
 
-            if (success) return true;
+            if (success)
+            {
+                if (action.Target.x != startPosition.x)
+                {
+                    spriteRenderer.flipX = action.Target.x < startPosition.x;
+                }
+
+                return true;
+            }
 
             currentAction.OnTurnOver -= ActionSuccess;
             return false;
@@ -93,7 +103,7 @@ namespace WSP.Units
 
         public void SetVisibility(bool visible)
         {
-            spriteRenderer.enabled = visible;
+            spriteRenderer.gameObject.SetActive(visible);
             IsVisible = visible;
         }
 

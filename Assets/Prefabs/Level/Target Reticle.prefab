@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7803122996964040275}
+  <NormalColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  <FriendlyColor>k__BackingField: {r: 0, g: 1, b: 0, a: 1}
+  <EnemyColor>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &3827214380870737635
 GameObject:
   m_ObjectHideFlags: 0
@@ -116,9 +119,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1932203437
-  m_SortingLayer: -1
-  m_SortingOrder: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 44ec4c6873b6b4d49b072e2ff574f3a5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
