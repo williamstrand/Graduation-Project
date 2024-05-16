@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using WSP.Units;
+using WSP.Units.Characters;
 
 namespace WSP.MainMenu
 {
@@ -17,11 +17,12 @@ namespace WSP.MainMenu
 
         [SerializeField] GameObject selectedIndicator;
 
-        public Character Character { get; private set; }
+        public int CharacterIndex { get; private set; }
 
-        public void Set(Character character)
+        public void Set(int index)
         {
-            Character = character;
+            var character = CharacterDatabase.Characters[index];
+            CharacterIndex = index;
 
             image.sprite = character.Sprite;
             nameText.text = character.Name;

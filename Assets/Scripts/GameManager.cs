@@ -7,6 +7,7 @@ using WSP.Input;
 using WSP.Map;
 using WSP.Ui;
 using WSP.Units;
+using WSP.Units.Characters;
 using WSP.Units.Enemies;
 using WSP.Units.Player;
 
@@ -49,13 +50,22 @@ namespace WSP
         void StartGame()
         {
             playerController = Instantiate(playerPrefab);
-            var character = ScriptableObject.CreateInstance<Character>();
-            JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("Character"), character);
-            var playerUnit = character.Unit;
-            playerController.SetUnit(Instantiate(playerUnit));
+            var index = PlayerPrefs.GetInt("Character", 0);
+            var character = CharacterDatabase.Characters[index];
+            playerController.SetUnit(Instantiate(character.Unit));
 
+            for (var i = 0; i < character.SpecialAttacks.Length; i++)
+            {
+                playerController.Unit.SpecialAttack.AddSpecialAttack(character.SpecialAttacks[i]);
+            }
+
+            for (var i = 0; i < character.Items.Length; i++)
+            {
+                playerController.Unit.Inventory.AddItem(character.Items[i]);
+            }
+
+            uiManager.Initialize(playerController);
             GenerateLevel();
-            uiManager.Initialize();
             UpdateVisibility();
             StartTurn(playerController);
         }

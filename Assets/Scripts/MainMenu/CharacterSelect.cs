@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using WSP.Units;
+using WSP.Units.Characters;
 
 namespace WSP.MainMenu
 {
     public class CharacterSelect : MonoBehaviour
     {
-        [SerializeField] Character[] characters;
         [SerializeField] CharacterButton characterPrefab;
         [SerializeField] Transform buttonParent;
 
@@ -19,10 +18,11 @@ namespace WSP.MainMenu
         {
             startButton.interactable = false;
 
+            var characters = CharacterDatabase.Characters;
             for (var i = 0; i < characters.Length; i++)
             {
                 var button = Instantiate(characterPrefab, buttonParent);
-                button.Set(Instantiate(characters[i]));
+                button.Set(i);
                 button.OnSelected += OnCharacterSelected;
             }
 
@@ -49,8 +49,7 @@ namespace WSP.MainMenu
         {
             if (!selected) return;
 
-            var character = JsonUtility.ToJson(selected.Character);
-            PlayerPrefs.SetString("Character", character);
+            PlayerPrefs.SetInt("Character", selected.CharacterIndex);
 
             SceneManager.LoadScene(1);
         }

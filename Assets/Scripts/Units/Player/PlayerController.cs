@@ -4,9 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using WSP.Camera;
 using WSP.Input;
-using WSP.Items;
 using WSP.Targeting;
-using WSP.Units.SpecialAttacks;
 using WSP.Units.Upgrades;
 
 namespace WSP.Units.Player
@@ -32,15 +30,6 @@ namespace WSP.Units.Player
         void Awake()
         {
             TargetingComponent = GetComponent<TargetingComponent>();
-        }
-
-        void Start()
-        {
-            Unit.SpecialAttack.SetSpecialAttack(0, new BattleRage());
-            Unit.SpecialAttack.SetSpecialAttack(1, new SludgeBomb());
-            Unit.SpecialAttack.SetSpecialAttack(2, new Whirlwind());
-            Unit.SpecialAttack.SetSpecialAttack(3, new IceSpike());
-            Unit.Inventory.AddItem(new Apple());
         }
 
         void OnEnable()

@@ -1,0 +1,54 @@
+ManifestFileVersion: 0
+CRC: 838301607
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0d26fc4c8f851223ad0ac2efd15f5b69
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b31ebbc6c156734aaff50e807319e704
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 0d26fc4c8f851223ad0ac2efd15f5b69
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2083420660df49e6b919f4b61d4eefa8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dcc151d6c68b4fecbe59bcdd3297af38, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6ca716a489fe469c8334f7c5952f0b09, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8f74bd7602704cf3ad21e3b290cc04a5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4751d5f3b9d345728fe0eeb5b106c2d5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8f069472233748c7ae9815620416d4f1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d34c914960c4c4c83762b01673e7617, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: WSP.Units.Stats
+Assets:
+- Assets/Prefabs/Units/Player Ranger.prefab
+- Assets/Prefabs/Units/Unit.prefab
+- Assets/Prefabs/Units/Enemy.prefab
+- Assets/Prefabs/Units/Player Knight.prefab
+Dependencies:
+- P:/Unity/Projects/Graduation Project/Assets/Asset Bundles/sprites

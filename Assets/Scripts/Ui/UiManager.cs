@@ -22,21 +22,25 @@ namespace WSP.Ui
         [SerializeField] SpecialAttackUi specialAttackUi;
         [SerializeField] RewardMenu.RewardMenu rewardMenu;
 
-        static PlayerController PlayerController => GameManager.CurrentLevel.Player;
+        PlayerController playerController;
 
         void Awake()
         {
             Canvas = GetComponent<Canvas>();
         }
 
-        public void Initialize()
+        public void Initialize(PlayerController player)
         {
-            PlayerController.OnUnitHealthChanged += UpdateHealthBar;
-            healthBar.UpdateBar(PlayerController.Unit.CurrentHealth, PlayerController.Unit.Stats.Health);
+            playerController = player;
 
-            PlayerController.OnOpenInventory += OpenInventory;
+            playerController.OnUnitHealthChanged += UpdateHealthBar;
+            healthBar.UpdateBar(playerController.Unit.CurrentHealth, playerController.Unit.Stats.Health);
 
-            PlayerController.Unit.SpecialAttack.OnSpecialAttacksChanged += UpdateSpecialAttackUi;
+            playerController.OnOpenInventory += OpenInventory;
+
+            playerController.Unit.SpecialAttack.OnSpecialAttacksChanged += UpdateSpecialAttackUi;
+
+            UpdateSpecialAttackUi(playerController.Unit.SpecialAttack.SpecialAttacks);
         }
 
         void UpdateHealthBar(float health, float maxHealth)
